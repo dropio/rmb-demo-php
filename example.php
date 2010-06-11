@@ -1,35 +1,34 @@
 <?php
 
-/**
- * You can execute this by running: php example.php
- * 
- * To view your changes, open: 
- *     http://drop.io/php_api_lib
- * 
- */
 
 include('lib/dropio-php/Dropio/Api.php');
 
-//Visit http:/api.drop.io to get an api_key.
-$API_KEY = 'YOUR_API_KEY_HERE';
+//Visit http://backbone.drop.io to apply for a Rich Media Backbone API key
+$API_KEY = 'YOUR_API_KEY';
+
 Dropio_Api::setKey($API_KEY);
 $dropname = $_REQUEST['dropname'];
 
-//Dropio_Drop::load('demcodemo')->addNote('This is an example of the Drop.io PHP Library','Hello World');
+//Example of adding a note to a drop
+//Dropio_Drop::load($dropname)->addNote('This is an example of the Drop.io PHP Library','Hello World');
 
-//Below is an example of a one line upload to a drop.
-//Dropio_Drop::load('demcodemo')->addFile('/Users/glitch/Pictures/Eye-Fi/3-6-10/IMG_1859.JPG');
-
-//An example of looping through all the assets in a drop.
 $page = 1;
+
+//Set the $dropname to the passed in parameter, or create a new drop with a random name
 if(!empty($dropname)){
 	$drop = Dropio_Drop::load($dropname);
 }else{
 	$drop = Dropio_Drop::instance()->save();
 	$dropname = $drop->name;
 }
+
+//Set the CDNs we'd like to provide. These will be appended to download urls with the "via" parameter
 $enabled_cdns = array('akamai','voxel','limelight');
+
+//Set the output locations possible for uploads. You can create new output locations under the API tab in your account
 $output_locations = array('DropioS3');
+
+//If you want to examine the full output of the drop object, uncomment this line
 //echo print_r($drop);
 
 ?>
@@ -54,31 +53,26 @@ $output_locations = array('DropioS3');
 		
 	
 	</style>
-	
-	<?php if($_REQUEST['viewmode'] == 'media'){  
-			?>
-		<script type="text/javascript" src="uploadify/jquery-1.3.2.min.js"></script>
-		<script type="text/javascript" src="uploadify/swfobject.js"></script>
-		<script type="text/javascript" src="uploadify/jquery.uploadify.v2.1.0.min.js"></script>
-		<link rel="stylesheet" type="text/css" media="screen, projection" href="uploadify/uploadify.css" />
+	<script type="text/javascript" src="uploadify/jquery-1.3.2.min.js"></script>
+	<script type="text/javascript" src="uploadify/swfobject.js"></script>
+	<script type="text/javascript" src="uploadify/jquery.uploadify.v2.1.0.min.js"></script>
+	<link rel="stylesheet" type="text/css" media="screen, projection" href="uploadify/uploadify.css" />
 	
 	
-		<script type="text/javascript">// <![CDATA[
-		$(document).ready(function() {
-		$('#file').uploadify({
-		'uploader'  : 'uploadify/uploadify.swf',
-		'script'    : '<?php echo Dropio_Api::UPLOAD_URL; ?>',
-		'multi'    : true,
-		'scriptData': {'api_key': '<?php echo $API_KEY; ?>', 'version':'3.0','drop_name': '<?php echo $dropname; ?>'},
-		'cancelImg' : 'uploadify/cancel.png',
-		'auto'      : true,
-		'onAllComplete' : function(){setTimeout(window.location.reload(),3000);}, 
-		'folder'    : '/uploads'
-		});
-		});
-		// ]]></script>
-	
-	<?php } ?>
+	<script type="text/javascript">// <![CDATA[
+	$(document).ready(function() {
+	$('#file').uploadify({
+	'uploader'  : 'uploadify/uploadify.swf',
+	'script'    : '<?php echo Dropio_Api::UPLOAD_URL; ?>',
+	'multi'    : true,
+	'scriptData': {'api_key': '<?php echo $API_KEY; ?>', 'version':'3.0','drop_name': '<?php echo $dropname; ?>'},
+	'cancelImg' : 'uploadify/cancel.png',
+	'auto'      : true,
+	'onAllComplete' : function(){setTimeout(window.location.reload(),3000);}, 
+	'folder'    : '/uploads'
+	});
+	});
+	// ]]></script>
 </head>
 <body>
 
@@ -171,11 +165,11 @@ $output_locations = array('DropioS3');
 	<form action="<?php echo  Dropio_Api::UPLOAD_URL; ?>" enctype="multipart/form-data" method="post">
 	
 	<p><label for="file">Select File</label> : 
-		<input type="file" name="file" id="file" /></p>
+		<input type="file" name="file" id="fileraw" /></p>
 	<input type="hidden" name='api_key' value='<?php echo $API_KEY; ?>' />
 	<input type="hidden" name='version' value='3.0' />
 	<input type="hidden" name='drop_name' value='<?php echo $dropname; ?>' />
-	<input type="hidden" name='redirect_to' value='<?php echo  "http://" + $_SERVER["HTTP_HOST"]  + $_SERVER["REQUEST_URI"]; ?>' />
+	<input type="hidden" name='redirect_to' value='<?php echo  "http://" . $_SERVER["HTTP_HOST"]  . $_SERVER["REQUEST_URI"]; ?>' />
 	Output Locations: 
 	<?php foreach ($output_locations as $ol){  ?> 
 		<br />
@@ -200,7 +194,7 @@ $output_locations = array('DropioS3');
 } elseif ($_REQUEST["viewmode"] == 'media') 
 { ?>
 <style type="text/css">
-	body{background:url('/images/mediabg.png') #dbdbdb repeat-x;}
+	body{background:url('images/fancybg.png') #dbdbdb repeat-x;}
 	table{border:1px solid #aaaaaa;}
 	table th{border-bottom:1px solid black;}
 	table td{border-bottom:1px solid #cccccc;padding:10px;}
