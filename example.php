@@ -38,6 +38,21 @@ while ( ($assetsIn = $drop->getAssets($page)) && $assetsIn->getCount()) {
 	}
 	$page++;
 }
+
+//////////////////////
+//Asset deletion
+if($_REQUEST["action"] == "delete" && $_REQUEST["assetid"]){
+ 	//iterate through assets
+	$counter = 0;
+ 	foreach($assets as $a){
+		if($a->{$a->primary_key} == $_REQUEST["assetid"]){
+			$a->delete();
+			//also remove that asset from the local array
+			unset($assets[$counter]);
+		}
+		$counter++;
+	}
+}
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
@@ -431,6 +446,7 @@ function GetAssetsByType($type = array("image", "video", "audio", "document", "o
 					?>
 					</td>
 					<td><?php if ($a->type != "note") { ?><a href="<?php echo $origfile; ?>">Download File</a><?php } ?>
+						<hr />	<a href="<?php echo $_SERVER['PHP_SELF'] . '?dropname='.$dropname.'&viewmode='.$_REQUEST['viewmode'].'&action=delete&assetid='.$a->{$a->primary_key} ?>" >delete asset</a>
 					</td>
 				</tr>
 					<?php
