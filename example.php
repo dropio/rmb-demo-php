@@ -30,14 +30,21 @@ $output_locations = array('DropioS3');
 
 //If you want to examine the full output of the drop object, uncomment this line
 //echo print_r($drop);
-
+$assets = array();
+//Fetch all assets in the drop into a global $assets variable
+while ( ($assetsIn = $drop->getAssets($page)) && $assetsIn->getCount()) {
+	foreach ($assetsIn as $assetIn){
+		$assets[] = $assetIn;
+	}
+	$page++;
+}
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
 <html xmlns="http://www.w3.org/1999/xhtml"> 
  
 <head> 
-	<title>Dropio API demo</title>
+	<title>Drop.io Rich Media Backbone Example</title>
 	<style type="text/css">
 		#assets{
 			
@@ -53,26 +60,31 @@ $output_locations = array('DropioS3');
 		
 	
 	</style>
-	<script type="text/javascript" src="uploadify/jquery-1.3.2.min.js"></script>
-	<script type="text/javascript" src="uploadify/swfobject.js"></script>
-	<script type="text/javascript" src="uploadify/jquery.uploadify.v2.1.0.min.js"></script>
-	<link rel="stylesheet" type="text/css" media="screen, projection" href="uploadify/uploadify.css" />
+	
+	<?php if($_REQUEST['viewmode'] == 'media' || $_REQUEST['viewmode'] == 'sorted'){  
+			?>
+		<script type="text/javascript" src="uploadify/jquery-1.3.2.min.js"></script>
+		<script type="text/javascript" src="uploadify/swfobject.js"></script>
+		<script type="text/javascript" src="uploadify/jquery.uploadify.v2.1.0.min.js"></script>
+		<link rel="stylesheet" type="text/css" media="screen, projection" href="uploadify/uploadify.css" />
 	
 	
-	<script type="text/javascript">// <![CDATA[
-	$(document).ready(function() {
-	$('#file').uploadify({
-	'uploader'  : 'uploadify/uploadify.swf',
-	'script'    : '<?php echo Dropio_Api::UPLOAD_URL; ?>',
-	'multi'    : true,
-	'scriptData': {'api_key': '<?php echo $API_KEY; ?>', 'version':'3.0','drop_name': '<?php echo $dropname; ?>'},
-	'cancelImg' : 'uploadify/cancel.png',
-	'auto'      : true,
-	'onAllComplete' : function(){setTimeout(window.location.reload(),3000);}, 
-	'folder'    : '/uploads'
-	});
-	});
-	// ]]></script>
+		<script type="text/javascript">// <![CDATA[
+		$(document).ready(function() {
+		$('#file').uploadify({
+		'uploader'  : 'uploadify/uploadify.swf',
+		'script'    : '<?php echo Dropio_Api::UPLOAD_URL; ?>',
+		'multi'    : true,
+		'scriptData': {'api_key': '<?php echo $API_KEY; ?>', 'version':'3.0','drop_name': '<?php echo $dropname; ?>'},
+		'cancelImg' : 'uploadify/cancel.png',
+		'auto'      : true,
+		'onAllComplete' : function(){setTimeout(window.location.reload(),3000);}, 
+		'folder'    : '/uploads'
+		});
+		});
+		// ]]></script>
+	
+	<?php } ?>
 </head>
 <body>
 
@@ -81,18 +93,18 @@ $output_locations = array('DropioS3');
 
 
 <div id="assets">
-	<h2>Examining the drop <?php echo  $dropname; ?></h2>
+	<h2>What is in the <?php echo  $dropname; ?> folder?</h2>
 	
 	<h4>Switch to
-	<a href="<?php echo $_SERVER['PHP_SELF'] . '?dropname='.$dropname.'&viewmode=media'; ?>">media view</a> to see these assets displayed inline</h4>
+	<a href="<?php echo $_SERVER['PHP_SELF'] . '?dropname='.$dropname.'&viewmode=media'; ?>">visual mode</a> to see previews of these items</h4>
 
 	<br />
-	There are <?php echo  $drop->values['asset_count']; ?> assets in this drop
+	There are <?php echo  $drop->values['asset_count']; ?> items in this folder
 		<br />
 
 		<ul>
-		<?php while ( ($assets = $drop->getAssets($page)) && $assets->getCount()) {
-		  foreach ($assets as $name=>$a) { ?>
+		<?php 
+			foreach ($assets as $name=>$a) { ?>
 			<li>
 			<h3><?php echo  $a->name;  ?></h3>
 			<ul>
@@ -136,11 +148,10 @@ $output_locations = array('DropioS3');
 					</ul>
 				</li>
 			<?php } 
-			  
-			$page++; ?>
+			   ?>
 			</ul>
 			</li>
-		<?php } } 
+		<?php  } 
 		?> </ul>
 		
 	<br /><br />
@@ -161,19 +172,21 @@ $output_locations = array('DropioS3');
 	}
 </script>
 <div id="uploader">
-	<h1>File Upload</h1>
+	<h1>Upload items here</h1>
 	<form action="<?php echo  Dropio_Api::UPLOAD_URL; ?>" enctype="multipart/form-data" method="post">
 	
 	<p><label for="file">Select File</label> : 
-		<input type="file" name="file" id="fileraw" /></p>
+		<input type="file" name="file" id="file" /></p>
 	<input type="hidden" name='api_key' value='<?php echo $API_KEY; ?>' />
 	<input type="hidden" name='version' value='3.0' />
 	<input type="hidden" name='drop_name' value='<?php echo $dropname; ?>' />
 	<input type="hidden" name='redirect_to' value='<?php echo  "http://" . $_SERVER["HTTP_HOST"]  . $_SERVER["REQUEST_URI"]; ?>' />
-	Output Locations: 
+	File Cabinet: 
 	<?php foreach ($output_locations as $ol){  ?> 
 		<br />
 		<input type="checkbox" name='output_location[<?php echo  $ol; ?>]' id="" value='<?php echo  $ol; ?>'  onclick="makeol()" <?php if ($ol == "DropioS3") {echo  "checked";}  ?>/>
+		
+		
 		<label for="output_location[<?php echo  $ol; ?>]" ><?php echo  $ol; ?></label>
 		
 	<?php } ?>
@@ -202,14 +215,134 @@ $output_locations = array('DropioS3');
 <script src='osflv/AC_RunActiveContent.js' language='javascript'></script>
 
 <div id="assets">
-	<h2 style="font-size:24px">Viewing the contents of "<?php echo  $dropname ?>"</h2>
+	<h2 style="font-size:24px">Viewing the items in the <?php echo  $dropname ?> folder</h2>
 	<h4>Switch to
-	<a href="<?php echo $_SERVER['PHP_SELF'] . '?dropname='.$dropname; ?>">detailed view</a> to view information about these assets</h4>
+	<a href="<?php echo $_SERVER['PHP_SELF'] . '?dropname='.$dropname; ?>">detailed view</a> to view way more information about these items including several downloadable links, sized thumbnails for images, etc.</h4>
 		<br />
-		<table><tr><th width="250">Title &amp; Description</th><th width="400">Preview</th><th width="50">Original file</th></tr> 
+		<table><tr><th width="250">Title &amp; Description</th><th width="400">Preview</th><th width="50">Links</th></tr> 
 		<?php 
-			while ( ($assets = $drop->getAssets($page)) && $assets->getCount()) {
-		  		foreach ($assets as $name=>$a) {
+			//passing no types will return all of them
+			GetAssetsByType();
+		?>
+		</table>
+	<br /><br />
+
+</div>
+<script type="text/javascript">
+	function makeol(){
+		//alert('test');
+		var chks = $$("input");
+		var olval = [];
+		chks.each( function( element ) {
+			if(element.type == 'checkbox' && element.checked){
+				//alert(element.value);
+				olval.push(element.value);
+			} 
+		});
+		$("olfield").value = olval.join(",");
+	}
+</script>
+<div id="uploader" style="background:#ffffff;-moz-border-radius:20px;-webkit-border-radius:20px;width:660px;padding:10px 20px 20px 20px;margin-top:30px">
+	<h1>Upload a new file to this folder</h1>
+	
+	<input id="file" name="file" type="file" />
+	
+</div>
+
+
+
+<?php } ?>
+<?php /* 
+####################################################################################### 
+###Sorted (grouped) rendering mode##################################################### 
+#######################################################################################  */ ?>
+<?php 
+if ($_REQUEST["viewmode"] == 'sorted') 
+{ ?>
+<style type="text/css">
+	body{background:url('images/fancybg.png') #dbdbdb repeat-x;}
+	table{border:1px solid #aaaaaa;}
+	table th{border-bottom:1px solid black;}
+	table td{border-bottom:1px solid #cccccc;padding:10px;}
+</style>
+<script src='osflv/AC_RunActiveContent.js' language='javascript'></script>
+
+<div id="assets">
+	<h2 style="font-size:24px">Grouping the items in the <?php echo  $dropname ?> folder</h2>
+	<h4>Switch to
+	<a href="<?php echo $_SERVER['PHP_SELF'] . '?dropname='.$dropname; ?>">detailed view</a> to view way more information about these items including several downloadable links, sized thumbnails for images, etc.</h4>
+		<br />
+		<h2>Notes</h2>
+		<table><tr><th width="250">Title &amp; Description</th><th width="400">Preview</th><th width="50">Links</th></tr> 
+		<?php 
+			GetAssetsByType(array("note"));
+		?>
+		</table>
+		<h2>Images</h2>
+		<table><tr><th width="250">Title &amp; Description</th><th width="400">Preview</th><th width="50">Links</th></tr> 
+		<?php 
+			GetAssetsByType(array("image"));
+		?>
+		</table>
+		<h2>Movies</h2>
+		<table><tr><th width="250">Title &amp; Description</th><th width="400">Preview</th><th width="50">Links</th></tr> 
+		<?php 
+			GetAssetsByType(array("movie"));
+		?>
+		</table>
+		<h2>Audio</h2>
+		<table><tr><th width="250">Title &amp; Description</th><th width="400">Preview</th><th width="50">Links</th></tr> 
+		<?php 
+			GetAssetsByType(array("audio"));
+		?>
+		</table>
+		<h2>Documents</h2>
+		<table><tr><th width="250">Title &amp; Description</th><th width="400">Preview</th><th width="50">Links</th></tr> 
+		<?php 
+			GetAssetsByType(array("document"));
+		?>
+		</table>
+		<h2>Files</h2>
+		<table><tr><th width="250">Title &amp; Description</th><th width="400">Preview</th><th width="50">Links</th></tr> 
+		<?php 
+			GetAssetsByType(array("other"));
+		?>
+		</table>
+	<br /><br />
+
+</div>
+<script type="text/javascript">
+	function makeol(){
+		//alert('test');
+		var chks = $$("input");
+		var olval = [];
+		chks.each( function( element ) {
+			if(element.type == 'checkbox' && element.checked){
+				//alert(element.value);
+				olval.push(element.value);
+			} 
+		});
+		$("olfield").value = olval.join(",");
+	}
+</script>
+<div id="uploader" style="background:#ffffff;-moz-border-radius:20px;-webkit-border-radius:20px;width:660px;padding:10px 20px 20px 20px;margin-top:30px">
+	<h1>Upload a new file to this folder</h1>
+	
+	<input id="file" name="file" type="file" />
+	
+</div>
+
+
+
+<?php } ?>
+</body></html>
+<?php
+function GetAssetsByType($type = array("image", "video", "audio", "document", "other", "note")){
+	global $drop, $assets, $API_KEY, $dropname, $enabled_cdns;
+	$page = 1;
+	foreach ($assets as $name=>$a) {
+			if(in_array($a->type, $type)){
+			//echo "monkeypants";
 			$origfile = "http://api.drop.io";
 			$origfile .= "/drops/".$dropname."/assets/".$a->name."/download/original?api_key=".$API_KEY;
 			$origfile .= "&version=3.0";
@@ -242,7 +375,7 @@ $output_locations = array('DropioS3');
 							#$preview = '<embed type="application/x-shockwave-flash" src="http://www.google.com/reader/ui/3247397568-audio-player.swf?audioUrl='
 							#$preview .= CGI::escape origfile
 							#$preview .= '" width="400" height="27" allowscriptaccess="never" quality="best" bgcolor="#ffffff" wmode="window" flashvars="playerMode=embedded" />'
-							
+				
 							$preview = '<object type="application/x-shockwave-flash" data="wpaudio/player.swf" id="';
 							$preview .= 'ap-' + $a->name;
 							$preview .= '" height="24" width="290">
@@ -281,7 +414,7 @@ $output_locations = array('DropioS3');
 							if ($r["name"] == "web_preview"){
 								if ($r["locations"][0]["status"] == "complete"){
 									$docurl = $r["locations"][0]["file_url"];
-									$preview .= "<iframe style='width:600px;height:300px' frameborder='0' src=\"http://docs.google.com/viewer?embedded=true&url=";
+									$preview .= "<iframe style='width:600px;height:802px' frameborder='0' src=\"http://docs.google.com/viewer?embedded=true&url=";
 									$preview .= urlencode($docurl);
 									$preview .= "\"></iframe>";
 								}
@@ -294,40 +427,18 @@ $output_locations = array('DropioS3');
 						$preview = "<a href='". $origfile . "'><img src='images/downloaddisk.png' style='border:none' alt='download'/></a>";
 						#$preview = h($a->inspect)
 					} 
-					echo $preview; ?>
-				</td>
-				<td><?php if ($a->type != "note") { ?><a href="<?php echo $origfile; ?>">link</a><?php } ?></td>
-			</tr>
-		<?php } 
-		
-		  
-			$page++;
+					echo $preview; 
+					?>
+					</td>
+					<td><?php if ($a->type != "note") { ?><a href="<?php echo $origfile; ?>">Download File</a><?php } ?>
+					</td>
+				</tr>
+					<?php
 		}
-		?>
-		</table>
-	<br /><br />
-
-</div>
-<script type="text/javascript">
-	function makeol(){
-		//alert('test');
-		var chks = $$("input");
-		var olval = [];
-		chks.each( function( element ) {
-			if(element.type == 'checkbox' && element.checked){
-				//alert(element.value);
-				olval.push(element.value);
-			} 
-		});
-		$("olfield").value = olval.join(",");
+		
 	}
-</script>
-<div id="uploader" style="background:#ffffff;-moz-border-radius:20px;-webkit-border-radius:20px;width:660px;padding:10px 20px 20px 20px;margin-top:30px">
-	<h1>Upload a new file to this drop</h1>
-	
-	<input id="file" name="file" type="file" />
-	
-</div>
+			
+	  
+}
 
-<?php } ?>
-</body></html>
+?>
