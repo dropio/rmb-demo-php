@@ -28,13 +28,19 @@ $enabled_cdns = array('akamai','voxel','limelight');
 //Set the output locations possible for uploads. You can create new output locations under the API tab in your account
 $output_locations = array('DropioS3');
 
+//Define types available
+$alltypes = array("image", "movie", "audio", "document", "other", "note");
+
 //If you want to examine the full output of the drop object, uncomment this line
 //echo print_r($drop);
-$assets = array();
+
 //Fetch all assets in the drop into a global $assets variable
+$assets = array();
+$assetCount = array();
 while ( ($assetsIn = $drop->getAssets($page)) && $assetsIn->getCount()) {
 	foreach ($assetsIn as $assetIn){
 		$assets[] = $assetIn;
+		$assetCount[$assetIn->type]++;
 	}
 	$page++;
 }
@@ -76,7 +82,7 @@ if($_REQUEST["action"] == "delete" && $_REQUEST["assetid"]){
 	
 	</style>
 	
-	<?php if($_REQUEST['viewmode'] == 'media' || $_REQUEST['viewmode'] == 'sorted'){  
+	<?php if($_REQUEST['viewmode'] != 'detailed'){  
 			?>
 		<script type="text/javascript" src="uploadify/jquery-1.3.2.min.js"></script>
 		<script type="text/javascript" src="uploadify/swfobject.js"></script>
@@ -93,7 +99,7 @@ if($_REQUEST["action"] == "delete" && $_REQUEST["assetid"]){
 		'scriptData': {'api_key': '<?php echo $API_KEY; ?>', 'version':'3.0','drop_name': '<?php echo $dropname; ?>'},
 		'cancelImg' : 'uploadify/cancel.png',
 		'auto'      : true,
-		'onAllComplete' : function(){setTimeout(window.location.reload(),3000);}, 
+		'onAllComplete' : function(){setTimeout(window.location = '<?php echo "http://" . $_SERVER["HTTP_HOST"] . $_SERVER["PHP_SELF"] . "?viewmode=".$_REQUEST["viewmode"]."&dropname=". $dropname; ?>',3000);}, 
 		'folder'    : '/uploads'
 		});
 		});
@@ -103,18 +109,70 @@ if($_REQUEST["action"] == "delete" && $_REQUEST["assetid"]){
 </head>
 <body>
 
-<?php if(empty($_REQUEST['viewmode']) || $_REQUEST['viewmode'] == 'detailed'){  
+<?php /* 
+####################################################################################### 
+###Media rendering mode################################################################ 
+#######################################################################################  */ ?>
+<?php 
+if (empty($_REQUEST["viewmode"]) || $_REQUEST["viewmode"] == 'media') 
+{ ?>
+<style type="text/css">
+	body{background:url('images/fancybg.png') #dbdbdb repeat-x;}
+	table{border:1px solid #aaaaaa;}
+	table th{border-bottom:1px solid black;}
+	table td{border-bottom:1px solid #cccccc;padding:10px;}
+</style>
+<script src='osflv/AC_RunActiveContent.js' language='javascript'></script>
+
+<div id="assets">
+	<h2 style="font-size:24px">Viewing the items in the drop: <?php echo  $dropname ?> </h2>
+	<h4>Switch to
+	<a href="<?php echo $_SERVER['PHP_SELF'] . '?viewmode=detailed&dropname='.$dropname; ?>">detailed view</a> to see more information about these assets, or view them <a href="<?php echo $_SERVER['PHP_SELF'] . '?viewmode=sorted&dropname='.$dropname; ?>">sorted by type</a></h4>
+		<br />
+		<table><tr><th width="250">Title &amp; Description</th><th width="400">Preview</th><th width="50">Links</th></tr> 
+		<?php 
+			//passing no types will return all of them
+			GetAssetsByType();
+		?>
+		</table>
+	<br /><br />
+
+</div>
+<script type="text/javascript">
+	function makeol(){
+		//alert('test');
+		var chks = $$("input");
+		var olval = [];
+		chks.each( function( element ) {
+			if(element.type == 'checkbox' && element.checked){
+				//alert(element.value);
+				olval.push(element.value);
+			} 
+		});
+		$("olfield").value = olval.join(",");
+	}
+</script>
+<div id="uploader" style="background:#ffffff;-moz-border-radius:20px;-webkit-border-radius:20px;width:660px;padding:10px 20px 20px 20px;margin-top:30px">
+	<h1>Upload a new file to this drop</h1>
+	
+	<input id="file" name="file" type="file" />
+	
+</div>
+
+
+
+<?php } else if($_REQUEST['viewmode'] == 'detailed'){  
 	?>
 
 
 <div id="assets">
-	<h2>What is in the <?php echo  $dropname; ?> folder?</h2>
+	<h2>Examining the drop <?php echo  $dropname; ?></h2>
 	
 	<h4>Switch to
-	<a href="<?php echo $_SERVER['PHP_SELF'] . '?dropname='.$dropname.'&viewmode=media'; ?>">visual mode</a> to see previews of these items</h4>
+	<a href="<?php echo $_SERVER['PHP_SELF'] . '?dropname='.$dropname.'&viewmode=media'; ?>">media view</a> to see previews of these assets.</h4>
 
 	<br />
-	There are <?php echo  $drop->values['asset_count']; ?> items in this folder
+	There are <?php echo  $drop->values['asset_count']; ?> items in this drop
 		<br />
 
 		<ul>
@@ -187,7 +245,7 @@ if($_REQUEST["action"] == "delete" && $_REQUEST["assetid"]){
 	}
 </script>
 <div id="uploader">
-	<h1>Upload items here</h1>
+	<h1>Upload</h1>
 	<form action="<?php echo  Dropio_Api::UPLOAD_URL; ?>" enctype="multipart/form-data" method="post">
 	
 	<p><label for="file">Select File</label> : 
@@ -196,7 +254,7 @@ if($_REQUEST["action"] == "delete" && $_REQUEST["assetid"]){
 	<input type="hidden" name='version' value='3.0' />
 	<input type="hidden" name='drop_name' value='<?php echo $dropname; ?>' />
 	<input type="hidden" name='redirect_to' value='<?php echo  "http://" . $_SERVER["HTTP_HOST"]  . $_SERVER["REQUEST_URI"]; ?>' />
-	File Cabinet: 
+	Output Locations: 
 	<?php foreach ($output_locations as $ol){  ?> 
 		<br />
 		<input type="checkbox" name='output_location[<?php echo  $ol; ?>]' id="" value='<?php echo  $ol; ?>'  onclick="makeol()" <?php if ($ol == "DropioS3") {echo  "checked";}  ?>/>
@@ -214,12 +272,12 @@ if($_REQUEST["action"] == "delete" && $_REQUEST["assetid"]){
 <br />
 
 	<br />
-<?php /* 
-####################################################################################### 
-###Media rendering mode################################################################ 
-#######################################################################################  */ ?>
+	<?php /* 
+	####################################################################################### 
+	###Sorted (grouped) rendering mode##################################################### 
+	#######################################################################################  */ ?>
 <?php 
-} elseif ($_REQUEST["viewmode"] == 'media') 
+} else if ($_REQUEST["viewmode"] == 'sorted') 
 { ?>
 <style type="text/css">
 	body{background:url('images/fancybg.png') #dbdbdb repeat-x;}
@@ -230,16 +288,22 @@ if($_REQUEST["action"] == "delete" && $_REQUEST["assetid"]){
 <script src='osflv/AC_RunActiveContent.js' language='javascript'></script>
 
 <div id="assets">
-	<h2 style="font-size:24px">Viewing the items in the <?php echo  $dropname ?> folder</h2>
+	<h2 style="font-size:24px">Viewing assets in the drop: <?php echo  $dropname ?> </h2>
 	<h4>Switch to
-	<a href="<?php echo $_SERVER['PHP_SELF'] . '?dropname='.$dropname; ?>">detailed view</a> to view way more information about these items including several downloadable links, sized thumbnails for images, etc.</h4>
+	<a href="<?php echo $_SERVER['PHP_SELF'] . '?viewmode=detailed&dropname='.$dropname; ?>">detailed view</a> to see more information about these assets, or <a href="<?php echo $_SERVER['PHP_SELF'] . '?viewmode=media&dropname='.$dropname; ?>">sorted by date</a>.</h4>
 		<br />
-		<table><tr><th width="250">Title &amp; Description</th><th width="400">Preview</th><th width="50">Links</th></tr> 
 		<?php 
-			//passing no types will return all of them
-			GetAssetsByType();
-		?>
-		</table>
+		foreach($alltypes as $type){ 
+			if($assetCount[$type]) { ?> 
+				<h2><?php echo PluralizeType($type); ?></h2>
+				<table><tr><th width="250">Title &amp; Description</th><th width="400">Preview</th><th width="50">Links</th></tr> 
+				<?php 
+					GetAssetsByType(array($type));
+				?>
+				</table>
+				<?php 
+			}
+		} ?>
 	<br /><br />
 
 </div>
@@ -258,90 +322,7 @@ if($_REQUEST["action"] == "delete" && $_REQUEST["assetid"]){
 	}
 </script>
 <div id="uploader" style="background:#ffffff;-moz-border-radius:20px;-webkit-border-radius:20px;width:660px;padding:10px 20px 20px 20px;margin-top:30px">
-	<h1>Upload a new file to this folder</h1>
-	
-	<input id="file" name="file" type="file" />
-	
-</div>
-
-
-
-<?php } ?>
-<?php /* 
-####################################################################################### 
-###Sorted (grouped) rendering mode##################################################### 
-#######################################################################################  */ ?>
-<?php 
-if ($_REQUEST["viewmode"] == 'sorted') 
-{ ?>
-<style type="text/css">
-	body{background:url('images/fancybg.png') #dbdbdb repeat-x;}
-	table{border:1px solid #aaaaaa;}
-	table th{border-bottom:1px solid black;}
-	table td{border-bottom:1px solid #cccccc;padding:10px;}
-</style>
-<script src='osflv/AC_RunActiveContent.js' language='javascript'></script>
-
-<div id="assets">
-	<h2 style="font-size:24px">Grouping the items in the <?php echo  $dropname ?> folder</h2>
-	<h4>Switch to
-	<a href="<?php echo $_SERVER['PHP_SELF'] . '?dropname='.$dropname; ?>">detailed view</a> to view way more information about these items including several downloadable links, sized thumbnails for images, etc.</h4>
-		<br />
-		<h2>Notes</h2>
-		<table><tr><th width="250">Title &amp; Description</th><th width="400">Preview</th><th width="50">Links</th></tr> 
-		<?php 
-			GetAssetsByType(array("note"));
-		?>
-		</table>
-		<h2>Images</h2>
-		<table><tr><th width="250">Title &amp; Description</th><th width="400">Preview</th><th width="50">Links</th></tr> 
-		<?php 
-			GetAssetsByType(array("image"));
-		?>
-		</table>
-		<h2>Movies</h2>
-		<table><tr><th width="250">Title &amp; Description</th><th width="400">Preview</th><th width="50">Links</th></tr> 
-		<?php 
-			GetAssetsByType(array("movie"));
-		?>
-		</table>
-		<h2>Audio</h2>
-		<table><tr><th width="250">Title &amp; Description</th><th width="400">Preview</th><th width="50">Links</th></tr> 
-		<?php 
-			GetAssetsByType(array("audio"));
-		?>
-		</table>
-		<h2>Documents</h2>
-		<table><tr><th width="250">Title &amp; Description</th><th width="400">Preview</th><th width="50">Links</th></tr> 
-		<?php 
-			GetAssetsByType(array("document"));
-		?>
-		</table>
-		<h2>Files</h2>
-		<table><tr><th width="250">Title &amp; Description</th><th width="400">Preview</th><th width="50">Links</th></tr> 
-		<?php 
-			GetAssetsByType(array("other"));
-		?>
-		</table>
-	<br /><br />
-
-</div>
-<script type="text/javascript">
-	function makeol(){
-		//alert('test');
-		var chks = $$("input");
-		var olval = [];
-		chks.each( function( element ) {
-			if(element.type == 'checkbox' && element.checked){
-				//alert(element.value);
-				olval.push(element.value);
-			} 
-		});
-		$("olfield").value = olval.join(",");
-	}
-</script>
-<div id="uploader" style="background:#ffffff;-moz-border-radius:20px;-webkit-border-radius:20px;width:660px;padding:10px 20px 20px 20px;margin-top:30px">
-	<h1>Upload a new file to this folder</h1>
+	<h1>Upload a new file to this drop</h1>
 	
 	<input id="file" name="file" type="file" />
 	
@@ -352,8 +333,8 @@ if ($_REQUEST["viewmode"] == 'sorted')
 <?php } ?>
 </body></html>
 <?php
-function GetAssetsByType($type = array("image", "video", "audio", "document", "other", "note")){
-	global $drop, $assets, $API_KEY, $dropname, $enabled_cdns;
+function GetAssetsByType($type = array("image", "movie", "audio", "document", "other", "note")){
+	global $drop, $assets, $API_KEY, $dropname, $enabled_cdns, $assetCount;
 	$page = 1;
 	foreach ($assets as $name=>$a) {
 			if(in_array($a->type, $type)){
@@ -361,6 +342,8 @@ function GetAssetsByType($type = array("image", "video", "audio", "document", "o
 			$origfile = "http://api.drop.io";
 			$origfile .= "/drops/".$dropname."/assets/".$a->name."/download/original?api_key=".$API_KEY;
 			$origfile .= "&version=3.0";
+			unset($dimension);
+			$dimension = Array();
 			if ($a->roles[0]["locations"][0]["name"] != "DropioS3"){
 				$origfile .= "&location=" + $a->roles[0]["locations"][0]["name"];
 			}
@@ -369,9 +352,8 @@ function GetAssetsByType($type = array("image", "video", "audio", "document", "o
 				<td>
 					<strong><?php echo  $a->title ?></strong>
 					<?php 
-					if(!empty($a->description)){ 	
-						echo  "<br />" + $a->description; 
-					} 
+					echo  "<br />" . $a->description; 
+					 
 					?>
 				</td>
 				<td>
@@ -379,11 +361,16 @@ function GetAssetsByType($type = array("image", "video", "audio", "document", "o
 					$preview = '';
 					if ($a->type == "image"){
 						foreach ($a->roles as $name=>$r) { 
-							if ($r["name"] == "thumbnail"){ 
+							if ($r["name"] == "large_thumbnail"){ 
 								if ($r["locations"][0]["status"] == "complete"){
-									$preview = "<img src=\"". $r["locations"][0]["file_url"] . "\" alt='".htmlspecialchars($a->name)."'>";
+									$preview = "<img style='width:240px;' src=\"". $r["locations"][0]["file_url"] . "\" alt='".htmlspecialchars($a->name)."'>";
+									$preview .= "<br />Original width = " . $dimensions['width'] . ", height = " .$dimensions['height'];
 								}
 							}
+							if ($r["name"] == "original_content"){
+								$dimensions['width'] = $r["width"];
+								$dimensions['height'] = $r["height"];
+							} 
 						}
 					} elseif ($a->type == "audio"){
 						if ($a->roles[0]["locations"][0]["status"] == "complete"){
@@ -447,6 +434,7 @@ function GetAssetsByType($type = array("image", "video", "audio", "document", "o
 					</td>
 					<td><?php if ($a->type != "note") { ?><a href="<?php echo $origfile; ?>">Download File</a><?php } ?>
 						<hr />	<a href="<?php echo $_SERVER['PHP_SELF'] . '?dropname='.$dropname.'&viewmode='.$_REQUEST['viewmode'].'&action=delete&assetid='.$a->{$a->primary_key} ?>" >delete asset</a>
+					
 					</td>
 				</tr>
 					<?php
@@ -456,5 +444,19 @@ function GetAssetsByType($type = array("image", "video", "audio", "document", "o
 			
 	  
 }
-
+function PluralizeType($type){
+	if($type == "image"){
+		return "Images";
+	}elseif($type == "movie"){
+		return "Movies";
+	}elseif($type == "audio"){
+		return "Audio";
+	}elseif($type == "document"){
+		return "Documents";
+	}elseif($type == "note"){
+		return "Notes";
+	}elseif($type == "other"){
+		return "Other Files";
+	}
+}
 ?>
