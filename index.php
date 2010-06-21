@@ -2,10 +2,11 @@
 
 
 include('lib/dropio-php/Dropio/Api.php');
+include('config.inc.php');
 
-//Visit http://backbone.drop.io to apply for a Rich Media Backbone API key
-$API_KEY = 'YOUR_API_KEY';
-
+//Please be sure to copy config.inc.php.sample to config.inc.php
+//then add your own $API_KEY in that file
+ 
 Dropio_Api::setKey($API_KEY);
 $dropname = $_REQUEST['dropname'];
 
@@ -352,8 +353,9 @@ function GetAssetsByType($type = array("image", "movie", "audio", "document", "o
 				<td>
 					<strong><?php echo  $a->title ?></strong>
 					<?php 
-					echo  "<br />" . $a->description; 
-					 
+					if(!empty($a->description)){
+						echo  "<br />" . $a->description; 
+				 	}
 					?>
 				</td>
 				<td>
