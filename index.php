@@ -2,7 +2,9 @@
 
 
 include('lib/dropio-php/Dropio/Api.php');
+include('Mobile_Detect.php');
 include('config.inc.php');
+$detect = new Mobile_Detect();
 
 //Please be sure to copy config.inc.php.sample to config.inc.php
 //then add your own $API_KEY in that file
@@ -38,7 +40,7 @@ $alltypes = array("image", "movie", "audio", "document", "other", "note");
 //Fetch all assets in the drop into a global $assets variable
 $assets = array();
 $assetCount = array();
-if($_REQUEST['viewmode'] == 'permalink'){//it's a permalink, just get the requested asset
+if($_REQUEST['viewmode'] == 'permalink' || $_REQUEST["action"] == "updateasset"){//it's a permalink, just get the requested asset
 	$assets[] = $drop->getAsset($_REQUEST['assetid']);
 }else{
 	while ( ($assetsIn = $drop->getAssets($page)) && $assetsIn->getCount()) {
@@ -63,6 +65,22 @@ if($_REQUEST["action"] == "delete" && $_REQUEST["assetid"]){
 		}
 		$counter++;
 	}
+}else if($_REQUEST["action"] == "updateasset" && $_REQUEST["assetid"]){
+ 	//iterate through assets
+	$updated = '';
+ 	foreach($assets as $a){
+		if($a->{$a->primary_key} == $_REQUEST["assetid"]){
+			//check if data is safe
+			if(json_decode(stripslashes($_REQUEST["metadata"]))){
+				//encode the json data with htmlspecialchars to avoid filtering on the drop.io side
+				$a->description = htmlspecialchars(stripslashes($_REQUEST["metadata"]));
+				$updated = $a->save();
+			}
+		}
+	}
+	//redirect back to this page after updating
+	//header("Location:http://" . $_SERVER["HTTP_HOST"] . $_SERVER["PHP_SELF"] . "?viewmode=".$_REQUEST["viewmode"]."&dropname=". $dropname);
+	die(json_encode($a));
 }else if($_REQUEST["action"] == "emailthis" && $_REQUEST["assetid"]){
  	//iterate through assets
 	$counter = 0;
@@ -98,13 +116,17 @@ if($_REQUEST["action"] == "delete" && $_REQUEST["assetid"]){
 	
 	</style>
 	
-	<?php if($_REQUEST['viewmode'] != 'detailed'){  
+	<?php
+	/* 
+		####################################################################################### 
+		### Uploadify uploader script (for all modes but detailed) ############################ 
+		#######################################################################################  */ 
+	 if($_REQUEST['viewmode'] != 'detailed'){  
 			?>
 		<script type="text/javascript" src="uploadify/jquery-1.3.2.min.js"></script>
 		<script type="text/javascript" src="uploadify/swfobject.js"></script>
 		<script type="text/javascript" src="uploadify/jquery.uploadify.v2.1.0.min.js"></script>
 		<link rel="stylesheet" type="text/css" media="screen, projection" href="uploadify/uploadify.css" />
-	
 	
 		<script type="text/javascript">// <![CDATA[
 		$(document).ready(function() {
@@ -120,14 +142,77 @@ if($_REQUEST["action"] == "delete" && $_REQUEST["assetid"]){
 		});
 		});
 		// ]]></script>
+		
+		
 	
+	<?php 
+	/* 
+		####################################################################################### 
+		### Audio player (for all modes but detailed)              ############################ 
+		#######################################################################################  */ ?>
+		<script type="text/javascript" src="audio-player/audio-player.js"></script>
+		<script type="text/javascript">  
+            AudioPlayer.setup("audio-player/player.swf", {  
+                width: 290,
+				transparentpagebg: "yes",
+				checkpolicy:"yes"
+				
+            });  
+        </script>
+	<?php 
+	/* 
+		####################################################################################### 
+		### HTML5 video player (for all modes but detailed)        ############################ 
+		#######################################################################################  */ ?>
+		<link rel="stylesheet" href="video-js/video-js.css" type="text/css" media="screen" title="Video JS" charset="utf-8">
+		<script src="video-js/video.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="utf-8">
+			// If using jQuery
+		     $(function(){
+		       VideoJS.setup();
+		     })
+		</script>
+	<?php 
+	/* 
+		####################################################################################### 
+		### JSON metadata editor (for all modes but detailed)      ############################ 
+		#######################################################################################  */ ?>
+		<link rel="stylesheet" type="text/css" href="jsoneditor/jsoneditor.css" />
+		
+		<script type="text/javascript" src="jsoneditor/jquery.json-2.2.min.js"></script>
+		<script type="text/javascript" src="jsoneditor/jquery.jsoneditor.js"></script> 
+		
+		<script type="text/javascript">
+			function updateAsset(assetid, data){
+				$('#wrap_je_' + assetid).toggle(400);
+				jsondata = $.toJSON(data);
+				//alert('updating the asset ' + assetid + ' with the data ' + jsondata);
+				dataobj = {metadata:jsondata,
+					assetid:assetid,
+					action:'updateasset',
+					dropname:'<?php echo $dropname; ?>',
+					viewmode:'<?php echo $_REQUEST["viewmode"]; ?>'} ;
+				//console.log(dataobj);
+				$.ajax({type:'POST',data:dataobj
+						,success: function(data) {
+							//console.log(data);
+				    		alert('Saved metadata for ' + assetid);
+				  		},error: function(data) {
+							//console.log(data);
+				    		alert('Error on ' + assetid);
+				  		}});
+			}
+		</script>
 	<?php } ?>
 </head>
 <body>
 
 <?php 
+
 if($mail_sent){
 	echo "<h2>Mail sent</h2>";
+}else if($updated){
+	echo "<h2>asset updated</h2>";
 }
 /* 
 ####################################################################################### 
@@ -141,6 +226,8 @@ if (empty($_REQUEST["viewmode"]) || $_REQUEST["viewmode"] == 'media' || $_REQUES
 	table{border:1px solid #aaaaaa;}
 	table th{border-bottom:1px solid black;}
 	table td{border-bottom:1px solid #cccccc;padding:10px;}
+	.metadata{background:#fff;border:1px solid #aaa;margin:4px;padding:4px;}
+	
 </style>
 <script src='osflv/AC_RunActiveContent.js' language='javascript'></script>
 
@@ -185,7 +272,11 @@ if (empty($_REQUEST["viewmode"]) || $_REQUEST["viewmode"] == 'media' || $_REQUES
 	
 </div>
 
-
+<?php
+/* 
+####################################################################################### 
+### Detailed rendering mode ########################################################### 
+#######################################################################################  */ ?>
 
 <?php } else if($_REQUEST['viewmode'] == 'detailed'){  
 	?>
@@ -209,13 +300,14 @@ if (empty($_REQUEST["viewmode"]) || $_REQUEST["viewmode"] == 'media' || $_REQUES
 			<ul>
 			<?php  foreach ($a->roles as $name=>$r) { ?>
 				<li>Role: <?php echo  ($r["name"]); ?>
+					<ul><li><textarea><?php echo  print_r($a); ?></textarea></li></ul>
 					<ul>
 					<?php foreach ($r["locations"] as $name=>$loc) { ?>
 						<li>Location: <?php echo $loc["name"]; ?></li>
 						<?php if ($r["name"] == "original_content") { ?>
 							<?php 
 								$ocurl = "http://api.drop.io/drops/".$dropname."/assets/".$a->name."/download/original?api_key=".$API_KEY."&version=3.0";
-								if($loc["name"] != "DropioS3"){ $ocurl .= "&location=" + $loc["name"]; } 
+								if($loc["name"] != "DropioS3"){ $ocurl .= "&location=" . $loc["name"]; } 
 							?>
 							<ul><li><a href="<?php echo $ocurl; ?>">
 							Direct Download</a> or via 
@@ -310,6 +402,7 @@ if (empty($_REQUEST["viewmode"]) || $_REQUEST["viewmode"] == 'media' || $_REQUES
 	table{border:1px solid #aaaaaa;}
 	table th{border-bottom:1px solid black;}
 	table td{border-bottom:1px solid #cccccc;padding:10px;}
+	.metadata{background:#fff;border:1px solid #aaa;margin:4px;padding:4px;}
 </style>
 <script src='osflv/AC_RunActiveContent.js' language='javascript'></script>
 
@@ -333,20 +426,6 @@ if (empty($_REQUEST["viewmode"]) || $_REQUEST["viewmode"] == 'media' || $_REQUES
 	<br /><br />
 
 </div>
-<script type="text/javascript">
-	function makeol(){
-		//alert('test');
-		var chks = $$("input");
-		var olval = [];
-		chks.each( function( element ) {
-			if(element.type == 'checkbox' && element.checked){
-				//alert(element.value);
-				olval.push(element.value);
-			} 
-		});
-		$("olfield").value = olval.join(",");
-	}
-</script>
 <div id="uploader" style="background:#ffffff;-moz-border-radius:20px;-webkit-border-radius:20px;width:660px;padding:10px 20px 20px 20px;margin-top:30px">
 	<h1>Upload a new file to this drop</h1>
 	
@@ -376,7 +455,7 @@ function SendAssetEmail($a, $emails){
 	<p>You can check this file out here:<br /><a href="http://' . $_SERVER["HTTP_HOST"] . $_SERVER["PHP_SELF"] . '?viewmode=permalink&assetid='.$a->{$a->primary_key}.'&dropname='. $dropname .'">http://' . $_SERVER["HTTP_HOST"] . $_SERVER["PHP_SELF"] . '?viewmode=permalink&assetid='.$a->{$a->primary_key}.'&dropname='. $dropname .'</a></p> 
 	';
 	
-	if($a->type == 'image'){
+	if(in_array($a->type, array('image','note', 'link'))){
 		$message .= '<h3>Preview:</h3>';
 		$message .= GetAssetPreview($a);
 	}
@@ -387,55 +466,94 @@ function SendAssetEmail($a, $emails){
 	return($mail_sent);
 }
 function GetAssetPreview($a){
+	global $detect;
 	if ($a->type == "image"){
+		//first, get some info from the original content
 		foreach ($a->roles as $name=>$r) { 
-			if ($r["name"] == "large_thumbnail"){ 
-				if ($r["locations"][0]["status"] == "complete"){
-					$preview = "<img style='width:240px;' src=\"". $r["locations"][0]["file_url"] . "\" alt='".htmlspecialchars($a->name)."'>";
-					$preview .= "<br />Original width = " . $dimensions['width'] . ", height = " .$dimensions['height'];
-				}
-			}
 			if ($r["name"] == "original_content"){
 				$dimensions['width'] = $r["width"];
 				$dimensions['height'] = $r["height"];
-			} 
+			}
+		}
+		//now, display the image
+		foreach ($a->roles as $name=>$r) { 
+			if ($r["name"] == "large_thumbnail"){ 
+				if ($r["locations"][0]["status"] == "complete"){
+					$preview = "<img style='width:";
+					$preview .= $r["width"] / 2;
+					$preview .= "px;height:";
+					$preview .= $r["height"] / 2;
+					$preview .= "px;' src=\"";
+					$preview .= $r["locations"][0]["file_url"];
+					$preview .= "\" alt='";
+					$preview .= htmlspecialchars($a->name);
+					$preview .= "'>";
+					//If you wanted to echo the original width and height of the uploaded file, you can do that here:
+					//$preview .= "<br />Original width = " . $dimensions['width'] . ", height = " .$dimensions['height'];
+				}
+			}
 		}
 	} elseif ($a->type == "audio"){
-		if ($a->roles[0]["locations"][0]["status"] == "complete"){
-			#$preview = '<embed type="application/x-shockwave-flash" src="http://www.google.com/reader/ui/3247397568-audio-player.swf?audioUrl='
-			#$preview .= CGI::escape origfile
-			#$preview .= '" width="400" height="27" allowscriptaccess="never" quality="best" bgcolor="#ffffff" wmode="window" flashvars="playerMode=embedded" />'
-
-			$preview = '<object type="application/x-shockwave-flash" data="wpaudio/player.swf" id="';
-			$preview .= 'ap-' + $a->name;
-			$preview .= '" height="24" width="290">
-			<param name="movie" value="wpaudio/player.swf">
-			<param name="FlashVars" value="playerID=';
-			$preview .= 'ap-' + $a->name;
-			$preview .= '&soundFile=';
-			$preview .= urlencode($origfile);
-			$preview .= '">
-			<param name="quality" value="high">
-			<param name="menu" value="false">
-			<param name="wmode" value="transparent">
-			</object>';
-			#$preview .= $a->inspect
-		}
-	}elseif ($a->type == "movie"){
-		$flv = '';
 		foreach ($a->roles as $name=>$r) {  
 			if ($r["name"] == "web_preview") {
 				if ($r["locations"][0]["status"] == "complete"){
-					$flv = $r["locations"][0]["file_url"];
-					$preview = "<object width='400' height='325' id='flvPlayer'>
-					  <param name='allowFullScreen' value='true'>
-					  <param name='movie' value='osflv/OSplayer.swf?movie=";
-					$preview .= urlencode($flv);
-					$preview .= "&btncolor=0x333333&accentcolor=0x31b8e9&txtcolor=0xdddddd&volume=30&previewimage=&autoload=off&vTitle=&showTitle=yes'>
-					  <embed src='osflv/OSplayer.swf?movie=";
-					$preview .=  urlencode($flv);
-					$preview .= "&btncolor=0x333333&accentcolor=0x31b8e9&txtcolor=0xdddddd&volume=30&previewimage=&autoload=off&vTitle=&showTitle=yes' width='400' height='325' allowFullScreen='true' type='application/x-shockwave-flash'>
-					 </object>";
+					//play using HTML5 for mobile (webkit and iphone/ipad support)
+					if($detect->isMobile()){
+						$preview ='<audio src="'.$r["locations"][0]["file_url"].'" controls autobuffer></audio>';
+					}else{
+					//use an open source flash player for regular web browsers
+						$preview ='<p id="ap-'.$a->name.'"></p>  
+				        <script type="text/javascript">  
+				        AudioPlayer.embed("ap-'.$a->name.'", 
+							{
+								soundFile: "'.urlencode($r["locations"][0]["file_url"]).'",
+								titles: "'.$a->title.'"
+							});  
+				        </script>';
+					}
+				}
+			}
+		}
+	}elseif ($a->type == "movie"){
+		$movie = '';
+		//first get the poster image
+		$poster = '';
+		foreach ($a->roles as $name=>$r) { 
+			if ($r["name"] == "large_thumbnail"){
+				if ($r["locations"][0]["status"] == "complete"){
+					$poster = $r["locations"][0]["file_url"];
+				}
+			}
+		}
+		//then get the web-friendly h.264 m4v file and wrap it in an HTML5 player with Flash fallback
+		foreach ($a->roles as $name=>$r) { 
+			if ($r["name"] == "web_preview") {
+				if ($r["locations"][0]["status"] == "complete"){
+					$movie = $r["locations"][0]["file_url"];
+					$preview = '
+					<!-- Begin VideoJS -->
+					  <div class="video-js-box">
+					    <!-- Using the Video for Everybody Embed Code http://camendesign.com/code/video_for_everybody -->
+					    <video class="video-js" width="400" height="325" poster="'.$poster.'" controls preload>
+					      <source src="'.$movie.'" type=\'video/mp4; codecs="avc1.42E01E, mp4a.40.2"\'>';
+							$preview .= "<object class='vjs-flash-fallback' width='400' height='325'>
+							  <param name='allowFullScreen' value='true'>
+							  <param name='movie' value='osflv/OSplayer.swf?movie=";
+							$preview .= urlencode($movie);
+							$preview .= "&btncolor=0x333333&accentcolor=0x31b8e9&txtcolor=0xdddddd&volume=30";
+							$preview .= "&previewimage=" . urlencode($poster);
+							$preview .= "&autoload=off&vTitle=".urlencode($a->title)."&showTitle=yes'>
+							  <embed src='osflv/OSplayer.swf?movie=";
+							$preview .=  urlencode($movie);
+							$preview .= "&btncolor=0x333333&accentcolor=0x31b8e9&txtcolor=0xdddddd&volume=30";
+							$preview .= "&previewimage=" . urlencode($poster);
+							$preview .= "&autoload=off&vTitle=".urlencode($a->title)."&showTitle=yes' width='400' height='325' allowFullScreen='true' type='application/x-shockwave-flash'>
+							 </object>";
+					    $preview .= '</video>
+					    <p class="vjs-no-video"></p>
+					  </div>
+					  <!-- End VideoJS -->';
+					
 				}
 			}
 		}
@@ -444,22 +562,27 @@ function GetAssetPreview($a){
 			if ($r["name"] == "web_preview"){
 				if ($r["locations"][0]["status"] == "complete"){
 					$docurl = $r["locations"][0]["file_url"];
-					$preview .= "<iframe style='width:600px;height:802px' frameborder='0' src=\"http://docs.google.com/viewer?embedded=true&url=";
-					$preview .= urlencode($docurl);
-					$preview .= "\"></iframe>";
+					if(!$detect->isMobile()){
+						$preview .= "<iframe style='width:600px;height:400px' frameborder='0' src=\"http://docs.google.com/viewer?embedded=true&url=";
+						$preview .= urlencode($docurl);
+						$preview .= "\"></iframe>";
+					}else{
+						$preview = '<object data="'.$docurl.'" type="application/pdf" width="500" height="375" />';
+					}
 				}
 			}
 		}
+	}elseif ($a->type == "link"){
+		$preview = '<a href="'.$a->url.'">' . $a->url . '</a>';
 	}elseif ($a->type == "note"){
-			$preview = $a->roles[0]["contents"];
-			#echo print_r($a);
+		$preview = $a->roles[0]["contents"];
 	}else{
 		$preview = "<a href='". $origfile . "'><img src='images/downloaddisk.png' style='border:none' alt='download'/></a>";
 		#$preview = h($a->inspect)
 	}
 	return $preview;
 }
-function GetAssetsByType($type = array("image", "movie", "audio", "document", "other", "note")){
+function GetAssetsByType($type = array("image", "movie", "audio", "document", "other", "note", "link")){
 	global $drop, $assets, $API_KEY, $dropname, $enabled_cdns, $assetCount;
 	$page = 1;
 	foreach ($assets as $name=>$a) {
@@ -471,16 +594,35 @@ function GetAssetsByType($type = array("image", "movie", "audio", "document", "o
 			unset($dimension);
 			$dimension = Array();
 			if ($a->roles[0]["locations"][0]["name"] != "DropioS3"){
-				$origfile .= "&location=" + $a->roles[0]["locations"][0]["name"];
+				$origfile .= "&location=" . $a->roles[0]["locations"][0]["name"];
 			}
 			?>
 			<tr>
 				<td>
 					<strong><?php echo  $a->title ?></strong>
-					<?php 
-					if(!empty($a->description)){
-						echo  "<br />" . $a->description; 
-				 	}
+					<?php
+					$description = $a->description;
+					//echo var_dump($description);
+					$data = '{}';
+					if(json_decode(stripslashes(htmlspecialchars_decode($description)))){
+						//we had decodable data in the description. It's metadata!
+						$data = stripslashes(htmlspecialchars_decode($description));
+				 	}else if(!empty($description)){
+						//just text in the description. Display it.
+						echo "<br />" . $description;
+					}
+					$metadata  = "<div class='metadata' id='wrap_je_".$a->name."' style='display:none;'>";
+					$metadata .= "<div class='metadata' id='je_".$a->name."' '></div>";
+					$metadata .= "<script type='text/javascript'>$(function(){";
+					$metadata .= "je=$('#je_".$a->name."');";
+					$metadata .= "je.jsoneditor('init', {
+							root:'metadata',
+							data:" . $data . "});});";
+					$metadata .= "</script>";
+					$metadata .= '<input type="button" value="save"';
+					$metadata .= " onclick=\"updateAsset('".$a->name."',$('#je_".$a->name."').jsoneditor('getjson'));\" />";
+					$metadata .= "</div>";
+					
 					?>
 				</td>
 				<td>
@@ -495,9 +637,13 @@ function GetAssetsByType($type = array("image", "movie", "audio", "document", "o
 	<input type="hidden" name='viewmode' value='<?php echo $_REQUEST["viewmode"]; ?>' />
 	<input type="hidden" name="action" value="emailthis" />
 	<input type="submit" value="Send this asset" /></form></div>
+					<?php if ($metadata){echo $metadata;}?>
 					</td>
 					<td><?php if ($a->type != "note") { ?><a href="<?php echo $origfile; ?>">Download File</a><?php } ?>
-						<hr />	<a href="<?php echo $_SERVER['PHP_SELF'] . '?dropname='.$dropname.'&viewmode='.$_REQUEST['viewmode'].'&action=delete&assetid='.$a->{$a->primary_key} ?>" >delete asset</a><hr />	<a href="#" onclick="$('#emailthis-<?php echo $a->{$a->primary_key}; ?>').toggle(400);return false;" >Email asset</a>
+						<hr />	
+						<a href="<?php echo $_SERVER['PHP_SELF'] . '?dropname='.$dropname.'&viewmode='.$_REQUEST['viewmode'].'&action=delete&assetid='.$a->{$a->primary_key} ?>" >delete asset</a><hr />	
+						<a href="#" onclick="$('#emailthis-<?php echo $a->{$a->primary_key}; ?>').toggle(400);return false;" >Email asset</a><hr />
+						<a href="#" onclick="$('#wrap_je_<?php echo $a->{$a->primary_key}; ?>').toggle(400);return false;">edit metadata</a>
 					
 					</td>
 				</tr>
@@ -519,6 +665,8 @@ function PluralizeType($type){
 		return "Documents";
 	}elseif($type == "note"){
 		return "Notes";
+	}elseif($type == "link"){
+		return "Links";
 	}elseif($type == "other"){
 		return "Other Files";
 	}
