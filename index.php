@@ -300,7 +300,6 @@ if (empty($_REQUEST["viewmode"]) || $_REQUEST["viewmode"] == 'media' || $_REQUES
 			<ul>
 			<?php  foreach ($a->roles as $name=>$r) { ?>
 				<li>Role: <?php echo  ($r["name"]); ?>
-					<ul><li><textarea><?php echo  print_r($a); ?></textarea></li></ul>
 					<ul>
 					<?php foreach ($r["locations"] as $name=>$loc) { ?>
 						<li>Location: <?php echo $loc["name"]; ?></li>
