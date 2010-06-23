@@ -576,10 +576,20 @@ function GetAssetPreview($a){
 	}elseif ($a->type == "note"){
 		$preview = $a->roles[0]["contents"];
 	}else{
-		$preview = "<a href='". $origfile . "'><img src='images/downloaddisk.png' style='border:none' alt='download'/></a>";
+		$preview = "<a href='". GetOriginalFileUrl($a) . "'><img src='images/downloaddisk.png' style='border:none' alt='download'/></a>";
 		#$preview = h($a->inspect)
 	}
 	return $preview;
+}
+function GetOriginalFileUrl($a){
+	global $dropname, $API_KEY;
+	$origfile = "http://api.drop.io";
+	$origfile .= "/drops/".$dropname."/assets/".$a->name."/download/original?api_key=".$API_KEY;
+	$origfile .= "&version=3.0";
+	if ($a->roles[0]["locations"][0]["name"] != "DropioS3"){
+		$origfile .= "&location=" . $a->roles[0]["locations"][0]["name"];
+	}
+	return $origfile;
 }
 function GetAssetsByType($type = array("image", "movie", "audio", "document", "other", "note", "link")){
 	global $drop, $assets, $API_KEY, $dropname, $enabled_cdns, $assetCount;
@@ -587,14 +597,10 @@ function GetAssetsByType($type = array("image", "movie", "audio", "document", "o
 	foreach ($assets as $name=>$a) {
 			if(in_array($a->type, $type)){
 			//echo "monkeypants";
-			$origfile = "http://api.drop.io";
-			$origfile .= "/drops/".$dropname."/assets/".$a->name."/download/original?api_key=".$API_KEY;
-			$origfile .= "&version=3.0";
+			$origfile = GetOriginalFileUrl($a);
 			unset($dimension);
 			$dimension = Array();
-			if ($a->roles[0]["locations"][0]["name"] != "DropioS3"){
-				$origfile .= "&location=" . $a->roles[0]["locations"][0]["name"];
-			}
+			
 			?>
 			<tr>
 				<td>
@@ -627,6 +633,7 @@ function GetAssetsByType($type = array("image", "movie", "audio", "document", "o
 				<td>
 					<?php 
 					$preview = GetAssetPreview($a);
+					//$preview .= 'Embed Code: <textarea rows="2" columns="60">' . htmlspecialchars(GetAssetPreview($a)) . '</textarea>';
 					echo $preview; 
 					?>
 						<div id="emailthis-<?php echo $a->{$a->primary_key}; ?>" style="display:none;"><form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post"> 
