@@ -21,7 +21,7 @@ Class Dropio_Drop_Subscription extends Dropio_Data {
   var $primary_key = 'id';
 
   /**
-	 * The constructor takes in the drop which the subscriptiong is being added to
+	 * The constructor takes in the drop which the subscription is being added to
 	 * and the optional subscription id.
 	 *
 	 * @param Dropio_Drop $drop
