@@ -20,7 +20,7 @@ Class Dropio_Drop_Exception extends Dropio_Exception{};
 Class Dropio_Drop extends Dropio_Data {
 
   var $dropio_api = null;
-  var $token = null;
+  var $token      = null;
 
   /**
    * Standard constructor.  $drop_name can be set to either later load or 
@@ -42,6 +42,7 @@ Class Dropio_Drop extends Dropio_Data {
    * 
    * @param string $name
    * @param string $token
+   * @param string $secret
    * @return Dropio_Drop
    */
 
@@ -109,8 +110,7 @@ Class Dropio_Drop extends Dropio_Data {
     }
 
   }
-
-
+  
   /**
    * Enter description here...
    *

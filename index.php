@@ -1,15 +1,29 @@
 <?php
 
+# Turn on all error reporting while we develop
+error_reporting(E_ALL);
 
+# Get API access
 include('lib/dropio-php/Dropio/Api.php');
+
+# Detech a mobile user
 include('Mobile_Detect.php');
+
+# Load the API keys and secrets
 include('config.inc.php');
+
 $detect = new Mobile_Detect();
+
 $docroot = 'http://' . $_SERVER["SERVER_NAME"] . substr($_SERVER["PHP_SELF"], 0, strrpos($_SERVER["PHP_SELF"], '/') + 1);
+
 //Please be sure to copy config.inc.php.sample to config.inc.php
 //then add your own $API_KEY in that file
- 
-Dropio_Api::setKey($API_KEY);
+
+# Set api key to be global for the life of this script
+# should we change this to the define('API_KEY','xxx') constants?
+Dropio_Api::setKey($API_KEY,$API_SECRET);
+
+# Get the name of the "drop"
 $dropname = $_REQUEST['dropname'];
 
 //Example of adding a note to a drop
@@ -167,7 +181,7 @@ if($_REQUEST["action"] == "delete" && $_REQUEST["assetid"]){
 		####################################################################################### 
 		### HTML5 video player (for all modes but detailed)        ############################ 
 		#######################################################################################  */ ?>
-		<link rel="stylesheet" href="<?php echo $docroot; ?>video-js/video-js.css" type="text/css" media="screen" title="Video JS" charset="utf-8">
+		<link rel="stylesheet" href="<?php echo $docroot; ?>video-js/video-js.css" type="text/css" media="screen" title="Video JS" charset="utf-8"/>
 		<script src="<?php echo $docroot; ?>video-js/video.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript" charset="utf-8">
 			// If using jQuery
@@ -363,30 +377,30 @@ if (empty($_REQUEST["viewmode"]) || $_REQUEST["viewmode"] == 'media' || $_REQUES
 		$("olfield").value = olval.join(",");
 	}
 </script>
+
+<!-- BEGIN UPLOADER -->
 <div id="uploader">
-	<h1>Upload</h1>
-	<form action="<?php echo  Dropio_Api::UPLOAD_URL; ?>" enctype="multipart/form-data" method="post">
+  <h1>Upload</h1>
+	<form action="<?php echo Dropio_Api::UPLOAD_URL; ?>" enctype="multipart/form-data" method="post">
 	
 	<p><label for="file">Select File</label> : 
-		<input type="file" name="file" id="file" /></p>
+  <input type="file" name="file" id="file" /></p>
 	<input type="hidden" name='api_key' value='<?php echo $API_KEY; ?>' />
-	<input type="hidden" name='version' value='3.0' />
+
+	<?php if (isset($API_SECRET)): ?>
+    <input type="hidden" name="api_signature" value="<?php echo Dropio_Drop::getSignature() ?>" />
+    <input type="hidden" name="timestamp" value="<?php echo Dropio_Drop::getSignature() ?>" />
+  <?php endif ?>
+
+  <input type="hidden" name='version' value='3.0' />
 	<input type="hidden" name='drop_name' value='<?php echo $dropname; ?>' />
 	<input type="hidden" name='redirect_to' value='<?php echo  "http://" . $_SERVER["HTTP_HOST"]  . $_SERVER["REQUEST_URI"]; ?>' />
-	Output Locations: 
-	<?php foreach ($output_locations as $ol){  ?> 
-		<br />
-		<input type="checkbox" name='output_location[<?php echo  $ol; ?>]' id="" value='<?php echo  $ol; ?>'  onclick="makeol()" <?php if ($ol == "DropioS3") {echo  "checked";}  ?>/>
-		
-		
-		<label for="output_location[<?php echo  $ol; ?>]" ><?php echo  $ol; ?></label>
-		
-	<?php } ?>
-	<input type="hidden" name='output_locations' value='DropioS3' id='olfield' />
+
 <br />	<input type="submit" /></form>
 <br />	<br />	<br />	<br />
 
 </div>
+<!-- END UPLOADER -->
 
 <br />
 
