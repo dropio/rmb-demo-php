@@ -17,3 +17,5 @@ spec.opts
 # ignore log files
 *.log
 
+_DEVELOPER_LOG
+nbproject/*
