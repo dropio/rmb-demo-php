@@ -24,22 +24,26 @@ $docroot = 'http://' . $_SERVER["SERVER_NAME"] . substr($_SERVER["PHP_SELF"], 0,
 Dropio_Api::setKey($API_KEY,$API_SECRET);
 
 # Get the name of the "drop"
-$dropname = $_REQUEST['dropname'];
+$dropname = (isset($_REQUEST['dropname'])) ? $_REQUEST['dropname'] : null;
 
-//Example of adding a note to a drop
+$newdrop = (isset($_REQUEST['newdrop'])) ? $_REQUEST['newdrop'] : null;
+
+////Example of adding a note to a drop
 //Dropio_Drop::load($dropname)->addNote('This is an example of the Drop.io PHP Library','Hello World');
 
 $page = 1;
 
 //Set the $dropname to the passed in parameter, or create a new drop with a random name
-if(!empty($dropname)){
+if(!is_null($dropname))
+{
 	$drop = Dropio_Drop::load($dropname);
-}else if($_REQUEST['newdrop']){
-	$drop = Dropio_Drop::instance($_REQUEST['newdrop'])->save();
-	$dropname = $drop->name;
-}else{
-	$drop = Dropio_Drop::instance()->save();
-	$dropname = $drop->name;
+} else if(isset($_REQUEST['newdrop']))
+{
+  $drop = Dropio_Drop::instance($_REQUEST['newdrop'])->save();
+  $dropname = $drop->name;
+} else{
+  $drop = Dropio_Drop::instance()->save();
+  $dropname = $drop->name;
 }
 
 //Set the CDNs we'd like to provide. These will be appended to download urls with the "via" parameter
