@@ -1,15 +1,15 @@
 <?php
 
-include 'Data.php';
-include 'Set.php';
-include 'Drop.php';
-include 'Drop/Set.php';
-include 'Asset.php';
-include 'Drop/Subscription.php';
-include 'Drop/Subscription/Set.php';
-include 'Asset/Set.php';
-include 'Asset/Comment.php';
-include 'Asset/Comment/Set.php';
+include_once 'Data.php';
+include_once 'Set.php';
+include_once 'Drop.php';
+include_once 'Drop/Set.php';
+include_once 'Asset.php';
+include_once 'Drop/Subscription.php';
+include_once 'Drop/Subscription/Set.php';
+include_once 'Asset/Set.php';
+include_once 'Asset/Comment.php';
+include_once 'Asset/Comment/Set.php';
  
 if (!extension_loaded('curl')) {
   throw new Dropio_Exception('This library requires the Curl extension.  Read more: http://php.net/manual/en/book.curl.php');
@@ -327,8 +327,8 @@ Class Dropio_Api {
   */
   function getStats () {
 
-  $result = $this->dropio_api->request('GET', 'accounts/drops',
-    Array('manager_api_token'=>$this->manager_token)
+  $result = $this->request('GET', 'accounts/stats',
+    Array()
   );
 
   return $result;
