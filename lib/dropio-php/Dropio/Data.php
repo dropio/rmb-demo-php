@@ -35,7 +35,7 @@ Abstract Class Dropio_Data {
   
   function loadFromArray( $array ) {
     
-    foreach ($array as $var=>$value) {
+    foreach ($array as $var => $value) {
       $this->$var = $value;
     }
 
@@ -79,7 +79,7 @@ Abstract Class Dropio_Data {
       $this->load();
     }
 
-    return array_key_exists($var,$this->values)?$this->values[$var]:null;
+    return array_key_exists($var, $this->values) ? $this->values[$var] : null;
   }
 
   /**
