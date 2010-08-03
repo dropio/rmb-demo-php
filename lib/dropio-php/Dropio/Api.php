@@ -4,7 +4,6 @@ include 'Data.php';
 include 'Set.php';
 include 'Drop.php';
 include 'Drop/Set.php';
-include 'Manager.php';
 include 'Asset.php';
 include 'Drop/Subscription.php';
 include 'Drop/Subscription/Set.php';
@@ -96,13 +95,13 @@ Class Dropio_Api {
 	 * @return Dropio_Api
 	 */
 
-  static function instance ( $api_key = null, $api_secret = null ) {
-    if (empty($api_key) || is_null($api_key))
+  public static function instance ( $api_key=null, $api_secret=null)
+  {
+    if (empty($api_key))
       $api_key = self::$global_api_key;
 
-    if (empty($api_secret) || is_null($api_secret))
-      $api_key = self::$global_api_secret;
-
+    if (empty($api_secret))
+      $api_secret = self::$global_api_secret;
 
     return new Dropio_Api( $api_key, $api_secret );
   }
@@ -286,23 +285,53 @@ Class Dropio_Api {
   }
 
   /**
-   * Simplify the process of making an upload form. Have the object return an
-   * HTML snippit ready to drop into any page
-   *
-   * TODO: Generate the code
-   */
+  * Simplify the process of making an upload form. Have the object return an
+  * HTML snippit ready to drop into any page
+  *
+  * TODO: Generate the code
+  */
   public static function getSimpleUploadForm()
   {
     return false;
   }
 
   /**
-   * Get the pretty flash / javascript uploader for uploadify form uploader
-   *
-   * TODO: Generate the code
-   */
+  * Get the pretty flash / javascript uploader for uploadify form uploader
+  *
+  * TODO: Generate the code
+  */
   public static function getUploadifyForm()
   {
     return false;
+  }
+
+  /**
+   * Return a list of all the drops for a given key
+   * @param <type> $page
+   * @return <type>
+   */
+  function getDrops ( $page = 1) {
+
+    $result = $this->request('GET', 'accounts/drops',
+      Array('page'=>$page)
+    );
+
+    return $result;
+
+  }
+
+  /**
+  * Retrieves status on manager account.
+  *
+  * @return Array
+  */
+  function getStats () {
+
+  $result = $this->dropio_api->request('GET', 'accounts/drops',
+    Array('manager_api_token'=>$this->manager_token)
+  );
+
+  return $result;
+
   }
 }
