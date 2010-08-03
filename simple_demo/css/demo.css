@@ -1,0 +1,79 @@
+/* 
+    Document   : demo.css
+    Created on : Aug 3, 2010, 5:24:53 PM
+    Author     : Sheraz Sharif
+    Description:
+        Stylesheet for the Drop API simple demo app
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+body, html {
+    margin: 0 auto;
+    padding: 0;
+    text-align: center;
+    font-family: helvetica,arial, sans-serif;
+}
+
+#container {
+    margin: 0 auto;
+    width: 600px;
+    text-align: left;
+}
+
+#message {
+    background-color: #66FF00;
+    color: #333;
+    border: 2px solid #333;
+    padding: 10px;
+    margin: 20px;
+}
+
+p {
+}
+
+th {
+    text-align: left;
+}
+
+label {
+    width: 200px;
+    display: block;
+    float: left;
+}
+
+ul {
+    list-style: none;
+    padding: 15px;
+}
+
+li {
+    padding: 10px;
+}
+
+.dropname {
+    float: left;
+    width: 200px;
+}
+
+.actionlink {
+    float: left;
+    width: 50px;
+}
+
+.actionlink a {
+    text-decoration: none;
+    text-transform: lowercase;
+    color: #aaa;
+}
+
+.delete a:hover {
+    color: red;
+}
+
+.edit a:hover {
+    color: green;
+}
