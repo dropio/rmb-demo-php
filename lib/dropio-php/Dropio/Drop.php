@@ -22,6 +22,12 @@ Class Dropio_Drop extends Dropio_Data {
   var $dropio_api = null;
   var $token      = null;
 
+    /**
+   * @var string  $orig_name  The original name of the drop. Will not change for
+   *                          the life ofthe object, even when it is renamed.
+   */
+  var $orig_name = null;
+
   /**
    * Standard constructor.  $drop_name can be set to either later load or 
    * create a new drop.
@@ -33,6 +39,7 @@ Class Dropio_Drop extends Dropio_Data {
   function __construct ( $drop_name = null, $token = null ) {
     $this->dropio_api = new Dropio_Api();
     $this->values[$this->primary_key] = $drop_name;
+    $this->orig_name = $drop_name;
     $this->token = $token;
   }
 
@@ -147,7 +154,7 @@ Class Dropio_Drop extends Dropio_Data {
 
       $updates['token'] = $this->token();
 
-      $result = $this->dropio_api->request('PUT', 'drops/' . $this->name, $updates);
+      $result = $this->dropio_api->request('PUT', 'drops/' . $this->orig_name, $updates);
 
       return $this->loadFromArray($result);
     }
