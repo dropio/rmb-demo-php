@@ -266,25 +266,6 @@ Class Dropio_Api {
   }
 
   /**
-   * Use this static method to get a signature to make uploads
-   * 
-   * @param   array   $params
-   * @return  array   Hash array containing signed URL and timestamp
-   *                  $ret['timestamp'] = 1280787859;
-   *                  $ret['signature'] = '292809f6e6d8b4bc9cbefc8ae5a287b93ed6d04c';
-   *
-   */
-  public static function getSignature($params = null)
-  {
-    $params['timestamp'] = strtotime('now + 15 minutes');
-
-    $arr['timestamp'] = $params['timestamp'];
-    $arr['signature'] = Dropio_Api::instance()->sign_if_needed($params);
-
-    return $arr;
-  }
-
-  /**
   * Simplify the process of making an upload form. Have the object return an
   * HTML snippit ready to drop into any page
   *
