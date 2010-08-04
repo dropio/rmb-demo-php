@@ -25,10 +25,10 @@ include_once('config.inc.php');
 
 # Get a list of drops for this account
 #
-$drops = Dropio_Api::instance($API_KEY)->getDrops();
+$drops = Dropio_Api::instance()->getDrops();
 
 # Get stats associated with this account
-$stats = Dropio_Api::instance($API_KEY)->getStats();
+$stats = Dropio_Api::instance()->getStats();
 
 ?>
 <html>
