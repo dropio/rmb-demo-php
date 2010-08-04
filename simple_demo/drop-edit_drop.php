@@ -1,17 +1,5 @@
 <?php
 
-# Setup some variables...
-$intervals = array(
-    '1_DAY_FROM_NOW'         => '1 Day from now',
-    '1_WEEK_FROM_NOW'        => '1 Week from now',
-    '1_MONTH_FROM_NOW'       => '1 Month from now',
-    '1_YEAR_FROM_NOW'        => '1 Year from now',
-    '1_DAY_FROM_LAST_VIEW'   => '1 Day from last view',
-    '1_WEEK_FROM_LAST_VIEW'  => '1 Week from last view',
-    '1_MONTH_FROM_LAST_VIEW' => '1 Month from last view',
-    '1_YEAR_FROM_LAST_VIEW'  => '1 Year from last view'
-  );
-
 # This is for making the demos a little nicer. It has nothing to do with using
 # the dropio api.
 include_once('_helper.php');
@@ -56,21 +44,14 @@ $drop = Dropio_Drop::load($dropname);
     <form action="drop-update_drop.php" method="post">
       <ul>
         <li>
-          <label for="dropname">Drop name:</label>
-          <input type="text" name="dropname" value="<?php echo $dropname ?>"/></li>
+          <label for="name">Drop name:</label>
+          <input type="text" name="name" value="<?php echo $dropname ?>"/></li>
         <li>
           <label for="description">Description:</label>
-          <textarea cols="20" rows="10">loremipsum</textarea>
+          <textarea cols="20" rows="10" name="description"><?php echo $drop->description ?></textarea>
         </li>
         <li>
-          <label for="expiration">Expiration:</label>
-          <select id="expiration" name="expiration">
-            <?php foreach($intervals as $option => $text): ?>
-              <option value="<?php echo $option ?>" <?php if($drop->expiration_length===$option) echo "selected"?>><?php echo $text ?></option>
-            <?php endforeach ?>
-          </select>
-        </li>
-        <li>
+          <input type="hidden" name="orig_name" value="<?php echo $dropname ?>"/>
           <input type="submit"/>
         </li>
       </ul>

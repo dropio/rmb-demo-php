@@ -11,9 +11,15 @@ include_once('../lib/dropio-php/Dropio/Api.php');
 include_once('config.inc.php');
 
 # Bail out if we didn't get a name with it.
-if(empty($_REQUEST['dropname']))
-  die('$dropname must be present in the request params');
+if(empty($_POST['name']))
+  die('$name must be present in the request params');
 
+$drop = Dropio_Drop::load($_POST['orig_name'])
+  ->set('name',$_POST['name'])
+  ->set('description',$_POST['description'])
+  ->save();
 
+$_SESSION['message'] = "Update successful!";
 
+header("Location: $docroot");
 ?>
