@@ -65,7 +65,7 @@ Class Dropio_Api {
 	 * @param string $api_key
 	 */
 
-  function __construct ( $api_key = null, $api_secret = null ) {
+  public function __construct ( $api_key = null, $api_secret = null ) {
 
     if (empty($api_key)) {
       $api_key = self::$global_api_key;
@@ -113,7 +113,7 @@ Class Dropio_Api {
    * @param string $api_secret the api secret (optional)
 	 */
 
-  static function setKey( $api_key = null, $api_secret = null ) {
+  public static function setKey( $api_key = null, $api_secret = null ) {
     self::$global_api_key = $api_key;
     self::$global_api_secret = $api_secret;
   }
@@ -124,7 +124,7 @@ Class Dropio_Api {
   * @param string $url
   */
 
-  static function setApiUrl( $url ) {
+  public static function setApiUrl( $url ) {
       self::$api_url = $url;
   }
 	
@@ -137,7 +137,7 @@ Class Dropio_Api {
     * @return mixed
     */
 
-  function request ( $method, $path, $params = Array() ) {
+  public function request ( $method, $path, $params = Array() ) {
 
     $params['version'] = self::API_VERSION;
     $params['format']  = self::RESPONSE_FORMAT;
