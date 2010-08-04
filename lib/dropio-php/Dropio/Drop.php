@@ -102,7 +102,7 @@ Class Dropio_Drop extends Dropio_Data {
   }
 
 
-  function token () {
+  public function token () {
 
     switch (true) {
       case strlen($this->token):
@@ -170,7 +170,7 @@ Class Dropio_Drop extends Dropio_Data {
    * @return unknown
    */
 
-  function getAsset ( $asset_name ) {
+  public function getAsset ( $asset_name ) {
 
     $asset_array = $this->dropio_api->request('GET', 'drops/' . $this->name . '/assets/' . $asset_name,
     Array('token'=>$this->token())
@@ -190,7 +190,7 @@ Class Dropio_Drop extends Dropio_Data {
    * @return Dropio_Drop
    */
 
-  function getAssets ( $page = 1, $order = 'oldest') {
+  public function getAssets ( $page = 1, $order = 'oldest') {
 
     if (!in_array($order, Array('oldest', 'latest'))){
       throw new Dropio_Drop_Exception('Invalid value for order, must be either: oldest or latest');
@@ -440,7 +440,50 @@ Class Dropio_Drop extends Dropio_Data {
 
   }
 
+  /**
+   *
+   * @return string An HTML string containgin a smiple form upload.
+   */
+  public function getSimpleUploadForm()
+  {
+    $docroot = "http://".$_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
 
+    $params = array(
+      'api_key'     => Dropio_Api::$global_api_key,
+      'drop_name'   => $this->orig_name,
+      'format'      => 'json',
+      'redirect_to' => $docroot,
+      'version'     => '3.0'
+    );
+
+    $params = $this->dropio_api->sign_if_needed($params);
+    $input=''; 
+    foreach ($params as $k=>$v)
+      $input .= "<input type=\"hidden\" name=\"$k\" value=\"$v\"/>\n";
+
+    $html = <<<EOF
+    <form action="http://assets.drop.io/upload" method="post" enctype="multipart/form-data">
+      <ul>
+        <li>
+          <label for="file">Add a new file:</label>
+          <input type="file" name="file" size="25"/>
+        </li>
+        <li>
+          $input
+          <input type="submit"/>
+        </li>
+      </ul>
+    </form>
+
+EOF;
+
+    return $html;
+  }
+
+  public function getUploadifyForm()
+  {
+    
+  }
 
 }
 
