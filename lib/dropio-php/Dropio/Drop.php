@@ -470,7 +470,7 @@ Class Dropio_Drop extends Dropio_Data {
         </li>
         <li>
           $input
-          <input type="submit"/>
+          <input type="submit" value="submit"/>
         </li>
       </ul>
     </form>
@@ -482,7 +482,46 @@ EOF;
 
   public function getUploadifyForm()
   {
-    
+    $upload_url = Dropio_Api::UPLOAD_URL;
+
+    $docroot = "http://".$_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
+
+    $params = array(
+      'api_key'     => Dropio_Api::$global_api_key,
+      'drop_name'   => $this->orig_name,
+      'format'      => 'json',
+      'version'     => '3.0'
+    );
+
+    $params = $this->dropio_api->sign_if_needed($params);
+
+    $str= json_encode($params);
+
+    $html =<<<EOL
+		<script type="text/javascript" src="../uploadify/jquery-1.3.2.min.js"></script>
+		<script type="text/javascript" src="../uploadify/swfobject.js"></script>
+		<script type="text/javascript" src="../uploadify/jquery.uploadify.v2.1.0.min.js"></script>
+		<link rel="stylesheet" type="text/css" media="screen, projection" href="../uploadify/uploadify.css" />
+
+		<script type="text/javascript">// <![CDATA[
+		$(document).ready(function() {
+		$('#file').uploadify({
+		'uploader'  : '../uploadify/uploadify.swf',
+		'script'    : '$upload_url',
+		'multi'    : true,
+		'scriptData': $str,
+		'cancelImg' : '../uploadify/cancel.png',
+		'auto'      : true,
+		'onAllComplete' : function(){setTimeout(window.location = '$docroot',3000);},
+		'folder'    : '/uploads'
+		});
+		});
+		// ]]></script>
+
+    <input type="file" name="fileUpload" id="file"/>
+EOL;
+
+    return $html;
   }
 
 }
