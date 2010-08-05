@@ -94,7 +94,6 @@ Class Dropio_Api {
    * @param string $api_secret
 	 * @return Dropio_Api
 	 */
-
   public static function instance ( $api_key=null, $api_secret=null)
   {
     if (empty($api_key))
@@ -112,36 +111,23 @@ Class Dropio_Api {
 	 * @param string $api_key
    * @param string $api_secret the api secret (optional)
 	 */
-
   public static function setKey( $api_key = null, $api_secret = null ) {
     self::$global_api_key = $api_key;
     self::$global_api_secret = $api_secret;
   }
 
   /**
-  * Sets the global api_url.
-  *
-  * @param string $url
-  */
-
-  public static function setApiUrl( $url ) {
-      self::$api_url = $url;
-  }
-	
-  /**
-    * Executes a request to Drop.io's API servers.
-    *
-    * @param string $method
-    * @param string $path
-    * @param array $params
-    * @return mixed
-    */
-
+   * Make the appropriate curl call to the drop.io servers.
+   *
+   * @param string $method  either GET,POST,PUT,DELETE,UPLOAD
+   * @param string $path    the uri path on the drop.io servers
+   * @param array $params   the request parameters
+   * @return mixed          the decoded json data as an array
+   */
   public function request ( $method, $path, $params = Array() ) {
 
     $params['version'] = self::API_VERSION;
     $params['format']  = self::RESPONSE_FORMAT;
-
     $params['api_key'] = $this->api_key;
 
     $api_url  = empty(self::$api_url) ? (self::$use_https ? self::API_HTTPS_URL : self::API_HTTP_URL) : self::$api_url;
@@ -149,7 +135,7 @@ Class Dropio_Api {
     $url      =  $api_url . '/' . $path;
 
     // Sign it, damn you!!
-    $params = $this->sign_if_needed($params);
+    $params = $this->signIfNeeded($params);
 
     $ch = curl_init();
 
@@ -226,64 +212,58 @@ Class Dropio_Api {
   }
 
   /**
+   * Sign the request if it is required by the api_key. If the api key is a
+   * secure key, then all requests will me signed.
    *
-   *
-   *
+   * @param array $params
+   * @return array param string with signature and timestamp if needed
    */
-  public function sign_if_needed($params = null)
+  public function signIfNeeded($params = null)
   {
     if($this->api_secret !== NULL)
     {
-        $params = $this->add_required_params($params);
-        $params = $this->sign_request($params);
+        $params = $this->addRequiredParams($params);
+        $params = $this->signRequest($params);
     }
 
     return $params;
   }
 
-  public function sign_request($params = null)
+  /**
+   * Sign the URL with a SHA1 hash
+   *
+   * @param array $params
+   * @return array the arram params with timestamp and signature in the hash keys
+   */
+  public function signRequest($params = null)
   {
-        $str='';
-        ksort($params);
+    $str='';
+    ksort($params);
 
-        # Weird, if token is present but empty, remove it. Move this logic to
-        # Drop object
-        if(empty($params['token']))
-          unset($params['token']);
+    # Weird, if token is present but empty, remove it. Move this logic to
+    # Drop object
+    if(empty($params['token']))
+      unset($params['token']);
 
-        foreach($params as $k=>$v)
-            $str .= "$k=$v";
+    foreach($params as $k=>$v)
+        $str .= "$k=$v";
 
-        $params['signature'] = sha1($str . $this->api_secret);
+    $params['signature'] = sha1($str . $this->api_secret);
 
-        return $params;
+    return $params;
   }
 
-  public function add_required_params($params = null)
+  /**
+   * Generate and insert a timestamp + 15 minutes into the params which are
+   * used for signing the URL
+   *
+   * @param array $params 
+   * @return array  Array with [timestamp] as one of the hash keys.
+   */
+  public function addRequiredParams($params = null)
   {
       $params['timestamp'] = strtotime('now + 15 minutes');
       return $params;
-  }
-
-  /**
-  * Simplify the process of making an upload form. Have the object return an
-  * HTML snippit ready to drop into any page
-  *
-  * TODO: Generate the code
-  */
-  public static function getSimpleUploadForm()
-  {
-    return false;
-  }
-
-  /**
-  * Get the pretty flash / javascript uploader for uploadify form uploader
-  *
-  * TODO: Generate the code
-  */
-  public static function getUploadifyForm()
-  {
-    return false;
   }
 
   /**
@@ -291,14 +271,9 @@ Class Dropio_Api {
    * @param <type> $page
    * @return <type>
    */
-  function getDrops ( $page = 1) {
-
-    $result = $this->request('GET', 'accounts/drops',
-      Array('page'=>$page)
-    );
-
+  public function getDrops ( $page = 1) {
+    $result = $this->request('GET', 'accounts/drops', Array('page'=>$page));
     return $result;
-
   }
 
   /**
@@ -306,13 +281,8 @@ Class Dropio_Api {
   *
   * @return Array
   */
-  function getStats () {
-
-  $result = $this->request('GET', 'accounts/stats',
-    Array()
-  );
-
-  return $result;
-
+  public function getStats () {
+    $result = $this->request('GET', 'accounts/stats',Array());
+    return $result;
   }
 }
