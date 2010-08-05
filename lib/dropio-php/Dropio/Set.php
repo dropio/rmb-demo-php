@@ -19,7 +19,7 @@ Class Dropio_Set  {
    * @param integer $per_page
    * @param string $name_key
    */
-	function __construct ( Array $items = null, $count = null, $page = null, $per_page = null, $name_key = null) {
+	public function __construct ( Array $items = null, $count = null, $page = null, $per_page = null, $name_key = null) {
 
 		$i = 0;
 		
@@ -40,7 +40,7 @@ Class Dropio_Set  {
 	 * @return integer
 	 */
 	
-	function getPage () {
+	public function getPage () {
 		return $this->_attributes['page'];
 	}
 	
@@ -51,7 +51,7 @@ Class Dropio_Set  {
 	 * @return integer
 	 */
 	
-	function getTotalCount () {
+	public function getTotalCount () {
 		return $this->_attributes['total_count'];
 	}
 	
@@ -61,7 +61,7 @@ Class Dropio_Set  {
 	 * @return integer
 	 */
 	
-	function getCount() {
+	public function getCount() {
 		return $this->_attributes['count'];
 	}
 	
@@ -71,7 +71,7 @@ Class Dropio_Set  {
 	 * @return integer
 	 */
 	
-	function getPerPage () {
+	public function getPerPage () {
 		return $this->_attributes['per_page'];
 	}
 	
@@ -81,7 +81,7 @@ Class Dropio_Set  {
 	 * @return string
 	 */
 	
-	function __toString() {
+	public function __toString() {
 		return (string) $this->count();
 	}
 
