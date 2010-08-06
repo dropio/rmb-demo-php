@@ -11,18 +11,18 @@ include_once('../lib/dropio-php/Dropio/Asset.php');
 include_once('config.inc.php');
 
 # Bail out if we didn't get a name with it.
-if(empty($_POST['name']))
-  die('$name must be present in the request params');
+if(!isset($_POST['assetname']))
+  die('$name must be present in the request params - ' . $_POST['name']);
 
 $asset = Dropio_Asset::getInstance($API_KEY,$API_SECRET)
         ->setDropName($_POST['dropname'])
-        ->setName($_POST['name'])
+        ->setName($_POST['assetname'])
         ->load()
-        ->setName($_POST['name'])
+        ->setName($_POST['assetname'])
         ->setDescription($_POST['description'])
         ->save();
 
 $_SESSION['message'] = "Update successful!";
 
-header("Location: $docroot");
+header("Location: {$docroot}drop-view_assets.php?dropname={$_POST['dropname']}");
 ?>

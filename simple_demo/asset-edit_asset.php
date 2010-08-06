@@ -42,13 +42,13 @@ $asset = Dropio_Drop::getInstance($API_KEY, $API_SECRET)
 
     <h1>Editing asset '<?php echo $asset->getName() ?>'</h1>
     <p>
-      <img src="<?php echo $asset->getFileUrl('thumbnail') ?>"/>
+      <img src="<?php echo $asset->getFileUrl('thumbnail') ?>" alt=""/>
     </p>
     <form action="asset-update_asset.php" method="post">
       <ul>
         <li>
-          <label for="name">Asset name:</label>
-          <input type="text" name="name" value="<?php echo $asset->getName(); ?>"/></li>
+          <label for="assetname">Asset name:</label>
+          <input type="text" name="assetname" value="<?php echo $asset->getName(); ?>"/></li>
         <li>
           <label for="description">Description:</label>
           <textarea cols="20" rows="10" name="description"><?php echo $asset->getDescription() ?></textarea>
