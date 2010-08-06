@@ -39,6 +39,11 @@ th {
     text-align: left;
 }
 
+td {
+    border-bottom: 1px dotted #ccc;
+    padding: 5px;
+}
+
 label {
     width: 200px;
     display: block;
