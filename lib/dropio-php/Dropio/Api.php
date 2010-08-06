@@ -1,241 +1,104 @@
 <?php
 
-include_once 'Data.php';
-include_once 'Set.php';
-include_once 'Drop.php';
-include_once 'Drop/Set.php';
-include_once 'Asset.php';
-include_once 'Drop/Subscription.php';
-include_once 'Drop/Subscription/Set.php';
-include_once 'Asset/Set.php';
-include_once 'Asset/Comment.php';
-include_once 'Asset/Comment/Set.php';
- 
-if (!extension_loaded('curl')) {
-  throw new Dropio_Exception('This library requires the Curl extension.  Read more: http://php.net/manual/en/book.curl.php');
-} 
-
 Class Dropio_Exception extends Exception {};
 Class Dropio_Api_Exception extends Dropio_Exception {};
-
-/**
- * Dropio_Api is a client for the Dropio API and the basis for all the other 
- * helper classes.
- * 
- * This can be used to access all the functionality of the API.  
- * 
- * If an error is returned from the API, a Dropio_Api_Exception is thrown.
- * 
- * Example to get details on a drop.
- * 
- * try {
- *  $api = new Dropio_Api(API_KEY);
- *  $response = $api->request('GET', '/drops/php_api_lib');
- *  print_r($response);
- * } catch (Dropio_Api_Exception $e) {
- *  die("Error:" . $e->getMessage());
- * }
- *
- */
 
 Class Dropio_Api {
 
   const RESPONSE_FORMAT  = 'json';
   const API_VERSION      = '3.0';
-
-  protected $api_key     = null;
-  protected $api_secret  = null;
-
-  static $global_api_key    = null;
-  static $global_api_secret = null;
-
-  static $use_https      = false;
-  static $api_url        = null;
-
-  const API_HTTP_URL     = 'http://api.drop.io';
-  const API_HTTPS_URL    = 'http://api.drop.io';
-
+  const API_URL          = 'api.drop.io';
   const CLIENT_VER       = '1.0';
   const UPLOAD_URL       = 'http://assets.drop.io/upload';
 
-  /**
-	 * instantiates a new Dropio_Api object.  The api_key is optional, if not set
-	 * it uses the global api_key set by: Dropio_Api::setKey(API_KEY);
-	 *
-	 * @param string $api_key
-	 */
-
-  public function __construct ( $api_key = null, $api_secret = null ) {
-
-    if (empty($api_key)) {
-      $api_key = self::$global_api_key;
-    }
-
-    if (empty($api_secret)) {
-      $api_secret = self::$global_api_secret;
-    }
-
-    if (empty($api_key)) {
-      throw new Dropio_Api_Exception('Api key is not set.');
-    }
-
-    $this->api_key = $api_key;
-    $this->api_secret = $api_secret;
-  }
+  private $_api_key      = null;
+  private $_api_secret   = null;
+  private $_use_https    = false;
 
   /**
-	 * Instance method to allow simple chaining.
-	 * 
-	 * Example:
-	 * 
-	 * $response = Dropio_Api::instance()->request('GET', '/drops/php_api_lib');
-	 *
-	 * @param string $api_key
-   * @param string $api_secret
-	 * @return Dropio_Api
-	 */
-  public static function instance ( $api_key=null, $api_secret=null)
-  {
-    if (empty($api_key))
-      $api_key = self::$global_api_key;
-
-    if (empty($api_secret))
-      $api_secret = self::$global_api_secret;
-
-    return new Dropio_Api( $api_key, $api_secret );
-  }
-
-  /**
-	 * Sets the global api_key.
-	 *
-	 * @param string $api_key
-   * @param string $api_secret the api secret (optional)
-	 */
-  public static function setKey( $api_key = null, $api_secret = null ) {
-    self::$global_api_key = $api_key;
-    self::$global_api_secret = $api_secret;
-  }
-
-  /**
-   * Make the appropriate curl call to the drop.io servers.
    *
-   * @param string $method  either GET,POST,PUT,DELETE,UPLOAD
-   * @param string $path    the uri path on the drop.io servers
-   * @param array $params   the request parameters
-   * @return mixed          the decoded json data as an array
+   * @var mixed  An associative array of values loaded from the API. Also used
+   *             when sending values back to the server.
    */
-  public function request ( $method, $path, $params = Array() ) {
+  protected $_values       = null;
 
-    $params['version'] = self::API_VERSION;
-    $params['format']  = self::RESPONSE_FORMAT;
-    $params['api_key'] = $this->api_key;
-
-    $api_url  = empty(self::$api_url) ? (self::$use_https ? self::API_HTTPS_URL : self::API_HTTP_URL) : self::$api_url;
-
-    $url      =  $api_url . '/' . $path;
-
-    // Sign it, damn you!!
-    $params = $this->signIfNeeded($params);
-
-    $ch = curl_init();
-
-    /**
-    *  Setting the user agent, useful for debugging and allowing us to check which version
-    **/
-		
-    curl_setopt($ch, CURLOPT_USERAGENT, 'Drop.io PHP client v' . self::CLIENT_VER);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 0);
-    
-    switch($method){
-      case 'POST':
-
-        curl_setopt($ch, CURLOPT_POST, 1);
-
-        //For some reason, this needs to be a string instead of an array.
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
-        break;
-      case 'DELETE':
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
-        break;
-      case 'PUT':
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-        break;
-      case 'GET':
-        $url .= '?' . http_build_query($params);
-        break;
-      case 'UPLOAD':
-        $params['file'] = '@' . $params['file'];
-
-        $url = self::UPLOAD_URL;
-
-        curl_setopt ($ch, CURLOPT_POST, 1);
-        curl_setopt ($ch, CURLOPT_POSTFIELDS, $params);
-        break;
-    }
-
-//    echo $url;print_r($params); echo "\n";
-    
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-    if ( ( $result = curl_exec($ch) ) === false ) {
-      throw new Dropio_Api_Exception ('Curl Error:' . curl_error($ch));
-    }
-
-    $http_response_code   = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-    if (
-    in_array($http_response_code, Array(200,400,403,404))
-    &&
-    is_array( $data = @json_decode( $result, true))
-    ) {
-
-      if (
-      isset($data['response']['result'])
-      &&
-      $data['response']['result'] == 'Failure'
-      ) {
-        throw new Dropio_Api_Exception ($data['response']['message']);
-      }
-
-      return $data;
-    }
-
-    throw new Dropio_Api_Exception(
-    'Received error code from web server:' . $http_response_code,
-    $http_response_code
-    );
-
+  public function __construct($key = null,$secret=null) {
+    $this->_api_key    = $key;
+    $this->_api_secret = $secret;
   }
 
   /**
-   * Sign the request if it is required by the api_key. If the api key is a
-   * secure key, then all requests will me signed.
+  *   Set the API_KEY
    *
-   * @param array $params
-   * @return array param string with signature and timestamp if needed
-   */
-  public function signIfNeeded($params = null)
+   * @param string The api key
+  */
+  private function setApiKey($v)
   {
-    if($this->api_secret !== NULL)
+    $this->_api_key = $v;
+    return $this;
+  }
+
+  /**
+  *   Set the API_SECRET
+   *
+   * @param string the secret associated with an api key
+  */
+  private function setApiSecret($v)
+  {
+    $this->_api_secret = $v;
+    return $this;
+  }
+
+  /**
+   *
+   * @return mixed  An associative array of values loaded from the server
+   */
+  public function getValues()
+  {
+    return $this->_values;
+  }
+
+  /**
+   *
+   * @param array $values
+   * @return <type>
+   */
+  public function setValues($values)
+  {
+    $this->_values = $values;
+    return $this;
+  }
+
+  /**
+   * Set whether the API call is secure (HTTPS) or insecure (HTTP)
+   *
+   * @param bolean $b (default true)
+   * @return mixed
+   */
+  public function setIsSecure($b = true)
+  {
+    $this->_use_https = $b;
+    return $this;
+  }
+
+  protected function _signIfNeeded($params = null)
+  {
+    if($this->_api_secret !== NULL)
     {
-        $params = $this->addRequiredParams($params);
-        $params = $this->signRequest($params);
+        $params = $this->_addRequiredParams($params);
+        $params = $this->_signRequest($params);
     }
 
     return $params;
   }
 
-  /**
-   * Sign the URL with a SHA1 hash
-   *
-   * @param array $params
-   * @return array the arram params with timestamp and signature in the hash keys
-   */
-  public function signRequest($params = null)
+  protected function _addRequiredParams($params = null)
+  {
+      $params['timestamp'] = strtotime('now + 15 minutes');
+      return $params;
+  }
+
+  protected function _signRequest($params = null)
   {
     $str='';
     ksort($params);
@@ -248,41 +111,126 @@ Class Dropio_Api {
     foreach($params as $k=>$v)
         $str .= "$k=$v";
 
-    $params['signature'] = sha1($str . $this->api_secret);
+    $params['signature'] = sha1($str . $this->_api_secret);
 
     return $params;
   }
 
   /**
-   * Generate and insert a timestamp + 15 minutes into the params which are
-   * used for signing the URL
+   * Build a use that is either secure (HTTPS) or plain (HTTP)
    *
-   * @param array $params 
-   * @return array  Array with [timestamp] as one of the hash keys.
+   * @return string   A complete URL that is either HTTP or HTTPS
    */
-  public function addRequiredParams($params = null)
+  private function getApiUrl()
   {
-      $params['timestamp'] = strtotime('now + 15 minutes');
-      return $params;
+    return ($this->_use_https) ? 'https://'.self::API_URL : 'http://'.self::API_URL;
   }
 
   /**
-   * Return a list of all the drops for a given key
-   * @param <type> $page
+   *
+   * @param <type> $method
+   * @param <type> $path
+   * @param <type> $params
    * @return <type>
    */
-  public function getDrops ( $page = 1) {
-    $result = $this->request('GET', 'accounts/drops', Array('page'=>$page));
-    return $result;
+  public function request($method, $path, $params=null)
+  {
+    $params['version'] = self::API_VERSION;
+    $params['format']  = self::RESPONSE_FORMAT;
+    $params['api_key'] = $this->_api_key;
+
+    $url =  $this->getApiUrl() . '/' . $path;
+
+    # Sign it, damn you!!
+    $params = $this->_signIfNeeded($params);
+
+    $ch = curl_init();
+
+    # Setting the user agent, useful for debugging and allowing us to check which version
+    curl_setopt($ch, CURLOPT_USERAGENT, 'Drop.io PHP client v' . self::CLIENT_VER);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 0);
+
+    switch($method)
+    {
+      case 'POST':
+
+        curl_setopt($ch, CURLOPT_POST, 1);
+
+        # For some reason, this needs to be a string instead of an array.
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+        break;
+        case 'DELETE':
+          curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+          curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
+          break;
+        case 'PUT':
+          curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+          curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+          curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+          break;
+        case 'GET':
+          $url .= '?' . http_build_query($params);
+          break;
+        case 'UPLOAD':
+          $params['file'] = '@' . $params['file'];
+
+          $url = self::UPLOAD_URL;
+
+          curl_setopt ($ch, CURLOPT_POST, 1);
+          curl_setopt ($ch, CURLOPT_POSTFIELDS, $params);
+          break;
+      }
+
+        //echo $url;print_r($params); echo "\n";
+
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+    if ( ( $result = curl_exec($ch) ) === false )
+      throw new Dropio_Api_Exception ('Curl Error:' . curl_error($ch));
+
+    $http_response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+    if (in_array($http_response_code, Array(200,400,403,404)) && is_array( $data = @json_decode( $result, true)))
+    {
+      if (isset($data['response']['result']) && $data['response']['result'] == 'Failure')
+      {
+        throw new Dropio_Api_Exception ($data['response']['message']);
+      }
+      return $data;
+    }
+
+    throw new Dropio_Api_Exception('Received error code from web server:' . $http_response_code,$http_response_code);
   }
 
   /**
-  * Retrieves status on manager account.
-  *
-  * @return Array
-  */
-  public function getStats () {
-    $result = $this->request('GET', 'accounts/stats',Array());
-    return $result;
+   * Get a list of all drops associated with this key
+   *
+   * @return array  An array of all the drops associated with this key
+   */
+  public function getDrops()
+  {
+    return $this->request('GET','accounts/drops',array());
   }
+
+  /**
+   * Get some stats associated with this key
+   *
+   * @return <type>
+   */
+  public function getStats()
+  {
+    return $this->request('GET','accounts/stats',array());
+  }
+
+  /**
+  * Get an instance which enables fluent interface / chaining x->a()->b()->c();
+  */
+  public static function getInstance($api_key,$api_secret)
+  {
+    return new Dropio_Api($api_key,$api_secret);
+  }
+
+  public function getApiKey() { return $this->_api_key; }
+  public function getApiSecret() { return $this->_api_secret; }
 }
