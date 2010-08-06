@@ -4,7 +4,7 @@
 include_once('config.inc.php');
 
 # We only need the API object.
-include_once('../lib/Dropio-php/Dropio/Api.php');
+include_once('lib/Dropio-php/Dropio/Api.php');
 
 # This uses the static method
 $drops = Dropio_Api::instance($API_KEY)->getDrops();

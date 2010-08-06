@@ -163,19 +163,19 @@ EOF;
     $str= json_encode($params);
 
     $html =<<<EOL
-		<script type="text/javascript" src="../uploadify/jquery-1.3.2.min.js"></script>
-		<script type="text/javascript" src="../uploadify/swfobject.js"></script>
-		<script type="text/javascript" src="../uploadify/jquery.uploadify.v2.1.0.min.js"></script>
-		<link rel="stylesheet" type="text/css" media="screen, projection" href="../uploadify/uploadify.css" />
+		<script type="text/javascript" src="uploadify/jquery-1.3.2.min.js"></script>
+		<script type="text/javascript" src="uploadify/swfobject.js"></script>
+		<script type="text/javascript" src="uploadify/jquery.uploadify.v2.1.0.min.js"></script>
+		<link rel="stylesheet" type="text/css" media="screen, projection" href="uploadify/uploadify.css" />
 
 		<script type="text/javascript">// <![CDATA[
 		$(document).ready(function() {
 		$('#file').uploadify({
-		'uploader'  : '../uploadify/uploadify.swf',
+		'uploader'  : 'uploadify/uploadify.swf',
 		'script'    : '$upload_url',
 		'multi'    : true,
 		'scriptData': $str,
-		'cancelImg' : '../uploadify/cancel.png',
+		'cancelImg' : 'uploadify/cancel.png',
 		'auto'      : true,
 		'onAllComplete' : function(){setTimeout(window.location = '$docroot',3000);},
 		'folder'    : '/uploads'

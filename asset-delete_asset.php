@@ -4,7 +4,7 @@
 include_once('_helper.php');
 
 # Get access to the API
-include_once('../lib/dropio-php/Dropio/Asset.php');
+include_once('lib/dropio-php/Dropio/Asset.php');
 
 # Call the configuration file
 include_once('config.inc.php');
