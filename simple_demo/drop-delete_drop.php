@@ -4,7 +4,7 @@
 include_once('_helper.php');
 
 # Get access to the API
-include_once('../lib/dropio-php/Dropio/Api.php');
+include_once('../lib/dropio-php/Dropio/Drop.php');
 
 # Call the configuration file
 include_once('config.inc.php');
@@ -17,7 +17,7 @@ if(empty($_REQUEST['dropname']))
 $dropname = $_REQUEST['dropname'];
 
 # Call a static method which will delete the drop
-$r = Dropio_Drop::instance($dropname)->delete();
+$r = Dropio_Drop::getInstance($API_KEY,$API_SECRET)->setName($dropname)->delete();
 
 if($r['response']['result'] == 'Success')
   $_SESSION['message'] = "Removed drop '$dropname'";
