@@ -2,14 +2,13 @@
 
 include_once '_bootstrap.php';
 
-$drops = DB::getInstance()->query("SELECT DISTINCT drop_name from asset")->fetch();
-
+$drops = DB::getInstance()->query("SELECT drop_name from asset GROUP BY drop_name ORDER BY drop_name")->fetchAll();
 ?>
 
 <html>
     <head>
         <title></title>
-        <link rel="stylesheet" type="text/css" href="css/main.css"/>
+        <link rel="stylesheet" type="text/css" href="../css/main.css"/>
     </head>
     <body>
         <div id="container">
@@ -25,12 +24,12 @@ $drops = DB::getInstance()->query("SELECT DISTINCT drop_name from asset")->fetch
             <li>Total Assets Tracked: </li>
         </ul>
         <hr/>
-        <p>Database actions: Add a drop | Delete a drop | Empty a drop</p>
+        <p>Database actions: <a href="drop-import_drop.php">Import a drop</a> | Delete a drop | Empty a drop</p>
         <p>Assets Actions: Add an asset</p>
         <h4>Drops currently in your database</h4>
         <ul>
         <?php foreach ($drops as $d): ?>
-            <li><a href="assets-view.php?drop_name=<?php echo $d ?>"><?php echo $d ?></a></li>
+            <li><a href="assets-view.php?drop_name=<?php echo $d['drop_name'] ?>"><?php echo $d['drop_name'] ?></a></li>
         <?php endforeach ?>
         </ul>
         <hr/>

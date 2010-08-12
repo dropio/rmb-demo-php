@@ -1,3 +1,5 @@
+List | Detailed
+<hr/>
 <?php foreach ($assets as $a):   ?>
      <div class="thumb">
          <img src="<?php echo get_thumb($a,'web_preview') ?>" alt=""/>

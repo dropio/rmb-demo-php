@@ -22,7 +22,7 @@ Class Dropio_Api {
    */
   protected $_values       = null;
 
-  public function __construct($key = null,$secret=null) {
+  public function __construct($key,$secret=null) {
     $this->_api_key    = $key;
     $this->_api_secret = $secret;
   }

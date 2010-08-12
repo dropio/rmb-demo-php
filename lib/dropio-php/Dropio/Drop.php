@@ -1,7 +1,7 @@
 <?php
 
-include_once('Api.php');
-include_once('Asset.php');
+include_once(dirname(__FILE__) . '/Api.php');
+include_once(dirname(__FILE__) . '/Asset.php');
 
 Class Dropio_Drop_Exception extends Dropio_Exception{};
 
@@ -145,7 +145,11 @@ EOF;
     return $html;
   }
 
-  public function getUploadifyForm()
+  /**
+  *
+  *  
+  */
+  public function getUploadifyForm($srcdir=null)
   {
     $upload_url = self::UPLOAD_URL;
 
@@ -163,19 +167,19 @@ EOF;
     $str= json_encode($params);
 
     $html =<<<EOL
-		<script type="text/javascript" src="uploadify/jquery-1.3.2.min.js"></script>
-		<script type="text/javascript" src="uploadify/swfobject.js"></script>
-		<script type="text/javascript" src="uploadify/jquery.uploadify.v2.1.0.min.js"></script>
-		<link rel="stylesheet" type="text/css" media="screen, projection" href="uploadify/uploadify.css" />
+		<script type="text/javascript" src="$srcdir/uploadify/jquery-1.3.2.min.js"></script>
+		<script type="text/javascript" src="$srcdir/uploadify/swfobject.js"></script>
+		<script type="text/javascript" src="$srcdir/uploadify/jquery.uploadify.v2.1.0.min.js"></script>
+		<link rel="stylesheet" type="text/css" media="screen, projection" href="$srcdir/uploadify/uploadify.css" />
 
 		<script type="text/javascript">// <![CDATA[
 		$(document).ready(function() {
 		$('#file').uploadify({
-		'uploader'  : 'uploadify/uploadify.swf',
+		'uploader'  : '$srcdir/uploadify/uploadify.swf',
 		'script'    : '$upload_url',
 		'multi'    : true,
 		'scriptData': $str,
-		'cancelImg' : 'uploadify/cancel.png',
+		'cancelImg' : '$srcdir/uploadify/cancel.png',
 		'auto'      : true,
 		'onAllComplete' : function(){setTimeout(window.location = '$docroot',3000);},
 		'folder'    : '/uploads'

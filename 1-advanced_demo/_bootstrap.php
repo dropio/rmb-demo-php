@@ -2,10 +2,12 @@
 
 # is the databse installed yet? Look for _config.inc.php
 if(!file_exists('_config.inc.php'))
-    header("Location: $docroot/install/");
+    header("Location: /1-advanced_demo/install/");
+
+include_once('_config.inc.php');
 
 # Load the databse class
-include_once 'lib/DB.class.php';
+include_once (dirname(__FILE__) . '/lib/DB.class.php');
 
 # Start a session so we can pass data to the next page load
 session_start();

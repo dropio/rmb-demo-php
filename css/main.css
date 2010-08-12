@@ -1,14 +1,8 @@
 /* 
-    Document   : demo.css
+    Document   : main.css
     Created on : Aug 3, 2010, 5:24:53 PM
-    Author     : Sheraz Sharif
-    Description:
-        Stylesheet for the Drop API simple demo app
-*/
-
-/* 
-   TODO customize this sample style
-   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+    Author     : Sheraz Sharif <sheraz@under-new-management.com>
+    Description: Stylesheet for the Drop API demo applications
 */
 
 body, html {
@@ -20,7 +14,7 @@ body, html {
 
 #container {
     margin: 0 auto;
-    width: 600px;
+    width: 800px;
     text-align: left;
 }
 
@@ -43,12 +37,6 @@ th {
 td {
     border-bottom: 1px dotted #ccc;
     padding: 5px;
-}
-
-label {
-    width: 200px;
-    display: block;
-    float: left;
 }
 
 ul {
@@ -82,4 +70,45 @@ li {
 
 .edit a:hover {
     color: green;
+}
+
+label {
+    display: block;
+    font-size: 1.2em;
+    padding: 3px;
+}
+
+input {
+    padding: 3px;
+    font-size: 1.5em;
+    border: 1px dotted #999;
+    margin-bottom: 10px;
+}
+
+#container {
+    margin: 0 auto;
+    width: 800px;
+    text-align: left;
+}
+
+.thumb {
+    padding: 10px;
+    border: 1px dotted #999;
+    float: left;
+    margin-top: 10px;
+    margin-right: 10px;
+    text-align: left;
+    font-size: 10px;
+    width: 100px;
+    height: 100px;
+    text-align: left;
+}
+
+.thumb img {
+    display: block;
+    border: 1px solid black;
+    margin: 0 auto;
+    margin-bottom: 5px;
+    max-height: 75px;
+    
 }

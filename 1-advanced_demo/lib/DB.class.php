@@ -1,4 +1,11 @@
 <?php
+Class Config {
+
+    public static $user = 'dropio';
+    public static $pass = 'abc123';
+    public static $dbname = 'dropio';
+
+}
 
 # This is a simple class that extends PDO
 Class DB {
@@ -8,15 +15,25 @@ Class DB {
     private $result;
 
     public function __construct($dsn,$user,$pass) {
-      $this->dbh = new PDO($dsn, $user, $pass);
+     try {
+       $this->dbh = new PDO($dsn, $user, $pass);
+     } catch (PDOException $e)
+     {
+       echo $e->getMessage() . "$user -  $pass";exit;
+     }
+
+     
     }
 
     public static function getInstance($user=null,$pass=null,$dbname=null,$host='localhost',$port=3306)
     {
+        if ($user === null)
+        {
+            $user = Config::$user;
+            $pass = Config::$pass;
+            $dbname= Config::$dbname;
+        }
         
-        if ($user === NULL)
-            include_once(dirname(__FILE__) .'/../_config.inc.php');
-
         $dsn = "mysql:host=$host;dbname=$dbname;port=$port";
 
         return new DB($dsn,$user,$pass);

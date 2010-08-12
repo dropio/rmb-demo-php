@@ -20,7 +20,7 @@ $stats = Dropio_Api::getInstance($API_KEY, $API_SECRET)->getStats();
 <html>
   <head>
     <title>Drop.io PHP API Simple Demo</title>
-    <link type="text/css" rel="stylesheet" media="screen" href="css/demo.css"/>
+    <link type="text/css" rel="stylesheet" media="screen" href="/css/main.css"/>
   </head>
   <body>
     <div id="container">

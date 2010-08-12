@@ -1,6 +1,6 @@
 <?php
 
-include_once('Drop.php');
+include_once(dirname(__FILE__) . '/Drop.php');
 
 Class Dropio_Asset extends Dropio_Api {
   /**

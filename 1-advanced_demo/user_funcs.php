@@ -16,7 +16,14 @@ function asset_updated($asset)
 
     dolog('asset_updated() called...');
     
+
     $values = json_decode($asset,true);
+    ob_start();
+    var_dump($values);
+    $status = ob_get_contents();
+    ob_end_clean();
+    
+    dolog("Contents of \$asset: $status");
 
     # Lookup the asset. If it exists then update it. Otherwise, insert it.
     $sql = "SELECT COUNT(*) as c FROM asset WHERE drop_name = ? and name = ?";

@@ -1,14 +1,6 @@
 <?php
-
-# This is for making the demos a little nicer. It has nothing to do with using
-# the dropio api.
-include_once('_helper.php');
-
-# Get access to the API
-include_once('lib/dropio-php/Dropio/Drop.php');
-
-# Call the configuration file
-include_once('config.inc.php');
+# Boostrap this page
+include_once('_bootstrap.php');
 
 # Bail out if we didn't get a name with it.
 if(empty($_REQUEST['dropname']))
@@ -29,7 +21,7 @@ $assets = $drop->getAssets();
 <html>
   <head>
     <title>View assets for Drop <?php echo $dropname ?> | Drop.io PHP API Simple Demo</title>
-    <link type="text/css" rel="stylesheet" media="screen" href="css/demo.css"/>
+    <link type="text/css" rel="stylesheet" media="screen" href="../css/main.css"/>
   </head>
   <body>
     <div id="container">
@@ -44,7 +36,7 @@ $assets = $drop->getAssets();
     <?php echo $drop->getSimpleUploadForm() ?>
 
     <p>Or use flash uploader</p>
-    <?php echo $drop->getUploadifyForm() ?>
+    <?php echo $drop->getUploadifyForm('/utils') ?>
 
     <h2>Files in this drop</h2>
     <table>

@@ -1,14 +1,8 @@
 <?php
 
-# This is for making the demos a little nicer. It has nothing to do with using
-# the dropio api.
-include_once('_helper.php');
+# Boostrap this page
+include_once('_bootstrap.php');
 
-# Get access to the API
-include_once('lib/dropio-php/Dropio/Asset.php');
-
-# Call the configuration file
-include_once('config.inc.php');
 
 # Bail out if we didn't get a name with it.
 if(empty($_REQUEST['dropname']) || empty($_REQUEST['asset']))
@@ -29,7 +23,7 @@ $asset = Dropio_Drop::getInstance($API_KEY, $API_SECRET)
 <html>
   <head>
     <title>Edit Asset | Drop.io PHP API Simple Demo</title>
-    <link type="text/css" rel="stylesheet" media="screen" href="css/demo.css"/>
+    <link type="text/css" rel="stylesheet" media="screen" href="../css/main.css"/>
   </head>
   <body>
     <div id="container">
