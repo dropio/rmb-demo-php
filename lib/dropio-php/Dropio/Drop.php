@@ -29,7 +29,7 @@ Class Dropio_Drop extends Dropio_Api {
   /**
    * @var boolean Has a drop already been loaded?
    */
-  private $_is_loaded    = false;
+  private $_is_loaded = false;
 
 
   /**
