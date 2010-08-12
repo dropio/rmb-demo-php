@@ -5,23 +5,10 @@
  * underlying PHP API.
  *
  * The online API reference can be found here: http://backbonedocs.drop.io/API-Methods
- *
- * Good luck,
- * 
- * Sheraz Sharif
  * 
  */
 
-# This is for making the demos a little nicer. It has nothing to do with using
-# the dropio api.
-include_once('_helper.php');
-
-# Get access to the API
-include_once('lib/dropio-php/Dropio/Drop.php');
-
-# Call the configuration file
-include_once('config.inc.php');
-
+include_once('_bootstrap.php');
 
 # Get a list of drops for this account
 $drops = Dropio_Api::getInstance($API_KEY, $API_SECRET)->getDrops();
