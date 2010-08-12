@@ -55,13 +55,8 @@ $assets = $drop->getAssets();
       <td>
         <a href="asset-delete_asset.php?dropname=<?php echo $drop->getName() ?>&asset=<?php echo $a->getName() ?>">Delete</a>
         <a href="asset-edit_asset.php?dropname=<?php echo $drop->getName() ?>&asset=<?php echo $a->getName() ?>">Edit</a>
-        Move
-        Copy
       </td>
     </tr>
-
-    <?php //echo var_dump($a->getRole('thumbnail')) ?>
-
     <?php endforeach ?>
     </table>
     </div>
