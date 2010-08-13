@@ -3,17 +3,13 @@ function get_thumb($a,$type)
 {
     $vals = json_decode($a['values'],true);
 
+    if ($vals == NULL || $vals==FALSE)
+        return 'images/spinner.gif'; 
+
     # Dig down into that array
     foreach($vals['roles'] as $v)
     {
-                    
         if ($v['name'] == $type)
-        {
-            if ($v['locations'][0]['status'] === 'pending')
-                return '/images/spinner.gif';
-            else
-                return $v['locations'][0]['file_url'];
-        }
-            
+            return ($a['is_complete']==0) ? 'images/spinner.gif' : $v['locations'][0]['file_url'];
     }
 }
