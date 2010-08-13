@@ -46,13 +46,13 @@ function asset_updated($asset)
 
         dolog("Found it. updating...");
 
-        $sql = "UPDATE asset set `values` = ? WHERE drop_name = ? AND name = ?";
+        $sql = "UPDATE asset set `values` = ?, is_complete = 1 WHERE drop_name = ? AND name = ?";
         $arr = array($asset,$values['drop_name'],$values['name']);
 
     } else {
 
         dolog("Did not find it. Inserting...");
-        $sql = "INSERT INTO asset (`created_at`, `name`, `drop_name`, `values`, `type`) VALUES (?,?,?,?,?)";
+        $sql = "INSERT INTO asset (`created_at`, `name`, `drop_name`, `values`, `type`,`is_complete`) VALUES (?,?,?,?,?,1)";
         $arr = array(
           $values['created_at'],
           $values['name'],
