@@ -11,6 +11,9 @@ $assets = DB::getInstance()
             ->execute(array($_GET['drop_name'], $type))
             ->fetchAll();
 
+$uploadify_options = array(
+  'pingback_url' => "{$docroot}pingback.php"
+);
 ?>
 <html>
     <head>
@@ -32,7 +35,7 @@ $assets = DB::getInstance()
         <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=archive">Archives</a> |
         <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=other">Other</a>
         <div style="float: right">
-            <?php echo Dropio_Drop::getInstance()->getUploadifyForm('../utils/'); ?>
+            <?php echo Dropio_Drop::getInstance($API_KEY)->setName($_GET['drop_name'])->getUploadifyForm('../utils/',$uploadify_options); ?>
         </div>
         <hr/>
 
