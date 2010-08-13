@@ -226,7 +226,7 @@ Class Dropio_Api {
   /**
   * Get an instance which enables fluent interface / chaining x->a()->b()->c();
   */
-  public static function getInstance($api_key,$api_secret)
+  public static function getInstance($api_key,$api_secret=null)
   {
     return new Dropio_Api($api_key,$api_secret);
   }

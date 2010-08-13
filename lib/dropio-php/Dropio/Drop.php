@@ -1,5 +1,6 @@
 <?php
 
+# Drop requires both API access and Asset
 include_once(dirname(__FILE__) . '/Api.php');
 include_once(dirname(__FILE__) . '/Asset.php');
 
@@ -12,7 +13,7 @@ Class Dropio_Drop_Exception extends Dropio_Exception{};
  * 
  * For example, to create a drop and to access it.
  * 
- * $drop = Dropio_Drop::instance('dropname')->save();
+ * $drop = Dropio_Drop::getInstance($API_KEY)->save();
  * 
  * To load a pre-existing drop and load:
  * 
@@ -147,10 +148,21 @@ EOF;
 
   /**
   *
+  *   - srcdir              the source directory that holds the uploadify files.
+  *                         Default to /uploadify/
+  *
+  * Options are:
+  *   - comment 
+  *   - description
+  *   - redirect_to
+  *   - convert_to      
+  *   - output_locations
+  *   - pingback_url        the url of a pingback server
   *  
   */
-  public function getUploadifyForm($srcdir=null)
+  public function getUploadifyForm($srcdir=null,$options=null)
   {
+
     $upload_url = self::UPLOAD_URL;
 
     $docroot = "http://".$_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
@@ -161,6 +173,10 @@ EOF;
       'format'      => 'json',
       'version'     => '3.0'
     );
+    
+    # Process the optional parameters
+    foreach ($options as $k=>$v)
+      $params[$k] = $v;
 
     $params = $this->_signIfNeeded($params);
 
@@ -177,11 +193,17 @@ EOF;
 		$('#file').uploadify({
 		'uploader'  : '$srcdir/uploadify/uploadify.swf',
 		'script'    : '$upload_url',
-		'multi'    : true,
+		'multi'     : true,
 		'scriptData': $str,
 		'cancelImg' : '$srcdir/uploadify/cancel.png',
 		'auto'      : true,
-		'onAllComplete' : function(){setTimeout(window.location = '$docroot',3000);},
+        /* TODO: This is not quite working right now
+        'onComplete': function(e,q,f,response,d){
+            //var j = eval('(' + response + ')');
+            jQuery.post('ajax/upload_complete.php', { drop_name:  '$this->_origName', response: response });
+            },*/
+		'onAllComplete' : function(){setTimeout(window.location = '$docroot',1000);},
+		'onError'   : function(e, q, f, o) { alert("ERROR: " + o.info + o.type); }, 
 		'folder'    : '/uploads'
 		});
 		});
@@ -226,6 +248,8 @@ EOL;
 
   /**
    * Setter methods for updates / new drops
+   *
+   * @param string A description of the drop.
    */
   public function setDescription($description) {
     $this->_values['description'] = $description;
@@ -240,6 +264,9 @@ EOL;
   public function setName($name)
   {
     $this->_values['name'] = $name;
+
+    # Set the original name if it has not yet been set
+    $this->_origName = (is_null($this->_origName)) ? $name : $this->_origName;
     return $this;
   }
 
@@ -267,8 +294,6 @@ EOL;
         ->setRoles($a['roles']);
       $this->_assets[] = $arr;
     }
-
-    # TODO - this should iterate over the list and create an array of asset objects
 
     return $this;
   }
@@ -309,7 +334,7 @@ EOL;
 
   public function promoteNick() {}
 
-  # Subscriptions
+  # Subscriptions - # TODO - implement these method stubs
   public function getSubscriptions() {}
   public function getSubscription() {}
   public function createSubscription() {}
