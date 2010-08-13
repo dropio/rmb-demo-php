@@ -36,7 +36,8 @@ CREATE TABLE IF NOT EXISTS `asset` (
   `drop_name`   varchar(100),
   `values`      text NOT NULL COMMENT 'json data array',
   `type`        varchar(20) NOT NULL,
-  PRIMARY KEY   (`id`)
+  `is_complete` tinyint(1) NOT NULL DEFAULT 0,
+PRIMARY KEY   (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Asset Table'  ;
 
 ALTER TABLE `asset` ADD UNIQUE (
