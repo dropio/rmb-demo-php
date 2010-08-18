@@ -335,10 +335,39 @@ EOL;
   public function promoteNick() {}
 
   # Subscriptions - # TODO - implement these method stubs
-  public function getSubscriptions() {}
-  public function getSubscription() {}
-  public function createSubscription() {}
-  public function deleteSubscription() {}
+  
+  
+  public function getSubscriptions() 
+  {
+    return $this->request('GET', "drops/{$this->getName()}/subscriptions",array());
+  }
+
+  
+  public function getSubscription($sub_id)
+  {
+    return $this->request('GET', "drops/{$this->getName()}/subscriptions/$sub_id",array());
+  }
+
+
+  public function createSubscription($type,$events=array('asset_added'),$options=null) 
+  {
+
+    $params = array('type'=>$type);
+
+    # Process the optional parameters
+    foreach ($options as $k=>$v)
+      $params[$k] = $v;
+
+    foreach($events as $v)
+      $params[$v] = true;
+
+    $result = $this->request('POST', "drops/{$this->getName()}/subscriptions", $params);
+  }
+  
+  public function deleteSubscription($sub_id)
+  {
+    return $this->request('GET', "drops/{$this->getName()}/subscriptions/$sub_id",array());
+  }
 
   public function isLoaded()
   {
