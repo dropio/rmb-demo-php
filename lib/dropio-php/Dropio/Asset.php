@@ -10,11 +10,6 @@ Class Dropio_Asset extends Dropio_Api {
   private $_dropName  = null;
 
   private $_origName  = null;
-  /**
-   *
-   * @var <type> The name of the asset
-   */
-  private $_name      = null;
 
   /**
    *
@@ -43,11 +38,11 @@ Class Dropio_Asset extends Dropio_Api {
   /**
    * Load and return the asset object
    *
-   * @return mixed An Asset object
+   * @return Drop_Asset An Asset object
    */
   public function load()
   {
-    $this->setValues($this->request('GET', "drops/".$this->getDropName()."/assets/".$this->getName(), array()));
+    $this->setValues($this->request('GET', "drops/{$this->getDropName()}/assets/{$this->getName()}", array()));
     $this->_origName = $this->getName();
     $this->_is_loaded = true;
     return $this;
@@ -89,7 +84,7 @@ Class Dropio_Asset extends Dropio_Api {
 
   public function setName($name)
   {
-    $this->_name = $name;
+    $this->_values['name'] = $name;
     return $this;
   }
 
@@ -261,51 +256,29 @@ Class Dropio_Asset extends Dropio_Api {
   public function getTitle()          { return $this->_values['title']; }
   public function getDescription()    { return $this->_values['description']; }
   public function getCreatedAt()      { return $this->_values['created_at']; }
-  public function getName()           { return $this->_name; }
+  public function getName()           { return $this->_values['name']; }
   public function getUrl()            { return $this->_values['url']; }
   public function getContents()       { return $this->_values['contents']; }
 
   /**
    *
-   * @return array Get all roles for an asset
+   * @return mixed      Get all roles for an asset
    */
-  public function getRoles()          { return $this->_values['roles']; }
+  public function getRoles()          { return $this->_roles; }
 
   /**
    *  Retrieve a single role for an asset (original_content, thumbnail,
    *  small_thumbnail, large_thumbnail, or web_preview)
    *
    * @param string $name The name of the role
-   * @return array Retrieve a single role from an asset
+   * @return mixed Retrieve a single role object from an asset object. FALSE if not found
    */
   public function getRole($name)
   {
     foreach($this->_roles as $r)
-      if ($r['name'] == $name)
+      if ($r->getName() == $name)
         return $r;
-  }
-
-  /**
-   *
-   * @param <type> $roles
-   * @return <type>
-   */
-  public function setRoles($roles=array())
-  {
-    $this->_roles = $roles;
-    return $this;
-  }
-
-  /**
-   *
-   * @param <type> $role
-   * @return <type>
-   */
-  public function getFileUrl($role='thumbnail')
-  {
-    foreach($this->_roles as $r)
-      if ($r['name'] == $role)
-        return $r['locations'][0]['file_url'];
+    return false;
   }
 
 }
