@@ -22,7 +22,9 @@ Class Dropio_Api {
    */
   protected $_values       = null;
 
-  public function __construct($key,$secret=null) {
+  public function __construct($key=null,$secret=null) {
+    if(is_null($key))
+        throw new Dropio_Api_Exception('You must set an API key.');
     $this->_api_key    = $key;
     $this->_api_secret = $secret;
   }
