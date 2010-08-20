@@ -14,15 +14,36 @@ $assets = DB::getInstance()
 $uploadify_options = array(
   'pingback_url' => "{$docroot}pingback.php"
 );
+
+$droplist = Dropio_Api::getInstance($API_KEY)->getDrops();
+
 ?>
 <html>
     <head>
         <title>Viewing all assets for drop '<?php echo $_GET['drop_name']?></title>
         <link rel="stylesheet" type="text/css" href="../css/main.css"/>
+        <script type="text/javascript" language="Javascript" src="js/jquery.js"></script>
+        <script type="text/javascript" language="javascript" src="js/fancybox.js"></script>
+        <script type="text/javascript" language="javascript">
+         document.onready(function(){
+
+
+         });
+
+
+        </script>
 
     </head>
     <body>
         <div id="container">
+        <div id="drops">
+          <h4>Drops</h4>
+          <ul>
+            <?php foreach ($droplist['drops'] as $d): ?>
+              <li><?php echo $d['name'] ?></li>
+            <?php endforeach ?>
+          </ul>
+        </div>
         <h1>Viewing type '<?php echo $type ?>' for drop '<?php echo $_GET['drop_name']?></h1>
 
         <hr/>
