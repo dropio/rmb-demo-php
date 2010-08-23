@@ -21,16 +21,6 @@ $uploadify_options = array(
     <head>
         <title>Viewing all assets for drop '<?php echo $_GET['drop_name']?></title>
         <link rel="stylesheet" type="text/css" href="../css/main.css"/>
-        <script type="text/javascript" language="Javascript" src="js/jquery.js"></script>
-        <script type="text/javascript" language="javascript" src="js/fancybox.js"></script>
-        <script type="text/javascript" language="javascript">
-         document.onready(function(){
-
-
-         });
-
-
-        </script>
 
     </head>
     <body>
