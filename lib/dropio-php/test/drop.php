@@ -10,9 +10,7 @@ class Dropio_DropTest extends PHPUnit_Framework_TestCase
 {
     const PAGINATION = 31; // Test pagination
 
-    protected $api   = null;
     protected $drop  = null;
-    protected $drops = array(); //array of drops
 
     public function setup()
     {
