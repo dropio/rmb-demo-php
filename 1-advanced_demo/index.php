@@ -34,5 +34,6 @@ $drops = DB::getInstance()->query("SELECT drop_name from asset GROUP BY drop_nam
         </ul>
         <hr/>
         </div>
+
     </body>
 </html>
