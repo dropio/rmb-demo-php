@@ -42,7 +42,9 @@ $assets = $drop->getAssets();
     <table>
     <?php foreach($assets as $a): ?>
     <tr>
-      <td><img src="<?php echo $a->getFileUrl('thumbnail') ?>"/></td>
+      <!-- this sould be an icon based on type -->
+      <td><img src="<?php echo $a->getRole()->getFileUrl() ?>"/></td>
+      
       <td><?php echo $a->getName() ?></td>
       <td>
         <a href="asset-delete_asset.php?dropname=<?php echo $drop->getName() ?>&asset=<?php echo $a->getName() ?>">Delete</a>
