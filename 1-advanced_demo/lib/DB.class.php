@@ -89,5 +89,8 @@ Class DB {
         return $this;
     }
 
-
+    public function getError()
+    {
+        return $this->stmt->errorInfo();
+    }
 }
