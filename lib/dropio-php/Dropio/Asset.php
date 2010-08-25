@@ -1,6 +1,8 @@
 <?php
 
 include_once(dirname(__FILE__) . '/Drop.php');
+include_once(dirname(__FILE__) . '/Roles/Roles.php');
+include_once(dirname(__FILE__) . '/Roles/ImageRole.php');
 
 Class Dropio_Asset extends Dropio_Api {
   /**
@@ -273,12 +275,34 @@ Class Dropio_Asset extends Dropio_Api {
    * @param string $name The name of the role
    * @return mixed Retrieve a single role object from an asset object. FALSE if not found
    */
-  public function getRole($name)
+  public function getRole($name=null)
   {
+    # If $name is null, then five a default based on the asset type
+    if(is_null($name))
+    {
+      switch($this->getType()) {
+        case 'image' : $name = 'thumbnail'; break;
+        case 'movie' : $name = 'web_preview'; break;
+        default      : $name = 'original_content'; break;
+      }
+    }
+
     foreach($this->_roles as $r)
       if ($r->getName() == $name)
         return $r;
     return false;
+  }
+
+  public function setRoles($roles=null)
+  {
+    # Use some black-magic to create the right types of objects
+    $type = ucfirst("{$this->getType()}Role");
+    foreach($roles as $r)
+    {
+      $this->_roles[] = new $type($r);
+    }
+
+    return $this;
   }
 
 }
