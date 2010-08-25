@@ -175,8 +175,7 @@ EOF;
     );
     
     # Process the optional parameters
-    foreach ($options as $k=>$v)
-      $params[$k] = $v;
+    foreach ($options as $k => $v) { $params[$k] = $v; }
 
     $params = $this->_signIfNeeded($params);
 
