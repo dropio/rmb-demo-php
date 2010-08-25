@@ -15,7 +15,6 @@ function asset_updated($asset)
 {
 
     dolog('asset_updated() called...');
-    
 
     $values = json_decode($asset,true);
     ob_start();
@@ -33,13 +32,6 @@ function asset_updated($asset)
     $s = $r->prepare($sql)->
                 execute($arr)->
                 fetch();
-
-    ob_start();
-    var_dump($s);
-    $status = ob_get_contents();
-    ob_end_clean();
-    
-    dolog("Asset returned: $status");
 
     if ((int) $s['c'] > 0)
     {
@@ -62,7 +54,10 @@ function asset_updated($asset)
         );
     }
     
-    $r->prepare($sql)->execute($arr);
+    if(!$r->prepare($sql)->execute($arr))
+    {
+      dolog('Filed to execute:' . $r->getError());
+    }
 
     return true;
 }
