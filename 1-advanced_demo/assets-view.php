@@ -6,10 +6,20 @@ include_once '../lib/dropio-php/Dropio/Drop.php';
 
 $type = (isset($_GET['type'])) ? $_GET['type'] : 'image';
 
-$assets = DB::getInstance()
-            ->prepare("SELECT * FROM asset WHERE drop_name = ? and type = ?")
-            ->execute(array($_GET['drop_name'], $type))
-            ->fetchAll();
+if($_GET['type'] == 'all')
+{
+
+    $assets = DB::getInstance()
+                ->prepare("SELECT * FROM asset WHERE drop_name = ? group by type")
+                ->execute(array($_GET['drop_name']))
+                ->fetchAll();
+} else {
+
+    $assets = DB::getInstance()
+                ->prepare("SELECT * FROM asset WHERE drop_name = ? and type = ?")
+                ->execute(array($_GET['drop_name'], $type))
+                ->fetchAll();
+}
 
 $uploadify_options = array(
   'pingback_url' => "{$docroot}pingback.php"
@@ -27,9 +37,10 @@ $uploadify_options = array(
         <div id="container">
         <?php include_once('_slot_drops.php'); ?>
         
-        <h1>Viewing type '<?php echo $type ?>' for drop '<?php echo $_GET['drop_name']?></h1>
+        <h3><?php echo $_GET['drop_name']?> &gt; <?php echo $type ?></h3>
 
         <hr/>
+        <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=all">All</a> |
         <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=image">Images</a> |
         <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=movie">Movies</a> |
         <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=audio">Audio</a> |
@@ -39,7 +50,8 @@ $uploadify_options = array(
         <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=archive">Archives</a> |
         <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=other">Other</a>
         <div style="float: right">
-            <?php echo Dropio_Drop::getInstance($API_KEY)->setName($_GET['drop_name'])->getUploadifyForm('../utils/',$uploadify_options); ?>
+            <?php //echo Dropio_Drop::getInstance($API_KEY)->setName($_GET['drop_name'])->getUploadifyForm('../utils/',$uploadify_options); ?>
+            <?php include_once('_slot_uploadify_form.php'); ?>
         </div>
         <hr/>
 
