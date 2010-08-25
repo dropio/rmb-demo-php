@@ -112,3 +112,20 @@ input {
     max-height: 75px;
     
 }
+
+#drops {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+}
+
+#drops ul {
+    padding: 0;
+    margin: 0;
+}
+
+#drops ul li {
+    padding: 0;
+    margin: 0;
+    font-size: 10px;
+}
