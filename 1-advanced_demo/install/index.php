@@ -27,29 +27,66 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post')
 
     # Create the tables
     $sql =<<<EOL
+-- phpMyAdmin SQL Dump
+-- version 3.1.2deb1ubuntu0.2
+-- http://www.phpmyadmin.net
+--
+-- Host: localhost
+-- Generation Time: Aug 30, 2010 at 09:05 PM
+-- Server version: 5.0.75
+-- PHP Version: 5.2.6-3ubuntu4.5
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+--
+-- Database: `dropio`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `asset`
+--
 
 DROP TABLE IF EXISTS `asset`;
 CREATE TABLE IF NOT EXISTS `asset` (
-  `id`          int(11) NOT NULL auto_increment,
-  `created_at`  date NOT NULL,
-  `name`        varchar(255),
-  `drop_name`   varchar(100),
-  `values`      text NOT NULL COMMENT 'json data array',
-  `type`        varchar(20) NOT NULL,
-  `is_complete` tinyint(1) NOT NULL DEFAULT 0,
-PRIMARY KEY   (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COMMENT='Asset Table'  ;
+  `id` int(11) NOT NULL auto_increment,
+  `drop_id` int(11) default NULL,
+  `created_at` date NOT NULL,
+  `name` varchar(255) default NULL,
+  `values` text NOT NULL COMMENT 'json data array',
+  `type` varchar(20) NOT NULL,
+  `is_complete` tinyint(1) NOT NULL default '0',
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `asset_drop_id_name_uniq_idx` (`drop_id`,`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Asset Table' AUTO_INCREMENT=1 ;
 
-ALTER TABLE `asset` ADD UNIQUE (
-`name` ,
-`drop`
-);
+-- --------------------------------------------------------
 
-DROP TABLE IF EXISTS `event` ;
-CREATE TABLE IF NOT EXISTS `event` (
-  `event` varchar(20) NOT NULL,
-  `created_at` date NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+--
+-- Table structure for table `drop`
+--
+
+DROP TABLE IF EXISTS `drop`;
+CREATE TABLE IF NOT EXISTS `drop` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) NOT NULL,
+  `created_at` int(11) NOT NULL,
+  `values` text NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `asset`
+--
+ALTER TABLE `asset`
+  ADD CONSTRAINT `asset_ibfk_1` FOREIGN KEY (`drop_id`) REFERENCES `drop` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
 EOL;
 
     $install = DB::getInstance()->query($sql);
@@ -68,6 +105,7 @@ EOL;
         <h1>Install the Drop.io Pingback Demo</h1>
         <?php if(isset($install) && ($install !== FALSE)): ?>
             <p>Success! The database was installed.</p>
+            <p><a href="#">Import your drops</a> or <a href="#">create a new one</a></p>
         <?php else: ?>
         <form action="" method="post">
             <fieldset>

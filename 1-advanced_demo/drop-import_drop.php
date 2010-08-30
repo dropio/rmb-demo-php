@@ -5,9 +5,12 @@ include_once('_bootstrap.php');
 # Include the classes for API access
 include_once('../lib/dropio-php/Dropio/Drop.php');
 
+
 include_once('user_funcs.php');
 
 # Has the user chosen a drop?
+# Note: If there are no assets in the drop then nothing will be inserted.
+# TODO: If there are no assets then we need to create a note asset
 if (isset($_GET['drop_name']))
 {
   $drop_name = $_GET['drop_name'];
@@ -21,8 +24,9 @@ if (isset($_GET['drop_name']))
     $v = $a->getValues();
     $v['drop_name']=$drop_name;
     asset_updated(json_encode($v));
-
   }
+  
+
 }
 
 
