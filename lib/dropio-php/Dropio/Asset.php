@@ -3,6 +3,8 @@
 include_once(dirname(__FILE__) . '/Drop.php');
 include_once(dirname(__FILE__) . '/Roles/Roles.php');
 include_once(dirname(__FILE__) . '/Roles/ImageRole.php');
+include_once(dirname(__FILE__) . '/Roles/DocumentRole.php');
+include_once(dirname(__FILE__) . '/Roles/AudioRole.php');
 
 Class Dropio_Asset extends Dropio_Api {
   /**

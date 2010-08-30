@@ -100,7 +100,7 @@ Class Dropio_Drop extends Dropio_Api {
    */
   public function emptyDrop()
   {
-    $result = $this->request('PUT', 'drops/' . $this->_origName . '/empty', array());
+    $result = $this->request('PUT', 'drops/' . $this->_origName . '/empty');
     $this->_assets = null;
     return $result;
   }
@@ -341,13 +341,22 @@ EOL;
     return $this->request('GET', "drops/{$this->getName()}/subscriptions",array());
   }
 
-  
+  /**
+   *
+   * @param <type> $sub_id
+   * @return <type>
+   */
   public function getSubscription($sub_id)
   {
     return $this->request('GET', "drops/{$this->getName()}/subscriptions/$sub_id",array());
   }
 
-
+  /**
+   *
+   * @param <type> $type
+   * @param <type> $events
+   * @param <type> $options
+   */
   public function createSubscription($type,$events=array('asset_added'),$options=null) 
   {
 
@@ -362,12 +371,23 @@ EOL;
 
     $result = $this->request('POST', "drops/{$this->getName()}/subscriptions", $params);
   }
-  
+
+  /**
+   *
+   * @param <type> $sub_id
+   * @return <type>
+   */
   public function deleteSubscription($sub_id)
   {
     return $this->request('GET', "drops/{$this->getName()}/subscriptions/$sub_id",array());
   }
 
+
+  /**
+   * Tell us whether 
+   *
+   * @return boolean True if the drop is loaded, false if not loaded
+   */
   public function isLoaded()
   {
     return $this->_is_loaded;
