@@ -63,15 +63,17 @@ Class Dropio_Drop extends Dropio_Api {
    */
   public function save()
   {
-    # Is this new or an update? If _is_loaded is false, the it is new. Otherwise
-    # we are updating an existing drop
+    # If _is_loaded is false, the drop is new. Otherwise update
     if (!$this->_is_loaded) {
-      # We'll create a new one.
-      if ($this->getName() == NULL)
-        $result = $this->request('POST', 'drops', array());
-      else
-        $result = $this->request('POST', 'drops', array('name'=>$this->getName()));
+      
+      # If the name is null, create a random drop.
+      if ($this->getName() == NULL) { 
+          $result = $this->request('POST', 'drops', array('expiration_length'=>'1_YEAR_FROM_LAST_VIEW'));
+      } else {
+          $result = $this->request('POST', 'drops', array('name'=>$this->getName(),'expiration_length'=>'1_YEAR_FROM_LAST_VIEW'));
+      }
       $this->_is_loaded = true;
+      
     } else {
       $result = $this->request('PUT', 'drops/' . $this->_origName, $this->prepareUpdate());
     }
@@ -214,9 +216,18 @@ EOL;
     return $html;
   }
 
-  public function createDrop($dropname)
+  /**
+   * Create a drop
+   *
+   * @link http://backbonedocs.drop.io/Create-a-Drop
+   * @param <type> $dropname
+   * @return <type>
+   */
+  public function createDrop($dropname,$expires='1_YEAR_FROM_LAST_VIEW')
   {
-    return $this->setName($dropname)->save();
+    return $this->setName($dropname)->
+            setExpirationLength($expires)->
+            save();
   }
 
   /**
@@ -391,5 +402,16 @@ EOL;
   public function isLoaded()
   {
     return $this->_is_loaded;
+  }
+
+  /**
+   *
+   * @param enum $length
+   * @return mexed
+   */
+  public function setExpirationLength($length='1_YEAR_FROM_LAST_VIEW')
+  {
+      $this->_values['expiration_length'] = $length;
+      return $this;
   }
 }
