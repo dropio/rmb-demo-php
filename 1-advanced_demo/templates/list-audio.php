@@ -5,15 +5,8 @@ AudioPlayer.setup("<?php echo $docroot ?>../utils/wpaudio/player.swf", {
 });  
 </script>  
 
-List | Detailed
-<hr/>
 <?php foreach ($assets as $k=>$a):   ?>
      <div class="thumb">
-         <p id="audioplayer_<?php echo $k ?>">Alt content</p>
-         <script type="text/javascript">  
-          AudioPlayer.embed("audioplayer_<?php echo $k ?>", {soundFile: "<?php echo get_thumb($a,'original_content') ?>"});  
-         </script>  
-         <b>Name:</b> <?php echo $a['name'] ?><br/>
-         <b>Description:</b> <?php //echo $a['description'] ?>
-    </div>
+     <?php echo show_image($a); ?>
+     </div>
 <?php endforeach ?>
