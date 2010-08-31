@@ -6,14 +6,14 @@
 
 $(document).ready(function() {
 
-    var api = new DropioApiClient("<?php echo $API_KEY ?>","http://dropio.m3b.net/DropioJSClientXDReceiver.html");
+    var api = new DropioApiClient("<?php echo $API_KEY ?>","<?php echo $docroot ?>/DropioJSClientXDReceiver.html");
 
     var chatPass = 'broken';
 
     var dropCB = function(response, status){
         chatPass = response.chat_password;
         console.log('get drop called with ' + chatPass);
-        DropioStreamer.start("<?php echo $_GET['drop_name'] ?>",chatPass,"http://dropio.m3b.net/streamer_xdr.html");
+        DropioStreamer.start("<?php echo $_GET['drop_name'] ?>",chatPass,"<?php echo $docroot ?>/streamer_xdr.html");
         DropioStreamer.observe(DropioStreamer.ASSET_UPDATED,function(data){
             console.log('asset updated called');
 
@@ -47,11 +47,25 @@ $(document).ready(function() {
        //console.log("asset callback call");
         j = eval('(' + e + ')');
 
-        // TODO: Clean this up
+        // Create the new element
         var newAsset = document.createElement('div');
         newAsset.setAttribute('class','thumb');
         newAsset.setAttribute('id',j.name);
         newAsset.innerHTML = '<img src="images/spinner.gif"/>';
+        
+        // Get the containing div. If it does not exist then create it
+        typecont = document.getElementById(j.type+'-container');
+        console.log(typecont);
+        if (typecont == null)
+        {
+          // Create the container
+          typecont = document.createElement('div');
+          typecont.setAttribute('style','clear:both');
+          typecont.setAttribute('id',j.type+'-container');
+          typecont.innerHTML = '<h3>' + j.type + '</h3>';
+          
+          document.getElementById('content-container').appendChild(typecont);
+        }
         document.getElementById(j.type+'-container').appendChild(newAsset);
         return true;
     };
@@ -60,7 +74,7 @@ $('#file').uploadify({
     'uploader'  : '../utils/uploadify/uploadify.swf',
     'script'    : 'http://assets.drop.io/upload',
     'multi'     : true,
-    'scriptData': {"api_key":"ef39e3464ace103e529016d0e7379da66ff50731","drop_name":"<?php echo $_GET['drop_name']?>","format":"json","version":"3.0","pingback_url":"http://dropio.m3b.net/1-advanced_demo/pingback.php"},
+    'scriptData': {"api_key":"<?php echo $API_KEY ?>","drop_name":"<?php echo $_GET['drop_name']?>","format":"json","version":"3.0","pingback_url":"<?php echo $docroot ?>/1-advanced_demo/pingback.php"},
     'cancelImg' : '../utils/uploadify/cancel.png',
     'auto'      : true,
     'onComplete' : function(e,q,f,r,d) {
