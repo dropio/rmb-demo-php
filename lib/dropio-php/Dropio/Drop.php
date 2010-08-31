@@ -89,9 +89,12 @@ Class Dropio_Drop extends Dropio_Api {
    * @link http://backbonedocs.drop.io/Delete-a-Drop
    * @return mixed
    */
-  public function delete()
+  public function delete($drop_name=null)
   {
-    $result = $this->request('DELETE','drops/' . $this->getName(), array());
+    if($drop_name !== NULL) { 
+      $this->setName($drop_name); 
+    }
+    $result = $this->request('DELETE','drops/' . $this->getName());
     return $result;
   }
 
@@ -245,16 +248,16 @@ EOL;
   /**
    * Getter methods for response bodies
    */
-  public function getChatPassword()   { return $this->_values['chat_password']; }
   public function getAdminToken()     { return $this->_values['admin_token']; }
   public function getAssetCount()     { return $this->_values['asset_count']; }
+  public function getChatPassword()   { return $this->_values['chat_password']; }  
   public function getCurrentBytes()   { return $this->_values['current_bytes']; }
-  public function getExpirationLength() { return $this->_values['expiration_length']; }
-  public function getEmail()          { return $this->_values['email']; }
   public function getDescription()    { return @$this->_values['description']; }
+  public function getEmail()          { return $this->_values['email']; }
+  public function getExpirationLength() { return $this->_values['expiration_length']; }
+  public function getExpiresAt()      { return $this->_values['expires_at']; }
   public function getMaxBytes()       { return $this->_values['max_bytes']; }
   public function getName()           { return $this->_values['name']; }
-  public function getExpiresAt()      { return $this->_values['expires_at']; }
 
   /**
    * Setter methods for updates / new drops
