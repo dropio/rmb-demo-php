@@ -17,6 +17,12 @@ if (isset($_GET['drop_name']))
   $drop = Dropio_Drop::getInstance($API_KEY)->load($drop_name);
   $assets = $drop->getAssets();
 
+
+  # Insert the drop
+  $r = DB::getInstance();
+  $sql = "INSERT INTO `drop` (name,`values`) VALUES (?,?)";
+  $s   = $r->prepare($sql)->execute(array($drop->getName(),json_encode($drop->getValues())));
+
   # Loop over each of the assets, inserting each on into the database
   foreach($assets as $a)
   {
@@ -26,10 +32,11 @@ if (isset($_GET['drop_name']))
     asset_updated(json_encode($v));
   }
   
+  $_SESSION['message'] = 'Drop Imported!';
+
+  echo '<script type="text/javascript" language="javascript">parent.$.fancybox.close();</script>';
 
 }
-
-
 
 $drops = Dropio_Api::getInstance($API_KEY)->getDrops();
 
@@ -40,15 +47,12 @@ $drops = Dropio_Api::getInstance($API_KEY)->getDrops();
         <link rel="stylesheet" type="text/css" href="../css/main.css"/>
     </head>
     <body>
-        <div id="container">
-        <h1>Import a Drop</h1>
         <p>Choose a drop to import</p>
         <ul>
           <?php foreach($drops['drops'] as $d): ?>
                 <li><a href="drop-import_drop.php?drop_name=<?php echo $d['name']?>" title="Import all assets for <?php echo $d['name'] ?>"><?php echo $d['name'] ?></a></li>
           <?php endforeach ?>
          </ul>
-         </div>
     </body>
 
 </html>
