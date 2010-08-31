@@ -11,8 +11,13 @@ $drops = DB::getInstance()->
 
 <html>
     <head>
-        <title></title>
-        <link rel="stylesheet" type="text/css" href="../css/main.css"/>
+        <title>Welcome to the drop.io RMB Advanced Demo</title>
+
+        <!-- The Pretty drop.io stylesheets -->
+        <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+        <link rel="stylesheet" type="text/css" href="../css/headers.css"/>
+        <link rel="stylesheet" type="text/css" href="../css/classes.css"/>
+        <link rel="stylesheet" type="text/css" href="../css/layout.css"/>
 
         <!-- Load jQuery -->
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
@@ -33,40 +38,41 @@ $drops = DB::getInstance()->
             });
         </script>
     </head>
-    <body>
-        <div id="container">
-        <h1>Drop.io Advanced Demo</h1>
-        <p>This is a demo of the advanced features of the drop.io API. It uses
-            MySQL to cache metadata about your drops and assets.
-        </p>
-        <hr/>
-        <h3>Important information:</h3>
-        <ul>
-            <li>Pingback Url: <?php echo "{$docroot}pingback.php"?></li>
-        </ul>
-        <hr/>
-        <p>Database actions: <a class="fancyform" href="drop-create_drop.php">Create drop</a> | <a class="fancyform" href="drop-import_drop.php">Import a drop</a></p>
-        <h4>Drops currently in your database</h4>
+<body>
+    <div id="layout">
+      <img src="../../images/logo.gif" alt="Drop.io Logo"/>
+      <h1>Drop.io Advanced Demo</h1>
+      <p>This is a demo of the advanced features of the drop.io API. It uses
+          MySQL to cache metadata about your drops and assets.
+      </p>
+      <hr class="Solid"/>
+      <h3>Important information:</h3>
+      <ul>
+          <li>Pingback Url: <?php echo "{$docroot}/pingback.php"?></li>
+      </ul>
+      <hr class="Solid"/>
+      <p>Database actions: <a class="fancyform" href="drop-create_drop.php">Create drop</a> | <a class="fancyform" href="drop-import_drop.php">Import a drop</a></p>
+      <h4>Drops currently in your database</h4>
 
-        <?php if($message): ?>
-        <div id="message">
-          <?php echo $message ?>
-        </div>
-        <?php endif ?>
+      <?php if($message): ?>
+      <div id="message">
+        <?php echo $message ?>
+      </div>
+      <?php endif ?>
 
-        <?php if(count($drops) > 0): ?>
-        <ul>
-            <?php foreach ($drops as $d): ?>
-                <li><a href="assets-view.php?drop_name=<?php echo $d['name'] ?>"><?php echo $d['name'] ?></a></li>
-            <?php endforeach ?>
-        </ul>
-        <?php else: ?>
-        
-            <p style="color: red">There are no drops. <a class="fancyform" href="drop-create_drop.php">Create one now.</a></p>
-        <?php endif ?>
-        
-        <hr/>
-        </div>
+      <?php if(count($drops) > 0): ?>
+      <ul>
+          <?php foreach ($drops as $d): ?>
+              <li><a href="assets-view.php?drop_name=<?php echo $d['name'] ?>"><?php echo $d['name'] ?></a></li>
+          <?php endforeach ?>
+      </ul>
+      <?php else: ?>
+    
+          <p style="color: red">There are no drops. <a class="fancyform" href="drop-create_drop.php">Create one now.</a></p>
+      <?php endif ?>
+    
+      <hr/>
+    </div>
 
-    </body>
+</body>
 </html>

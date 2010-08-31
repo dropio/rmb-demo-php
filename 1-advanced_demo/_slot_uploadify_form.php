@@ -16,23 +16,49 @@ $(document).ready(function() {
         DropioStreamer.start("<?php echo $_GET['drop_name'] ?>",chatPass,"<?php echo $docroot ?>/streamer_xdr.html");
         DropioStreamer.observe(DropioStreamer.ASSET_UPDATED,function(data){
             console.log('asset updated called');
-
+            console.log(data);
+            
             // Shortcut to the objects we want
+            var type = data.type;         // image, movie, document, etc
             var r = data.roles.role;
             var l = r.locations.location;
 
             // Bail out if the status is anything but complete
-            if (l.status !== 'complete') { return true; }
+            if (l.status !== 'complete') { return; }
 
             // Deal with the role based on it's type
+            switch (r.type)
+            {
+              case 'image' :
+                if (r.name == 'thumbnail') { 
+                  document.getElementById(data.name).innerHTML = '<a href="#"><img src="' + l.file_url + '"/></a>'; 
+                }
+                break;
+                
+              case 'movie'  :
+                if (r.name == 'web_preview') { 
+                  document.getElementById(data.name).innerHTML = '<a href="#"><img src="' + l.file_url + '"/></a>'; 
+                }
+                break;
+                
+              case 'document' :
+                if (r.name == 'web_preview') {
+                  document.getElementById(data.name).innerHTML = '<a href="#"><img src="' + l.file_url + '"/></a>'; 
+                }
+                break;
+                
+              case 'audio' :
+              
+                break;
+            }
+/*
             switch(r.name)
             {
                 case 'thumbnail' :
                     document.getElementById(data.name).innerHTML = '<a href="#"><img src="' + l.file_url + '"/></a>';
                     break;
-
             }
-
+*/
 
         });
 
@@ -47,11 +73,12 @@ $(document).ready(function() {
        //console.log("asset callback call");
         j = eval('(' + e + ')');
 
+        console.log('Original Content: ' + j.roles[0].locations[0].file_url);
         // Create the new element
         var newAsset = document.createElement('div');
         newAsset.setAttribute('class','thumb');
         newAsset.setAttribute('id',j.name);
-        newAsset.innerHTML = '<img src="images/spinner.gif"/>';
+        newAsset.innerHTML = '<a class="fancy' + j.type +'" href="'+ j.roles[0].locations[0].file_url +'"><img src="images/spinner.gif" alt="Not ready yet"/></a>';
         
         // Get the containing div. If it does not exist then create it
         typecont = document.getElementById(j.type+'-container');

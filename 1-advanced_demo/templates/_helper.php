@@ -16,31 +16,35 @@ function get_file_url($a,$type)
 
 function show_image($a)
 {
-    return '<a class="fancyimg" href="'.get_file_url($a,'original_content').'"><img src="'. get_file_url($a,'thumbnail') . '" alt=""/></a>' . substr($a['name'],0,15) . '<br/>';
+    return '<a class="fancyimage" href="'.get_file_url($a,'original_content').'"><img src="'. get_file_url($a,'thumbnail') . '" alt=""/></a>' . substr($a['name'],0,15) . '<br/>';
 }
 
+
+/**
+ *  Get an HTML snippit that loads wpaudio on an mp3 file
+ */
 function show_audio($a)
 {
     $file_url = get_file_url($a,'original_content');
-    $k = uniqid();
     $html = <<<EOF
-    <p id="audioplayer_$k">Alt content</p>
-         <script type="text/javascript">
-          AudioPlayer.embed("audioplayer_$k", {soundFile: "$file_url"});
-         </script>
-         <b>Name:</b> {$a['name']}<br/>
-         <b>Description:</b>
+    <p id="{$a['name']}">Alt content</p>
+    <script type="text/javascript" language="javascript">AudioPlayer.embed("{$a['name']}", {soundFile: "$file_url"});</script>
+    <b>Name:</b> {$a['name']}<br/>
+    <b>Description:</b>
     
 EOF;
     return $html;
 }
 
+/**
+ *  Get an HTML snippit that shows an icon and links to a web-preview of a document
+ */
 function show_document($a)
 {
-    return '<a href="'. get_file_url($a,'original_content').'"><img src="images/pdf_icon.jpg"/></a>' . substr($a['name'],0,15) . '<br/>';
+    return '<a class="fancydocument" href="'. get_file_url($a,'original_content').'"><img src="images/pdf_icon.jpg"/></a>' . substr($a['name'],0,15) . '<br/>';
 }
 
 function show_movie($a)
 {
-    return '<a class="fancy" href="'.get_file_url($a,'original_content').'"><img src="'. get_file_url($a,'thumbnail') . '" alt=""/></a>' . substr($a['name'],0,15) . '<br/>';
+    return '<a class="fancymovie" href="'.get_file_url($a,'web_preview').'" poster="'.get_file_url($a,'large_thumbnail').'" ><img src="'. get_file_url($a,'thumbnail') . '" alt=""/></a>' . substr($a['name'],0,15) . '<br/>';
 }

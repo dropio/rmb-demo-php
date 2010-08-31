@@ -30,8 +30,13 @@ $uploadify_options = array( 'pingback_url' => "{$docroot}pingback.php");
 <html>
 
 <head>
-<title>Viewing all assets for drop '<?php echo $_GET['drop_name']?></title>
-<link rel="stylesheet" type="text/css" href="../css/main.css"/>
+<title>Viewing assets for drop <?php echo $_GET['drop_name']?></title>
+
+<!-- The Pretty drop.io stylesheets -->
+<link rel="stylesheet" type="text/css" href="../css/base.css"/>
+<link rel="stylesheet" type="text/css" href="../css/headers.css"/>
+<link rel="stylesheet" type="text/css" href="../css/classes.css"/>
+<link rel="stylesheet" type="text/css" href="../css/layout.css"/>
 
 <!-- load jQuery -->
 <script type="text/javascript" src="../utils/uploadify/jquery-1.3.2.min.js"></script>
@@ -47,21 +52,22 @@ $uploadify_options = array( 'pingback_url' => "{$docroot}pingback.php");
 <!-- The Audio player -->
 <script type="text/javascript" src="../utils/wpaudio/audio-player.js"></script>
 
-<script type="text/javascript">
-AudioPlayer.setup("http://dropio.m3b.net/utils/wpaudio/player.swf", {
+<script type="text/javascript" language="javascript">
+
+// Load the audio player
+AudioPlayer.setup("<?php echo $docroot ?>/utils/wpaudio/player.swf", {
   width: 290
 });
 
-var api = new DropioApiClient("<?php echo $API_KEY ?>","http://dropio.m3b.net/DropioJSClientXDReceiver.html");
+// Initialize the Javascript API Client
+var api = new DropioApiClient("<?php echo $API_KEY ?>","<?php echo $docroot ?>/DropioJSClientXDReceiver.html");
 var params = { name : "<?php echo $_GET['drop_name'] ?>" };
+// End - Javascript API Client
 
-var callback = function(response, status) {
-    alert(status); // true, if successful
-    alert(response); // JSON response object about the drop named "foobar"
-};
 
 // Fancybox
 $(document).ready(function() {
+
     $(".fancyform").fancybox({
      'type' : 'iframe',
      'onClosed' : function(){
@@ -69,6 +75,7 @@ $(document).ready(function() {
      }
     });
     
+    // Handle the delete button
     $("#deletedrop").fancybox({
      'type' : 'iframe',
      'onClosed' : function(){
@@ -76,49 +83,72 @@ $(document).ready(function() {
      }
     });
 
-    $(".fancyimg").fancybox({
-      //'content' : '<img src=''/>'
+    // We have to force the image-type on all images because fancybox cannot
+    // auto-detect it.
+    $(".fancyimage").fancybox({
       'type' : 'image'
     });
+    
+    $('.fancydocument').each(function(){
+      $(this).fancybox({
+        'type' : 'iframe',
+        'href' : 'http://docs.google.com/viewer?embedded=true&url=' + $(this).attr('href')
+      });
+    
+    })
+
+    $('.fancymovie').each(function(){
+      $(this).fancybox({
+        'type' : 'iframe',
+        'href' : '<?php echo $docroot ?>/1-advanced_demo/_video_player.php?file=' + $(this).attr('href') + '&poster=' + $(this).attr('poster')
+      });
+      
+    })
     
     
 });
 
 </script>
-
-
-    </head>
+</head>
     <body>
-        <div id="container">
-        <?php include_once('_slot_drops.php'); ?>
-        
-        <h4><a href="<?php echo $docroot ?>/1-advanced_demo">Home</a> &gt; <?php echo $_GET['drop_name']?> &gt; <?php echo $type ?></h4>
+      <div id="layout">
+        <img src="../../images/logo.gif" alt="Drop.io Logo"/>
 
-        <hr/>
-        <a id="deletedrop" href="drop-delete_drop.php?drop_name=<?php echo $_GET['drop_name'] ?>">Delete this drop</a>
-        <hr/>
-        <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=all">All</a> |
-        <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=image">Images</a> |
-        <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=movie">Movies</a> |
-        <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=audio">Audio</a> |
-        <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=document">Documents</a> |
-        <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=notes">Notes</a> |
-        <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=link">Links</a> |
-        <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=other">Other</a>
-        <div style="float: right">
-            <?php include_once('_slot_uploadify_form.php'); ?>
-        </div>
-        <hr/>
-        <div id="content-container">
-        <?php foreach ($arr as $k=>$v):   ?>
-        <div style="clear: both" id="<?php echo $k ?>-container">
-            <h3><?php echo $k?></h3>
-            <?php foreach($v as $ass): ?>
-            <div class="thumb"><?php $func = "show_$k";echo $func($ass); ?></div>
-            <?php endforeach ?>
-        </div>
-        <?php endforeach ?>
-        </div> <!-- END content-container -->
+        <hr class="Solid"/>
+          <?php include_once('_slot_drops.php'); ?>
+        
+          <a href="<?php echo $docroot ?>/1-advanced_demo">Home</a> &gt; <?php echo $_GET['drop_name']?> &gt; <?php echo $type ?>
+          <div style="float: right">
+              <?php include_once('_slot_uploadify_form.php'); ?>
+          </div>
+
+          <hr class="Dotted"/>
+        
+          <a id="deletedrop" href="drop-delete_drop.php?drop_name=<?php echo $_GET['drop_name'] ?>">Delete this drop</a>
+        
+          <hr class="Dotted"/>
+        
+          <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=all">All</a> |
+          <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=image">Images</a> |
+          <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=movie">Movies</a> |
+          <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=audio">Audio</a> |
+          <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=document">Documents</a> |
+          <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=notes">Notes</a> |
+          <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=link">Links</a> |
+          <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=other">Other</a>
+                
+            <hr class="Dotted"/>
+        
+          <div id="content-container">
+          <?php foreach ($arr as $k=>$v):   ?>
+          <div class="container" id="<?php echo $k ?>-container">
+              <h2><?php echo $k?></h2>
+              <?php foreach($v as $ass): ?>
+              <div class="thumb"><?php $func = "show_$k";echo $func($ass); ?></div>
+              <?php endforeach ?>
+          </div>
+          <?php endforeach ?>
+          </div> <!-- END content-container -->
     </div>
-    </body>
+  </body>
 </html>

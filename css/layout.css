@@ -1,0 +1,80 @@
+#layout { width: 900px; margin: 15px auto; }
+#drop-io { float: left; margin-top: 20px; }
+#drop-io a { display: block; width: 172px; height: 54px; background: url(/images/logo.gif); }
+#drop-io span { display: none; }
+#user-controls { float: right; text-align: right; }
+
+#navigation { float: left; }
+#navigation li { display: inline; padding-right: 10px; margin-right: 7px; border-right: 1px dotted #ccc; }
+#navigation li:last-child { border: 0; margin: 0; padding: 0; }
+
+#user-controls { width: 290px; }
+#user-controls div { clear: left; margin-bottom: 3px; }
+#user-controls fieldset { margin: 0 6px 5px 0; }
+#user-controls fieldset div label { display: block; float: left; width: 119px; margin: 5px 6px 0 0; }
+#user-controls fieldset input[type='text'],
+#user-controls fieldset input[type='password'] { width: 150px; font-style: italic; }
+#user-controls label { margin-top: 3px; vertical-align: middle; }
+#user-controls p { margin: 1em 0; }
+
+#dash { width: 500px; float: right; text-align: right; }
+
+#content { margin: 1em 0; }
+#content h1 { margin-bottom: 18px; }
+
+#drive .Section { margin-bottom: 2em; border-bottom: 1px dotted #ccc; padding-bottom: 1em; }
+#drive .Section h3 { font-size: 22px; text-decoration: underline; }
+
+#drive .Icon { float: left; padding: 1em; border: 2px solid #ccc; margin-right: 1.5em; }
+#drive .Icon:hover { border-color: #bbb; }
+#drive .Icon a { font-weight: bold; }
+#drive .Icon span { display: block; }
+
+#folder-wrapper { float: left; width: 200px; margin-right: 20px; }
+#folder-wrapper h3 { margin-bottom: 7px; }
+#folder-wrapper ul { margin-bottom: 40px; }
+#folder-wrapper ul li { margin: 0; border-bottom: 1px dotted #ccc; }
+#folder-wrapper ul li:last-child { border: 0; }
+
+#folder-view { float: right; width: 680px; }
+
+#signup { font-size: 14px; }
+#signup table { width: 90%; }
+#signup input[type="submit"] { margin: 1em 0 0 1em; }
+
+#first { font-size: 18px; text-align: center; margin-bottom: 1.5em; color: #f00; }
+
+#footer { margin-top: 50px; }
+#footer li { display: inline; padding-right: 10px; margin-right: 7px; border-right: 1px dotted #ccc; }
+#footer .Plain { margin: 0; border: 0; padding: 0;}
+#copyright { float: right; }
+
+#homepage p span { color: #c00; }
+
+#overview { margin-bottom: 25px; }
+#overview .Side { width: 30%; padding-right: 18%; }
+
+#drop-list li { margin-bottom: .5em; }
+
+#sidebar { float: left; width: 200px; margin-right: 20px; }
+#sidebar h2 { font-size: 1.3em; }
+#sidebar textarea { width: 95%; height: 4em; }
+#sidebar select { width: 99%; font-size: 1.1em; margin-bottom: 5px; }
+#sidebar input[type="submit"] { float: right; }
+#sidebar .LinkSharer { width: 96%; font-size: .85em; font-family: Arial; border: 1px solid #ccc; margin-bottom: 5px; padding: 3px; }
+#drop { float: right; width: 680px; }
+
+#files { margin: 1em; }
+#files .Icon { float: left; padding: 1em; border: 1px dotted #ccc; margin: 0 15px 15px 0; }
+#files .Icon:hover { border-color: #bbb; }
+#files .Icon a { font-weight: bold; }
+#files .Icon span { display: block; }
+
+#new-drop-form #drop_title { width: 300px; }
+
+#activity { font-size: .84em; text-indent: 3px; }
+
+#user-permissions { width: 100%; }
+#user-permissions .User { margin-bottom: 1em; }
+#user-permissions h3 { font-size: 1.2em; margin-bottom: 4px; }
+#user-permissions p { text-indent: 2em; }

@@ -22,9 +22,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     echo '<script type="text/javascript" language="javascript">parent.$.fancybox.close();</script>';
 }
 ?>
-<?php if ($_SERVER['REQUEST_METHOD'] == 'GET'): ?>
-<form action="drop-delete_drop.php" method="post">
-<input type="hidden" name="drop_name" value="<?php echo $_GET['drop_name'] ?>"/>
-<input type="submit" value="Delete drop: <?php echo $_GET['drop_name'] ?>"/>
-</form>
+<html>
+<head>
+  <title></title>
+  <!-- The Pretty drop.io stylesheets -->
+  <link rel="stylesheet" type="text/css" href="../css/base.css"/>
+  <link rel="stylesheet" type="text/css" href="../css/headers.css"/>
+  <link rel="stylesheet" type="text/css" href="../css/classes.css"/>
+  <link rel="stylesheet" type="text/css" href="../css/layout.css"/>
+  
+</head>
+<body>
+  <?php if ($_SERVER['REQUEST_METHOD'] == 'GET'): ?>
+  <form action="drop-delete_drop.php" method="post">
+    <input type="hidden" name="drop_name" value="<?php echo $_GET['drop_name'] ?>"/>
+    <input type="submit" value="Delete drop: <?php echo $_GET['drop_name'] ?>"/>
+  </form>
 <?php endif ?>
+</body>
+</html>

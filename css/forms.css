@@ -1,0 +1,23 @@
+input, button, .Button {
+  vertical-align: middle; font-size: 1em; outline: none; font-weight: 300; padding: 0; letter-spacing: 1px; outline: none;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, FreeSans, sans-serif;
+}
+input[type=text], input[type=password] {
+  border: none; padding: 4px 3px 3px; border-bottom: 1px dotted #aaa; background: inherit;
+}
+input[type=submit], button, .Button {
+  border: none; cursor: pointer; color: #fff; background: #eb0000;
+  text-shadow: 0px -1px 1px #ccc; text-decoration: none; border-bottom: 1px solid rgba(0,0,0,0.25);
+  -moz-border-radius: 5px; -moz-box-shadow: 0 1px 3px #999; padding: 5px 9px;
+  -webkit-border-radius: 5px; -webkit-box-shadow: 0 1px 3px #999;
+}
+input[type=text]:hover, input[type=password]:hover, input.Focused { border-color: #000; }
+select { outline: none; }
+input, button, .Button, .Big { -webkit-text-stroke: 1px transparent; }
+input.Plain { border: 1px solid #aaa; padding: 4px 3px; }
+input.Disabled { background: #aaa; cursor: default; }
+
+.errorExplanation h2 { font-size: 1.4em; color: #c00; margin-bottom: .25em; }
+.errorExplanation li { font-size: .82em; color: #c00; margin: 0 0 .25em 2em; }
+
+.Hint { color: #c00; font-style: italic; margin-top: 3px; font-size: .9em; }

@@ -1,0 +1,45 @@
+body { background: #fff; margin: 0; padding: 0; color: #000;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, FreeSans, sans-serif;
+  line-height: 1.6; font-size: 90%; letter-spacing: 0.025em; font-weight: 300; text-rendering: optimizeLegibility; }
+a { text-decoration: none; color: #c00; outline: none; }
+a:hover { text-decoration: underline; }
+div, ul, li, h1, h2, h3, h4 { background-repeat: no-repeat; background-position: top left; }
+h1, h2, h3, h4 { font-size: 1em; line-height: 1.4; margin: 0 0 1em; font-weight: normal; }
+p, blockquote, dl, dd, ul, ol, li, table { margin: 0 0 1em; padding: 0; }
+ul { list-style-type: none; }
+img, img a { border: 0; }
+legend { display: none; }
+hr { clear: both; height: 1px; background: none; border: 0; }
+form { margin: 0; }
+fieldset { display: block; margin: 0; padding: 0; border: 0; }
+table { border-collapse: collapse; border-spacing: 0; }
+td, th { font-weight: normal; text-align: left; font-style: normal; }
+::-moz-selection { background: #fcc; text-shadow: none; }
+::selection { background: #fcc; text-shadow: none; }
+
+/* Added just for this demo */
+#drops { position: fixed; top: 40px; left: 20px; font-size: x-small;}
+
+.thumb {
+    padding: 10px;
+    border: 1px dotted #999;
+    float: left;
+    margin-top: 10px;
+    margin-right: 10px;
+    text-align: left;
+    font-size: 10px;
+    width: 100px;
+    height: 100px;
+    text-align: left;
+}
+
+.thumb img {
+    display: block;
+    border: 1px solid black;
+    margin: 0 auto;
+    margin-bottom: 5px;
+    max-height: 75px;
+    
+}
+
+.container { clear: both; }
