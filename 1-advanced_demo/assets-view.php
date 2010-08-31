@@ -8,11 +8,11 @@ $type = (isset($_GET['type'])) ? $_GET['type'] : 'all';
 
 if($type == 'all')
 {
-    $assets = DB::getInstance()->prepare("SELECT * FROM asset WHERE drop_name = ? order by type")
+    $assets = DB::getInstance()->prepare("SELECT * FROM asset WHERE drop_id IN (SELECT id from `drop` WHERE name = ?) ORDER BY type")
                 ->execute(array($_GET['drop_name']))
                 ->fetchAll();
 } else {
-    $assets = DB::getInstance()->prepare("SELECT * FROM asset WHERE drop_name = ? and type = ?")
+    $assets = DB::getInstance()->prepare("SELECT * FROM asset WHERE drop_id IN (SELECT id from `drop` WHERE name = ?) and type = ?")
                 ->execute(array($_GET['drop_name'], $type))
                 ->fetchAll();
 }
@@ -60,6 +60,30 @@ var callback = function(response, status) {
     alert(response); // JSON response object about the drop named "foobar"
 };
 
+// Fancybox
+$(document).ready(function() {
+    $(".fancyform").fancybox({
+     'type' : 'iframe',
+     'onClosed' : function(){
+         location.reload();
+     }
+    });
+    
+    $("#deletedrop").fancybox({
+     'type' : 'iframe',
+     'onClosed' : function(){
+         window.location = '<?php echo $docroot ?>/1-advanced_demo/';
+     }
+    });
+
+    $(".fancyimg").fancybox({
+      //'content' : '<img src=''/>'
+      'type' : 'image'
+    });
+    
+    
+});
+
 </script>
 
 
@@ -68,10 +92,10 @@ var callback = function(response, status) {
         <div id="container">
         <?php include_once('_slot_drops.php'); ?>
         
-        <h4><?php echo $_GET['drop_name']?> &gt; <?php echo $type ?></h4>
+        <h4><a href="<?php echo $docroot ?>/1-advanced_demo">Home</a> &gt; <?php echo $_GET['drop_name']?> &gt; <?php echo $type ?></h4>
 
         <hr/>
-        <a href="javascript:api.getDrop({ name : "<?php echo $_GET['drop_name']?>" }, callback ); ?>">Empty Drop</a>
+        <a id="deletedrop" href="drop-delete_drop.php?drop_name=<?php echo $_GET['drop_name'] ?>">Delete this drop</a>
         <hr/>
         <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=all">All</a> |
         <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=image">Images</a> |
@@ -85,6 +109,7 @@ var callback = function(response, status) {
             <?php include_once('_slot_uploadify_form.php'); ?>
         </div>
         <hr/>
+        <div id="content-container">
         <?php foreach ($arr as $k=>$v):   ?>
         <div style="clear: both" id="<?php echo $k ?>-container">
             <h3><?php echo $k?></h3>
@@ -93,6 +118,7 @@ var callback = function(response, status) {
             <?php endforeach ?>
         </div>
         <?php endforeach ?>
+        </div> <!-- END content-container -->
     </div>
     </body>
 </html>
