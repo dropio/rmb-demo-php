@@ -1,6 +1,8 @@
 <?php 
 
-$drops = DB::getInstance()->query("SELECT drop_name from asset GROUP BY drop_name ORDER BY drop_name")->fetchAll();
+$sql = "SELECT d.name as drop_name FROM `drop` d GROUP BY d.name ORDER BY d.name";
+
+$drops = DB::getInstance()->query($sql)->fetchAll();
 
 ?>
 
