@@ -16,7 +16,7 @@ function get_file_url($a,$type)
 
 function show_image($a)
 {
-    return '<a class="fancy" href="'.get_file_url($a,'original_content').'"><img src="'. get_file_url($a,'thumbnail') . '" alt=""/></a>' . substr($a['name'],0,15) . '<br/>';
+    return '<a class="fancyimg" href="'.get_file_url($a,'original_content').'"><img src="'. get_file_url($a,'thumbnail') . '" alt=""/></a>' . substr($a['name'],0,15) . '<br/>';
 }
 
 function show_audio($a)
