@@ -15,6 +15,7 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post')
     fwrite($fp,"\$host='{$_POST['host']}';\n");
     fwrite($fp,"\$port=$port;\n");
     fwrite($fp,"\$dbname='{$_POST['dbname']}';\n\n");
+    fwrite($fp,"\$docroot='{$_POST['docroot']}';\n\n");
     fwrite($fp,"\$API_KEY='{$_POST['api_key']}';\n\n");
 
     if (!empty($_POST['api_secret']))
@@ -99,13 +100,32 @@ EOL;
     <head>
         <title>Install the Dropio Pingback demo</title>
         <link rel="stylesheet" type="text/css" href="../../css/main.css"/>
+
+        <!-- Load jQuery -->
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+
+        <!-- Load Fancybox -->
+        <script type="text/javascript" src="../../utils/fancybox/jquery.fancybox-1.3.1.pack.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../utils/fancybox/jquery.fancybox-1.3.1.css"/>
+
     </head>
     <body>
         <div id="container">
         <h1>Install the Drop.io Pingback Demo</h1>
         <?php if(isset($install) && ($install !== FALSE)): ?>
+        <script type="text/javascript" language="javascript">
+            $(document).ready(function() {
+                $(".fancyform").fancybox({
+                 'type' : 'iframe',
+                 'onClosed' : function(){
+                     window.location = '<?php echo $_POST['docroot'] ?>/1-advanced_demo';
+                 }
+                });
+            });
+        </script>
+
             <p>Success! The database was installed.</p>
-            <p><a href="#">Import your drops</a> or <a href="#">create a new one</a></p>
+            <p><a class="fancyform" href="../drop-import_drop.php">Import your drops</a> or <a class="fancyform" href="../drop-create_drop.php">create a new one</a></p>
         <?php else: ?>
         <form action="" method="post">
             <fieldset>
@@ -124,6 +144,12 @@ EOL;
 
             <label for="dbname">Database: </label>
             <input type="text" name="dbname" />
+            </fieldset>
+
+            <fieldset>
+            <legend>Webserver</legend>
+            <label for="host">Hostname: </label>
+            <input type="text" name="docroot" value="<?php echo $_SERVER['SERVER_NAME'] ?>"/>
             </fieldset>
             
             <fieldset>
