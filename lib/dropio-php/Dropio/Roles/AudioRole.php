@@ -6,7 +6,7 @@ class AudioRole extends Role
     public function getArtist()   { return $this->values['artist']; }
     public function getTrackTitle()   { return $this->values['track_title']; }
 
-    public function getPreview($type='')
+    public function getPreview($type)
     {
         return false;
     }
