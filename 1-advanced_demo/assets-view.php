@@ -93,17 +93,15 @@ $(document).ready(function() {
       $(this).fancybox({
         'type' : 'iframe',
         'href' : 'http://docs.google.com/viewer?embedded=true&url=' + $(this).attr('href')
-      });
-    
-    })
+      });    
+    });
 
     $('.fancymovie').each(function(){
       $(this).fancybox({
         'type' : 'iframe',
         'href' : '<?php echo $docroot ?>/1-advanced_demo/_video_player.php?file=' + $(this).attr('href') + '&poster=' + $(this).attr('poster')
       });
-      
-    })
+    });
     
     
 });

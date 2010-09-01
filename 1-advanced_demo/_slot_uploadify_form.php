@@ -12,38 +12,64 @@ $(document).ready(function() {
 
     var dropCB = function(response, status){
         chatPass = response.chat_password;
-        console.log('get drop called with ' + chatPass);
+
         DropioStreamer.start("<?php echo $_GET['drop_name'] ?>",chatPass,"<?php echo $docroot ?>/streamer_xdr.html");
         DropioStreamer.observe(DropioStreamer.ASSET_UPDATED,function(data){
-            console.log('asset updated called');
-            console.log(data);
             
             // Shortcut to the objects we want
             var type = data.type;         // image, movie, document, etc
             var r = data.roles.role;
             var l = r.locations.location;
 
+            console.log('checking role');
+            console.log(r);
+
             // Bail out if the status is anything but complete
             if (l.status !== 'complete') { return; }
 
             // Deal with the role based on it's type
-            switch (r.type)
+            switch (type)
             {
               case 'image' :
+                console.log('inside switch');
                 if (r.name == 'thumbnail') { 
-                  document.getElementById(data.name).innerHTML = '<a href="#"><img src="' + l.file_url + '"/></a>'; 
+                  console.log('r.name is thumbnail: ' + l.file_url);
+                  document.getElementById(data.name).innerHTML = '<img src="' + l.file_url + '"/>'; 
                 }
                 break;
                 
               case 'movie'  :
-                if (r.name == 'web_preview') { 
-                  document.getElementById(data.name).innerHTML = '<a href="#"><img src="' + l.file_url + '"/></a>'; 
+                if (r.name == 'thumbnail') { 
+                  document.getElementById(data.name).innerHTML = '<img src="' + l.file_url + '"/>';
                 }
+                if (r.name == 'web_preview') { 
+                  var myLink = document.getElementById(data.name);
+                  myLink.setAttribute('href',l.file_url);
+                  $(myLink).each(function(){
+                    $(this).fancybox({
+                      'type' : 'iframe',
+                      'href' : '<?php echo $docroot ?>/1-advanced_demo/_video_player.php?file=' + $(this).attr('href') + '&poster=' + $(this).attr('poster')
+                    });
+                  });
+                  
+                }
+                if (r.name == 'large_thumbnail') { 
+                  document.getElementById(data.name).setAttribute('poster',l.file_url); 
+                }
+                
                 break;
                 
               case 'document' :
                 if (r.name == 'web_preview') {
-                  document.getElementById(data.name).innerHTML = '<a href="#"><img src="' + l.file_url + '"/></a>'; 
+                  var myLink = document.getElementById(data.name);
+                  myLink.innerHTML = '<img src="images/pdf_icon.jpg"/>';
+                  $(myLink).each(function(){
+                    $(this).fancybox({
+                      'type' : 'iframe',
+                      'href' : 'http://docs.google.com/viewer?embedded=true&url=' + $(this).attr('href')
+                    });    
+                  });
+                  
                 }
                 break;
                 
@@ -51,14 +77,6 @@ $(document).ready(function() {
               
                 break;
             }
-/*
-            switch(r.name)
-            {
-                case 'thumbnail' :
-                    document.getElementById(data.name).innerHTML = '<a href="#"><img src="' + l.file_url + '"/></a>';
-                    break;
-            }
-*/
 
         });
 
@@ -73,16 +91,40 @@ $(document).ready(function() {
        //console.log("asset callback call");
         j = eval('(' + e + ')');
 
-        console.log('Original Content: ' + j.roles[0].locations[0].file_url);
+console.log(j);
+
+        //console.log('Original Content: ' + j.roles[0].locations[0].file_url);
         // Create the new element
         var newAsset = document.createElement('div');
         newAsset.setAttribute('class','thumb');
-        newAsset.setAttribute('id',j.name);
-        newAsset.innerHTML = '<a class="fancy' + j.type +'" href="'+ j.roles[0].locations[0].file_url +'"><img src="images/spinner.gif" alt="Not ready yet"/></a>';
+        
+        var myLink = document.createElement('a');
+        myLink.setAttribute('class','fancy'+j.type);
+        myLink.setAttribute('id',j.name);
+
+        switch(j.type)
+        {
+          case 'image' : 
+            myLink.setAttribute('href',j.roles[0].locations[0].file_url);
+            $(myLink).fancybox({'type':'image'});
+            break;
+          case 'movie' :
+            myLink.setAttribute('href','#');
+            break;
+          case 'audio' :
+            myLink.setAttribute('href',j.roles[0].locations[0].file_url);
+            break;
+          case 'document' :
+            myLink.setAttribute('href','#');
+            break;
+        }
+
+        myLink.innerHTML = '<img src="images/spinner.gif" alt="Not ready yet"/>';
+        newAsset.appendChild(myLink);
         
         // Get the containing div. If it does not exist then create it
         typecont = document.getElementById(j.type+'-container');
-        console.log(typecont);
+        
         if (typecont == null)
         {
           // Create the container
@@ -105,8 +147,6 @@ $('#file').uploadify({
     'cancelImg' : '../utils/uploadify/cancel.png',
     'auto'      : true,
     'onComplete' : function(e,q,f,r,d) {
-        console.log("calling complete with:");
-        console.log(r);
         assetCallback(r);
         return true;
     },
