@@ -91,8 +91,8 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post')
 EOL;
 	$dbi = DB::getInstance($_POST['user'],$_POST['pass'],$_POST['dbname'],$_POST['host'],$port);
     $install = $dbi->prepare($sql);
-	$install->execute();
-	$pdoerror = $install->getError();
+	$install->query();
+	$pdoerror = $install->getResult();
 }
 
 # TODO: A little js validation? Or bail out somewhere in the post
