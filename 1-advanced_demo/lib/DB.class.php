@@ -154,7 +154,7 @@ Class DB {
 		foreach ($sqlarray as $sqlstmt){
         	try {
 	            //$this->stmt = $this->dbh->exec($sql);
-				$this->dbh->exec($sqlstmt) or die("Error executing the sql. errorInfo:" . print_r($this->dbh->errorInfo(), true) . "\nSQL statement: " . $sqlstmt);
+				$this->dbh->exec($sqlstmt);// or die("Error executing the sql. errorInfo:" . print_r($this->dbh->errorInfo(), true) . "\nSQL statement: " . $sqlstmt);
 	        } catch (PDOException $e) {
 	            echo $e->getMessage();
 	        }

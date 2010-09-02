@@ -27,15 +27,7 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post')
     include_once (dirname(__FILE__) . '/../lib/DB.class.php');
 
     # Create the tables
-    $sql =<<<EOL
-		
-		-- --------------------------------------------------------\r\n
-		\r\n
-		--\r\n
-		-- Table structure for table `asset`\r\n
-		--\r\n
-		\r\n
-		DROP TABLE IF EXISTS `asset`;\r\n
+    $sql ="DROP TABLE IF EXISTS `asset`;\r\n
 		CREATE TABLE IF NOT EXISTS `asset` (\r\n
 		  `id` int(11) NOT NULL auto_increment,\r\n
 		  `drop_id` int(11) default NULL,\r\n
@@ -47,13 +39,6 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post')
 		  PRIMARY KEY  (`id`),\r\n
 		  UNIQUE KEY `asset_drop_id_name_uniq_idx` (`drop_id`,`name`)\r\n
 		) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Asset Table' AUTO_INCREMENT=1 ;\r\n
-		\r\n
-		-- --------------------------------------------------------\r\n
-		\r\n
-		--\r\n
-		-- Table structure for table `drop`\r\n
-		--\r\n
-		\r\n
 		DROP TABLE IF EXISTS `drop`;\r\n
 		CREATE TABLE IF NOT EXISTS `drop` (\r\n
 		  `id` int(11) NOT NULL auto_increment,\r\n
@@ -63,18 +48,8 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post')
 		  PRIMARY KEY  (`id`),\r\n
 		  UNIQUE KEY `name` (`name`)\r\n
 		) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;\r\n
-		\r\n
-		--\r\n
-		-- Constraints for dumped tables\r\n
-		--\r\n
-		\r\n
-		--\r\n
-		-- Constraints for table `asset`\r\n
-		--\r\n
 		ALTER TABLE `asset`\r\n
-		  ADD CONSTRAINT `asset_ibfk_1` FOREIGN KEY (`drop_id`) REFERENCES `drop` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;\r\n
-
-EOL;
+		  ADD CONSTRAINT `asset_ibfk_1` FOREIGN KEY (`drop_id`) REFERENCES `drop` (`id`) ON DELETE CASCADE ON UPDATE CASCADE";
 	$dbi = DB::getInstance($_POST['user'],$_POST['pass'],$_POST['dbname'],$_POST['host'],$port);
     $install = $dbi->exec($sql);
 	$pdoerror = $install->getResult();
