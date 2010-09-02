@@ -126,7 +126,8 @@ EOL;
             });
         </script>
 
-            <p>Success! The database was installed.</p>
+            <p>Success! The database was installed.<br/><?php print_r($dbi); print_r($pdoerror); ?></p>
+
             <p><a class="fancyform" href="../drop-import_drop.php">Import your drops</a> or <a class="fancyform" href="../drop-create_drop.php">create a new one</a></p>
         <?php else: ?>
         <form action="" method="post">
