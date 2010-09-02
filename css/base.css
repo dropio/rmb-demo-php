@@ -3,7 +3,7 @@ body { background: #fff; margin: 0; padding: 0; color: #000;
   line-height: 1.6; font-size: 90%; letter-spacing: 0.025em; font-weight: 300; text-rendering: optimizeLegibility; }
 a { text-decoration: none; color: #c00; outline: none; }
 a:hover { text-decoration: underline; }
-div, ul, li, h1, h2, h3, h4 { background-repeat: no-repeat; background-position: top left; }
+div, ul, li, h1, h2, h3, h4 {  background-position: top left; }
 h1, h2, h3, h4 { font-size: 1em; line-height: 1.4; margin: 0 0 1em; font-weight: normal; }
 p, blockquote, dl, dd, ul, ol, li, table { margin: 0 0 1em; padding: 0; }
 ul { list-style-type: none; }
