@@ -60,7 +60,7 @@ else{
 ?>
 <html>
     <head>
-        <title>Install the Dropio Advanced demo</title>
+        <title>Install the Dropio RMB Advanced demo</title>
         <link rel="stylesheet" type="text/css" href="../../css/main.css"/>
 
         <!-- Load jQuery -->
@@ -73,22 +73,9 @@ else{
     </head>
     <body>
         <div id="container">
-        <h1>Install the Drop.io Pingback Demo</h1>
-        <?php if(isset($install) && ($install !== FALSE)): ?>
-        <script type="text/javascript" language="javascript">
-            $(document).ready(function() {
-                $(".fancyform").fancybox({
-                 'type' : 'iframe',
-                 'onClosed' : function(){
-                     window.location = '<?php echo $_POST['docroot'] ?>/1-advanced_demo';
-                 }
-                });
-            });
-        </script>
-
-            <p>Success! The database was installed.</p>
-
-            <p><a class="fancyform" href="../drop-import_drop.php">Import your drops</a> or <a class="fancyform" href="../drop-create_drop.php">create a new one</a></p>
+        <h1>Install the Drop.io RMB Advanced Demo</h1>
+        
+        <p><a class="fancyform" href="../drop-import_drop.php">Import your drops</a> or <a class="fancyform" href="../drop-create_drop.php">create a new one</a></p>
         
         <form action="" method="post">
             <fieldset>
@@ -131,7 +118,6 @@ else{
             with this operation.
         </p>
         </div>
-        <?php endif ?>
     </body>
 </html>
 <?php 
