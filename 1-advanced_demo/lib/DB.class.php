@@ -4,9 +4,11 @@
  */
 Class Config {
 
-    public static $user = 'dropio';
-    public static $pass = 'abc123';
-    public static $dbname = 'dropio';
+    public static $user;
+    public static $pass;
+    public static $dbname;
+	public static $host;
+	public static $port;
 
 }
 
@@ -63,6 +65,8 @@ Class DB {
             $user = Config::$user;
             $pass = Config::$pass;
             $dbname= Config::$dbname;
+			$host= Config::$host;
+			$post= Config::$port;
         }
         
         $dsn = "mysql:host=$host;dbname=$dbname;port=$port";
