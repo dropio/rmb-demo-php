@@ -52,15 +52,15 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post')
 		  ADD CONSTRAINT `asset_ibfk_1` FOREIGN KEY (`drop_id`) REFERENCES `drop` (`id`) ON DELETE CASCADE ON UPDATE CASCADE";
 	$dbi = DB::getInstance($_POST['user'],$_POST['pass'],$_POST['dbname'],$_POST['host'],$port);
     $install = $dbi->exec($sql);
-	$pdoerror = $install->getResult();
+	#Redirect to the app
+	header("Location: http://" . $_SERVER['SERVER_NAME'] ."/". substr($_SERVER["REQUEST_URI"], 0, strpos($_SERVER["REQUEST_URI"], "/install")));
+	# TODO: A little js validation? Or bail out somewhere in the post
 }
-
-# TODO: A little js validation? Or bail out somewhere in the post
-
+else{
 ?>
 <html>
     <head>
-        <title>Install the Dropio Pingback demo</title>
+        <title>Install the Dropio Advanced demo</title>
         <link rel="stylesheet" type="text/css" href="../../css/main.css"/>
 
         <!-- Load jQuery -->
@@ -86,10 +86,10 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post')
             });
         </script>
 
-            <p>Success! The database was installed.<br/><?php print_r($dbi); print_r($pdoerror); ?></p>
+            <p>Success! The database was installed.</p>
 
             <p><a class="fancyform" href="../drop-import_drop.php">Import your drops</a> or <a class="fancyform" href="../drop-create_drop.php">create a new one</a></p>
-        <?php else: ?>
+        
         <form action="" method="post">
             <fieldset>
             <legend>Database</legend>
@@ -134,3 +134,6 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post')
         <?php endif ?>
     </body>
 </html>
+<?php 
+} 
+?>
