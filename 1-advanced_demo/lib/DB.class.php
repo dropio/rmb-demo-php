@@ -152,7 +152,7 @@ Class DB {
     {
         try {
             //$this->stmt = $this->dbh->exec($sql);
-			$this->dbh->exec() or die(print_r($this->dbh->errorInfo(), true));
+			$this->dbh->exec($sql)) or die(print_r($this->dbh->errorInfo(), true));
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
