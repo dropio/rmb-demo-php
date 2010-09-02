@@ -14,7 +14,7 @@ include_once('user_funcs.php');
 if (isset($_GET['drop_name']))
 {
   $drop_name = $_GET['drop_name'];
-  $drop = Dropio_Drop::getInstance($API_KEY)->load($drop_name);
+  $drop = Dropio_Drop::getInstance($API_KEY, $API_SECRET)->load($drop_name);
   $assets = $drop->getAssets();
 
 

@@ -39,7 +39,7 @@ function asset_updated($asset)
     # Does not exist, create
     if ((int) $s['c'] == 0) {
         # Load the drop first
-        $drop = Dropio_Drop::getInstance($API_KEY)->load($values['drop_name']);
+        $drop = Dropio_Drop::getInstance($API_KEY, $API_SECRET)->load($values['drop_name']);
         
         $sql = "INSERT INTO `drop` (name,`values`) VALUES (?,?)";
         $s = $r->prepare($sql)->
