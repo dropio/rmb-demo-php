@@ -142,6 +142,24 @@ Class DB {
         return $this;
     }
 
+	/**
+     * Exec a SQL Statement on the database.
+     *
+     * @param string $sql
+     * @return <type>
+     */
+    public function exec($sql)
+    {
+        try {
+            //$this->stmt = $this->dbh->exec($sql);
+			$this->dbh->exec() or die(print_r($this->dbh->errorInfo(), true));
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+
+        return $this;
+    }
+
     /**
      *
      * @return <type>
