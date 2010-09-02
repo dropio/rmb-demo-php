@@ -2,16 +2,20 @@
 <script type="text/javascript" src="../utils/uploadify/jquery.uploadify.v2.1.0.min.js"></script>
 <link rel="stylesheet" type="text/css" media="screen, projection" href="../utils/uploadify/uploadify.css" />
 
+<?php
+	$drop_name = $_GET['drop_name'];
+	$drop = Dropio_Drop::getInstance($API_KEY, $API_SECRET)->load($drop_name);
+	$chatPass = $drop->getChatPassword();
+?>
+
 <script type="text/javascript">// <![CDATA[
 
 $(document).ready(function() {
 
     var api = new DropioApiClient("<?php echo $API_KEY ?>","<?php echo $docroot ?>/DropioJSClientXDReceiver.html");
-
-    var chatPass = 'broken';
-
+	
     var dropCB = function(response, status){
-        chatPass = response.chat_password;
+        var chatPass = "<?php echo $chatPass ?>";
 
         DropioStreamer.start("<?php echo $_GET['drop_name'] ?>",chatPass,"<?php echo $docroot ?>/streamer_xdr.html");
         DropioStreamer.observe(DropioStreamer.ASSET_UPDATED,function(data){
@@ -138,12 +142,24 @@ console.log(j);
         document.getElementById(j.type+'-container').appendChild(newAsset);
         return true;
     };
-
+<?php
+	$sigdata = '';
+	if(!empty($API_SECRET)){
+		$timestamp = time() + (60 * 60);
+		$paramsToSign = array();
+		$paramsToSign["version"] = "3.0";
+		$paramsToSign["timestamp"] = $timestamp;
+		$paramsToSign["signature_mode"] = "OPEN";
+		$paramsToSign["api_key"] = $API_KEY;
+		$signedParams = Dropio_Api::getInstance($API_KEY, $API_SECRET)->signRequest($paramsToSign);
+		$sigdata .= ',"timestamp":"'.$timestamp.'","signature_mode":"OPEN","signature":"'.$signedParams["signature"].'"';
+	}
+?>
 $('#file').uploadify({
     'uploader'  : '../utils/uploadify/uploadify.swf',
     'script'    : 'http://assets.drop.io/upload',
     'multi'     : true,
-    'scriptData': {"api_key":"<?php echo $API_KEY ?>","drop_name":"<?php echo $_GET['drop_name']?>","format":"json","version":"3.0","pingback_url":"<?php echo $docroot ?>/1-advanced_demo/pingback.php"},
+    'scriptData': {"api_key":"<?php echo $API_KEY ?>","drop_name":"<?php echo $_GET['drop_name']?>","format":"json","version":"3.0","pingback_url":"<?php echo $docroot ?>/1-advanced_demo/pingback.php"<?php echo $sigdata; ?>},
     'cancelImg' : '../utils/uploadify/cancel.png',
     'auto'      : true,
     'onComplete' : function(e,q,f,r,d) {

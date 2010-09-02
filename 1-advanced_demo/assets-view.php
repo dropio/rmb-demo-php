@@ -64,7 +64,6 @@ var api = new DropioApiClient("<?php echo $API_KEY ?>","<?php echo $docroot ?>/D
 var params = { name : "<?php echo $_GET['drop_name'] ?>" };
 // End - Javascript API Client
 
-
 // Fancybox
 $(document).ready(function() {
 
