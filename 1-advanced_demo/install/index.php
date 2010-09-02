@@ -89,8 +89,10 @@ ALTER TABLE `asset`
   ADD CONSTRAINT `asset_ibfk_1` FOREIGN KEY (`drop_id`) REFERENCES `drop` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 EOL;
-
-    $install = DB::getInstance()->query($sql);
+	$dbi = DB::getInstance($_POST['user'],$_POST['pass'],$_POST['dbname'],$_POST['host'],$port);
+    $install = $dbi->prepare($sql);
+	$install->execute();
+	$pdoerror = $install->getError();
 }
 
 # TODO: A little js validation? Or bail out somewhere in the post
