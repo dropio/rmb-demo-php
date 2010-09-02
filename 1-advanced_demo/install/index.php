@@ -28,65 +28,65 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post')
 
     # Create the tables
     $sql =<<<EOL
--- phpMyAdmin SQL Dump
--- version 3.1.2deb1ubuntu0.2
--- http://www.phpmyadmin.net
---
--- Host: localhost
--- Generation Time: Aug 30, 2010 at 09:05 PM
--- Server version: 5.0.75
--- PHP Version: 5.2.6-3ubuntu4.5
-
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-
---
--- Database: `dropio`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `asset`
---
-
-DROP TABLE IF EXISTS `asset`;
-CREATE TABLE IF NOT EXISTS `asset` (
-  `id` int(11) NOT NULL auto_increment,
-  `drop_id` int(11) default NULL,
-  `created_at` date NOT NULL,
-  `name` varchar(255) default NULL,
-  `values` text NOT NULL COMMENT 'json data array',
-  `type` varchar(20) NOT NULL,
-  `is_complete` tinyint(1) NOT NULL default '0',
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `asset_drop_id_name_uniq_idx` (`drop_id`,`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Asset Table' AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `drop`
---
-
-DROP TABLE IF EXISTS `drop`;
-CREATE TABLE IF NOT EXISTS `drop` (
-  `id` int(11) NOT NULL auto_increment,
-  `name` varchar(255) NOT NULL,
-  `created_at` int(11) NOT NULL,
-  `values` text NOT NULL,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `asset`
---
-ALTER TABLE `asset`
-  ADD CONSTRAINT `asset_ibfk_1` FOREIGN KEY (`drop_id`) REFERENCES `drop` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+		-- phpMyAdmin SQL Dump\r\n\r\n
+		-- version 3.1.2deb1ubuntu0.2\r\n
+		-- http://www.phpmyadmin.net\r\n
+		--\r\n
+		-- Host: localhost\r\n
+		-- Generation Time: Aug 30, 2010 at 09:05 PM\r\n
+		-- Server version: 5.0.75\r\n
+		-- PHP Version: 5.2.6-3ubuntu4.5\r\n
+		\r\n
+		SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";\r\n
+		\r\n
+		--\r\n
+		-- Database: `dropio`\r\n
+		--\r\n
+		\r\n
+		-- --------------------------------------------------------\r\n
+		\r\n
+		--\r\n
+		-- Table structure for table `asset`\r\n
+		--\r\n
+		\r\n
+		DROP TABLE IF EXISTS `asset`;\r\n
+		CREATE TABLE IF NOT EXISTS `asset` (\r\n
+		  `id` int(11) NOT NULL auto_increment,\r\n
+		  `drop_id` int(11) default NULL,\r\n
+		  `created_at` date NOT NULL,\r\n
+		  `name` varchar(255) default NULL,\r\n
+		  `values` text NOT NULL COMMENT 'json data array',\r\n
+		  `type` varchar(20) NOT NULL,\r\n
+		  `is_complete` tinyint(1) NOT NULL default '0',\r\n
+		  PRIMARY KEY  (`id`),\r\n
+		  UNIQUE KEY `asset_drop_id_name_uniq_idx` (`drop_id`,`name`)\r\n
+		) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Asset Table' AUTO_INCREMENT=1 ;\r\n
+		\r\n
+		-- --------------------------------------------------------\r\n
+		\r\n
+		--\r\n
+		-- Table structure for table `drop`\r\n
+		--\r\n
+		\r\n
+		DROP TABLE IF EXISTS `drop`;\r\n
+		CREATE TABLE IF NOT EXISTS `drop` (\r\n
+		  `id` int(11) NOT NULL auto_increment,\r\n
+		  `name` varchar(255) NOT NULL,\r\n
+		  `created_at` int(11) NOT NULL,\r\n
+		  `values` text NOT NULL,\r\n
+		  PRIMARY KEY  (`id`),\r\n
+		  UNIQUE KEY `name` (`name`)\r\n
+		) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;\r\n
+		\r\n
+		--\r\n
+		-- Constraints for dumped tables\r\n
+		--\r\n
+		\r\n
+		--\r\n
+		-- Constraints for table `asset`\r\n
+		--\r\n
+		ALTER TABLE `asset`\r\n
+		  ADD CONSTRAINT `asset_ibfk_1` FOREIGN KEY (`drop_id`) REFERENCES `drop` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;\r\n
 
 EOL;
 	$dbi = DB::getInstance($_POST['user'],$_POST['pass'],$_POST['dbname'],$_POST['host'],$port);
