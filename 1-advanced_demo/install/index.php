@@ -91,7 +91,7 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post')
 EOL;
 	$dbi = DB::getInstance($_POST['user'],$_POST['pass'],$_POST['dbname'],$_POST['host'],$port);
     $install = $dbi->prepare($sql);
-	$install->query();
+	$install->query($sql);
 	$pdoerror = $install->getResult();
 }
 
