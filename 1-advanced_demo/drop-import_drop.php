@@ -38,7 +38,7 @@ if (isset($_GET['drop_name']))
 
 }
 
-$drops = Dropio_Api::getInstance($API_KEY)->getDrops();
+$drops = Dropio_Api::getInstance($API_KEY, $API_SECRET)->getDrops();
 
 ?>
 <html>
