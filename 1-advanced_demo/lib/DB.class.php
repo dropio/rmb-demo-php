@@ -150,12 +150,15 @@ Class DB {
      */
     public function exec($sql)
     {
-        try {
-            //$this->stmt = $this->dbh->exec($sql);
-			$this->dbh->exec($sql) or die("Error executing the sql. errorInfo:" . print_r($this->dbh->errorInfo(), true) . "\nSQL statement: " . $sql);
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
+		$sqlarray = explode(";", $sql);
+		foreach ($sqlarray as $sqlstmt){
+        	try {
+	            //$this->stmt = $this->dbh->exec($sql);
+				$this->dbh->exec($sqlstmt) or die("Error executing the sql. errorInfo:" . print_r($this->dbh->errorInfo(), true) . "\nSQL statement: " . $sqlstmt);
+	        } catch (PDOException $e) {
+	            echo $e->getMessage();
+	        }
+		}
 
         return $this;
     }
