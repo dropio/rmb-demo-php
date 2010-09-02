@@ -28,21 +28,7 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post')
 
     # Create the tables
     $sql =<<<EOL
-		-- phpMyAdmin SQL Dump\r\n\r\n
-		-- version 3.1.2deb1ubuntu0.2\r\n
-		-- http://www.phpmyadmin.net\r\n
-		--\r\n
-		-- Host: localhost\r\n
-		-- Generation Time: Aug 30, 2010 at 09:05 PM\r\n
-		-- Server version: 5.0.75\r\n
-		-- PHP Version: 5.2.6-3ubuntu4.5\r\n
-		\r\n
-		SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";\r\n
-		\r\n
-		--\r\n
-		-- Database: `dropio`\r\n
-		--\r\n
-		\r\n
+		
 		-- --------------------------------------------------------\r\n
 		\r\n
 		--\r\n
