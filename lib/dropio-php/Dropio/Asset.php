@@ -5,6 +5,10 @@ include_once(dirname(__FILE__) . '/Roles/Roles.php');
 include_once(dirname(__FILE__) . '/Roles/ImageRole.php');
 include_once(dirname(__FILE__) . '/Roles/DocumentRole.php');
 include_once(dirname(__FILE__) . '/Roles/AudioRole.php');
+include_once(dirname(__FILE__) . '/Roles/MovieRole.php');
+include_once(dirname(__FILE__) . '/Roles/OtherRole.php');
+include_once(dirname(__FILE__) . '/Roles/LinkRole.php');
+include_once(dirname(__FILE__) . '/Roles/NoteRole.php');
 
 Class Dropio_Asset extends Dropio_Api {
   /**
