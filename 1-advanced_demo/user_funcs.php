@@ -17,15 +17,11 @@ function asset_updated($asset)
     global $API_KEY;
     global $API_SECRET;
 
-    dolog('asset_updated() called...');
+    dolog('asset_updated() called...raw json string is:'.$asset);
 
-    $values = json_decode($asset,true);
-    ob_start();
-    var_dump($values);
-    $status = ob_get_contents();
-    ob_end_clean();
+    $values = json_decode(stripslashes($asset),true);
     
-    dolog("Contents of \$asset: $status");
+    dolog("Contents of \$asset:".print_r($values, true));
     
     # Lookup the drop. Create it if it does not exist
     $sql = "SELECT COUNT(id) AS c FROM `drop` WHERE name = ?";
@@ -39,6 +35,8 @@ function asset_updated($asset)
     # Does not exist, create
     if ((int) $s['c'] == 0) {
         # Load the drop first
+		# Include the classes for API access
+		include_once('../lib/dropio-php/Dropio/Drop.php');
         $drop = Dropio_Drop::getInstance($API_KEY, $API_SECRET)->load($values['drop_name']);
         
         $sql = "INSERT INTO `drop` (name,`values`) VALUES (?,?)";
@@ -66,7 +64,7 @@ function asset_updated($asset)
         $sql = "UPDATE asset a SET a.`values` = ?, a.is_complete = 1
                     WHERE drop_id IN (SELECT id FROM `drop` d WHERE d.name = ?)
                     AND a.name = ?";
-        $arr = array($asset,$values['drop_name'],$values['name']);
+        $arr = array(stripslashes($asset),$values['drop_name'],$values['name']);
 
     } else {
 
@@ -79,7 +77,7 @@ function asset_updated($asset)
           $values['drop_name'],
           $values['created_at'],
           $values['name'],
-          $asset,
+          stripslashes($asset),
           $values['type']
         );
     }
@@ -95,7 +93,7 @@ function asset_updated($asset)
 function asset_destroyed($asset)
 {
   $sql = "DELETE FROM asset WHERE drop_id IN (SELECT id from `drop` d where d.name = ?) AND name = ?";
-  $values = json_decode($asset,true);
+  $values = json_decode(stripslashes($asset),true);
 
   $arr = array($values['drop_name'],$values['name']);
 
