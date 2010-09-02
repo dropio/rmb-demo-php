@@ -10,11 +10,11 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post')
     # Write the config
     $fp = fopen('../_config.inc.php','w+');
     fwrite($fp,"<?php\n\n");
-    fwrite($fp,"\$user='{$_POST['user']}';\n");
-    fwrite($fp,"\$pass='{$_POST['pass']}';\n");
-    fwrite($fp,"\$host='{$_POST['host']}';\n");
-    fwrite($fp,"\$port=$port;\n");
-    fwrite($fp,"\$dbname='{$_POST['dbname']}';\n\n");
+    fwrite($fp,"Config::\$user='{$_POST['user']}';\n");
+    fwrite($fp,"Config::\$pass='{$_POST['pass']}';\n");
+    fwrite($fp,"Config::\$host='{$_POST['host']}';\n");
+    fwrite($fp,"Config::\$port=$port;\n");
+    fwrite($fp,"Config::\$dbname='{$_POST['dbname']}';\n\n");
     fwrite($fp,"\$docroot='{$_POST['docroot']}';\n\n");
     fwrite($fp,"\$API_KEY='{$_POST['api_key']}';\n\n");
 
