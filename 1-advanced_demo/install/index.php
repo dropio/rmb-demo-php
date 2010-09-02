@@ -152,7 +152,7 @@ EOL;
             <fieldset>
             <legend>Webserver</legend>
             <label for="host">Hostname: </label>
-            <input type="text" name="docroot" value="<?php echo $_SERVER['SERVER_NAME'] ?>"/>
+            <input type="text" name="docroot" value="http://<?php echo $_SERVER['SERVER_NAME'] ?>"/>
             </fieldset>
             
             <fieldset>
