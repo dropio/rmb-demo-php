@@ -10,11 +10,15 @@
 
 include_once('_bootstrap.php');
 
-# Get a list of drops for this account
-$drops = Dropio_Api::getInstance($API_KEY, $API_SECRET)->getDrops();
+if(!empty($API_KEY) && $API_KEY != 'YOUR_API_KEY') {
+	# Get a list of drops for this account
+	$drops = Dropio_Api::getInstance($API_KEY, $API_SECRET)->getDrops();
 
-# Get stats associated with this account
-$stats = Dropio_Api::getInstance($API_KEY, $API_SECRET)->getStats();
+	# Get stats associated with this account
+	$stats = Dropio_Api::getInstance($API_KEY, $API_SECRET)->getStats();
+}else{
+	$message = "Please provide an API_KEY in config.inc.php";
+}
 
 ?>
 <html>
@@ -26,15 +30,15 @@ $stats = Dropio_Api::getInstance($API_KEY, $API_SECRET)->getStats();
     <div id="container">
     <h1>Drop.io API Simple Demo for PHP</h1>
     <p>
-      Thank you for downloading our API. These demos provide a simple examples
-      which will get you started on making your own apps which hook up to
-      the Drop.io media backbone.</p>
+      This demo provides a simple examples
+      which will get you started on making your own apps which use 
+      the Drop.io Rich Media Backbone.</p>
     <p>
-      This is afully functional demo app that you can use to manage your drops.
-      To get started all you need to do is edit the <i>config.php</i> file with
-      your <i>api key</i> and <i>api secret</i> if you are using secured keys.
+      This is a fully functional demo app that you can use to manage your drops.
+      To get started all you need to do is edit the <i>config.inc.php</i> file with
+      your <i>API key</i> and <i>API secret</i> if you are using secured keys.
     </p>
-    <p>Note: api secret is optional if you are using unsecured api keys.</p>
+    <p>Note: API secret is optional if you are using unsecured API keys.</p>
 
     <hr/>
 
