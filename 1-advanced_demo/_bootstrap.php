@@ -4,10 +4,11 @@
 if(!file_exists(dirname(__FILE__). '/_config.inc.php'))
     header("Location: /1-advanced_demo/install/");
 
-include_once('_config.inc.php');
-
 # Load the databse class
 include_once (dirname(__FILE__) . '/lib/DB.class.php');
+
+# Load install-specific configuration
+include_once('_config.inc.php');
 
 # Start a session so we can pass data to the next page load
 session_start();
