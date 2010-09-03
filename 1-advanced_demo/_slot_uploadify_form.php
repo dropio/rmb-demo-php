@@ -95,7 +95,7 @@ $(document).ready(function() {
        //console.log("asset callback call");
         j = eval('(' + e + ')');
 
-console.log(j);
+        console.log(j);
 
         //console.log('Original Content: ' + j.roles[0].locations[0].file_url);
         // Create the new element
@@ -142,34 +142,40 @@ console.log(j);
         document.getElementById(j.type+'-container').appendChild(newAsset);
         return true;
     };
-<?php
-  $sigdata = '';
-  if(!empty($API_SECRET)){
-    $timestamp = time() + (60 * 60);
-    $paramsToSign = array();
-    $paramsToSign["version"] = "3.0";
-    $paramsToSign["timestamp"] = $timestamp;
-    $paramsToSign["signature_mode"] = "OPEN";
-    $paramsToSign["api_key"] = $API_KEY;
-    $signedParams = Dropio_Api::getInstance($API_KEY, $API_SECRET)->signRequest($paramsToSign);
-    $sigdata .= ',"timestamp":"'.$timestamp.'","signature_mode":"OPEN","signature":"'.$signedParams["signature"].'"';
-  }
-?>
-$('#file').uploadify({
-    'uploader'  : '../utils/uploadify/uploadify.swf',
-    'script'    : 'http://assets.drop.io/upload',
-    'multi'     : true,
-    'scriptData': {"api_key":"<?php echo $API_KEY ?>","drop_name":"<?php echo $_GET['drop_name']?>","format":"json","version":"3.0","pingback_url":"<?php echo $docroot ?>/1-advanced_demo/pingback.php"<?php echo $sigdata; ?>},
-    'cancelImg' : '../utils/uploadify/cancel.png',
-    'auto'      : true,
-    'onComplete' : function(e,q,f,r,d) {
-        assetCallback(r);
-        return true;
-    },
-    'onAllComplete' : function(){return true;},
-    'onError'       : function(e, q, f, o) { alert("ERROR: " + o.info + o.type); },
-    'folder'        : '/uploads'
-    });
+  <?php
+    $sigdata = '';
+    if(!empty($API_SECRET)){
+      $timestamp = time() + (60 * 60);
+      $paramsToSign = array();
+      $paramsToSign["version"] = "3.0";
+      $paramsToSign["timestamp"] = $timestamp;
+      $paramsToSign["signature_mode"] = "OPEN";
+      $paramsToSign["api_key"] = $API_KEY;
+      $signedParams = Dropio_Api::getInstance($API_KEY, $API_SECRET)->signRequest($paramsToSign);
+      $sigdata .= ',"timestamp":"'.$timestamp.'","signature_mode":"OPEN","signature":"'.$signedParams["signature"].'"';
+    }
+  ?>
+  $('#file').uploadify({
+      'uploader'        : '../utils/uploadify/uploadify.swf',
+      'script'          : 'http://assets.drop.io/upload',
+      'multi'           : true,
+      'scriptData'      : {
+        "api_key"       : "<?php echo $API_KEY ?>",
+        "drop_name"     : "<?php echo $_GET['drop_name']?>",
+        "format"        : "json",
+        "version"       : "3.0",
+        "pingback_url"  : "<?php echo $docroot ?>/1-advanced_demo/pingback.php"<?php echo $sigdata; ?>
+      },
+      'cancelImg'       : '../utils/uploadify/cancel.png',
+      'auto'            : true,
+      'onComplete'      : function(e,q,f,r,d) {
+          assetCallback(r);
+          return true;
+      },
+      'onAllComplete'   : function() { return true; },
+      'onError'         : function(e, q, f, o) { alert("ERROR: " + o.info + o.type); },
+      'folder'          : '/uploads'
+  });
 });
 // ]]></script>
 
