@@ -6,7 +6,7 @@
 
 To run either of these demo applications you'll need an RMB API key (and optionally an API secret key). 
 
-Get yours from http://backbone.drop.io
+Get yours from <http://backbone.drop.io>
 
 ### 0-simple_demo
 
