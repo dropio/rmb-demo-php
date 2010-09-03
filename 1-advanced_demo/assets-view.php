@@ -97,13 +97,14 @@ $(document).ready(function() {
 
     $('.fancymovie').each(function(){
       $(this).fancybox({
+        'padding'   : 0,
+        'autoScale' : false,
         'type'      : 'iframe',
         'width'     : 640,
         'height'    : 480,
         'href'      : '<?php echo $docroot ?>/1-advanced_demo/_video_player.php?file=' + $(this).attr('href') + '&poster=' + $(this).attr('poster')
       });
     });
-
 
 });
 
