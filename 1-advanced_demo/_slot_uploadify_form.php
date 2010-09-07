@@ -22,33 +22,33 @@ $(document).ready(function() {
 
             // Shortcut to the objects we want
             var type = data.type;         // image, movie, document, etc
-            var r = data.roles.role;
-            var l = r.locations.location;
+            var role = data.roles.role;
+            var location = role.locations.location;
 
             console.log('checking role');
-            console.log(r);
+            console.log(role);
 
             // Bail out if the status is anything but complete
-            if (l.status !== 'complete') { return; }
+            if (location.status !== 'complete') { return; }
 
             // Deal with the role based on it's type
             switch (type)
             {
               case 'image' :
                 console.log('inside switch');
-                if (r.name == 'thumbnail') {
-                  console.log('r.name is thumbnail: ' + l.file_url);
-                  document.getElementById(data.name).innerHTML = '<img src="' + l.file_url + '"/>';
+                if (role.name == 'thumbnail') {
+                  console.log('role.name is thumbnail: ' + location.file_url);
+                  document.getElementById(data.name).innerHTML = '<img src="' + location.file_url + '"/>';
                 }
                 break;
 
               case 'movie'  :
-                if (r.name == 'thumbnail') {
-                  document.getElementById(data.name).innerHTML = '<img src="' + l.file_url + '"/>';
+                if (role.name == 'thumbnail') {
+                  document.getElementById(data.name).innerHTML = '<img src="' + location.file_url + '"/>';
                 }
-                if (r.name == 'web_preview') {
+                if (role.name == 'web_preview') {
                   var myLink = document.getElementById(data.name);
-                  myLink.setAttribute('href',l.file_url);
+                  myLink.setAttribute('href',location.file_url);
                   $(myLink).each(function(){
                     $(this).fancybox({
                       'type' : 'iframe',
@@ -57,14 +57,14 @@ $(document).ready(function() {
                   });
 
                 }
-                if (r.name == 'large_thumbnail') {
-                  document.getElementById(data.name).setAttribute('poster',l.file_url);
+                if (role.name == 'large_thumbnail') {
+                  document.getElementById(data.name).setAttribute('poster',location.file_url);
                 }
 
                 break;
 
               case 'document' :
-                if (r.name == 'web_preview') {
+                if (role.name == 'web_preview') {
                   var myLink = document.getElementById(data.name);
                   myLink.innerHTML = '<img src="images/pdf_icon.jpg"/>';
                   $(myLink).each(function(){
@@ -168,8 +168,8 @@ $(document).ready(function() {
       },
       'cancelImg'       : '../utils/uploadify/cancel.png',
       'auto'            : true,
-      'onComplete'      : function(e,q,f,r,d) {
-          assetCallback(r);
+      'onComplete'      : function(e, q, f, role, d) {
+          assetCallback(role);
           return true;
       },
       'onAllComplete'   : function() { return true; },
