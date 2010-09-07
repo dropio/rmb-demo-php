@@ -91,7 +91,9 @@ $(document).ready(function() {
     $('.fancydocument').each(function(){
       $(this).fancybox({
         'type' : 'iframe',
-        'href' : 'http://docs.google.com/viewer?embedded=true&url=' + $(this).attr('href')
+        'href' : 'http://docs.google.com/viewer?embedded=true&url=' + $(this).attr('href'),
+        'width' : 960,
+        'height' : 600
       });
     });
 
