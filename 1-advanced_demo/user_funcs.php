@@ -20,9 +20,9 @@ function asset_updated($asset)
     dolog('asset_updated() called...raw json string is:'.$asset);
 
     $values = json_decode(stripslashes($asset),true);
-    
+
     dolog("Contents of \$asset:".print_r($values, true));
-    
+
     # Lookup the drop. Create it if it does not exist
     $sql = "SELECT COUNT(id) AS c FROM `drop` WHERE name = ?";
 
@@ -34,11 +34,11 @@ function asset_updated($asset)
 
     # Does not exist, create
     if ((int) $s['c'] == 0) {
-        # Load the drop first
-		# Include the classes for API access
-		include_once('../lib/dropio-php/Dropio/Drop.php');
+      # Load the drop first
+      # Include the classes for API access
+    include_once('../lib/dropio-php/Dropio/Drop.php');
         $drop = Dropio_Drop::getInstance($API_KEY, $API_SECRET)->load($values['drop_name']);
-        
+
         $sql = "INSERT INTO `drop` (name,`values`) VALUES (?,?)";
         $s = $r->prepare($sql)->
             execute(array($values['drop_name'],$drop->getValues()));
@@ -49,7 +49,7 @@ function asset_updated($asset)
                 FROM asset a LEFT JOIN `drop` d
                 ON d.id = a.drop_id
                 WHERE d.name = ? and a.name = ?";
-    
+
     $arr = array($values['drop_name'],$values['name']);
 
     $s = $r->prepare($sql)->
@@ -81,7 +81,7 @@ function asset_updated($asset)
           $values['type']
         );
     }
-    
+
     if(!$r->prepare($sql)->execute($arr))
     {
       dolog('Filed to execute:' . $r->getError());
@@ -98,5 +98,5 @@ function asset_destroyed($asset)
   $arr = array($values['drop_name'],$values['name']);
 
   DB::getInstance()->prepare($sql)->execute($arr);
-  
+
 }
