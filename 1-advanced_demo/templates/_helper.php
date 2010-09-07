@@ -41,7 +41,7 @@ EOF;
  */
 function show_document($a)
 {
-    return '<a class="fancydocument" href="'. get_file_url($a,'original_content').'"><img src="images/pdf_icon.jpg"/></a>' . substr($a['name'],0,15) . '<br/>';
+    return '<a class="fancydocument" href="'. get_file_url($a,'web_preview').'"><img src="images/pdf_icon.jpg"/></a>' . substr($a['name'],0,15) . '<br/>';
 }
 
 function show_movie($a)
