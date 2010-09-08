@@ -27,7 +27,6 @@ if (isset($_GET['drop_name']))
     # Loop over each of the assets, inserting each on into the database
     foreach($assets as $a)
     {
-      #var_dump($a->getValues());exit;
       $v = $a->getValues();
       $v['drop_name']=$drop_name;
       asset_updated(json_encode($v));
