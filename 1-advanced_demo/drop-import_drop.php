@@ -19,23 +19,27 @@ if (isset($_GET['drop_name']))
 
 
   # Insert the drop
-  $r = DB::getInstance();
-  $sql = "INSERT INTO `drop` (name,`values`) VALUES (?,?)";
-  $s   = $r->prepare($sql)->execute(array($drop->getName(),json_encode($drop->getValues())));
+  try {
+    $r = DB::getInstance();
+    $sql = "INSERT INTO `drop` (name,`values`) VALUES (?,?)";
+    $s   = $r->prepare($sql)->execute(array($drop->getName(),json_encode($drop->getValues())));
 
-  # Loop over each of the assets, inserting each on into the database
-  foreach($assets as $a)
-  {
-    #var_dump($a->getValues());exit;
-    $v = $a->getValues();
-    $v['drop_name']=$drop_name;
-    asset_updated(json_encode($v));
+    # Loop over each of the assets, inserting each on into the database
+    foreach($assets as $a)
+    {
+      #var_dump($a->getValues());exit;
+      $v = $a->getValues();
+      $v['drop_name']=$drop_name;
+      asset_updated(json_encode($v));
+    }
+
+    $_SESSION['message'] = 'Drop Imported!';
+
+  } catch(Exception $e) {
+    $_SESSION['message'] = '<p>That drop was already imported.</p>';
   }
-  
-  $_SESSION['message'] = 'Drop Imported!';
 
   echo '<script type="text/javascript" language="javascript">parent.$.fancybox.close();</script>';
-
 }
 
 $drops = Dropio_Api::getInstance($API_KEY, $API_SECRET)->getDrops();
