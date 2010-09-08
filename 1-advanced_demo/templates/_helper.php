@@ -21,7 +21,7 @@ function show_image($a)
 
 
 /**
- *  Get an HTML snippit that loads wpaudio on an mp3 file
+ *  Get an HTML snippet that loads wpaudio on an mp3 file
  */
 function show_audio($a)
 {
@@ -37,7 +37,7 @@ EOF;
 }
 
 /**
- *  Get an HTML snippit that shows an icon and links to a document
+ *  Get an HTML snippet that shows an icon and links to a document
  */
 function show_document($a)
 {
