@@ -135,7 +135,7 @@ $(document).ready(function() {
           typecont = document.createElement('div');
           typecont.setAttribute('style','clear:both');
           typecont.setAttribute('id',j.type+'-container');
-          typecont.innerHTML = '<h3>' + j.type + '</h3>';
+          typecont.innerHTML = '<h2>' + j.type + '</h2>';
 
           document.getElementById('content-container').appendChild(typecont);
         }
