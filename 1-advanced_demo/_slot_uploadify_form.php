@@ -4,11 +4,9 @@
     $drop = Dropio_Drop::getInstance($API_KEY, $API_SECRET)->load($drop_name);
     $chatPass = $drop->getChatPassword();
   } catch (Exception $e) {
-    echo '</div>';
-    echo '<h1>', $e->getMessage(), '</h1>';
+    echo '</div><h1>', $e->getMessage(), '</h1>';
     echo '<p><a id="deletedrop" href="drop-delete_drop.php?drop_name=', $_GET['drop_name'];
-    echo '">Delete this drop from your database</a></p>';
-    echo '</body></html>';
+    echo '">Delete this drop from your database</a></p></body></html>';
     die();
   }
 ?>
