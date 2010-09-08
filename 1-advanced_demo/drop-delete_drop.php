@@ -38,10 +38,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 </head>
 <body>
   <?php if ($_SERVER['REQUEST_METHOD'] == 'GET'): ?>
-  <form action="drop-delete_drop.php" method="post">
-    <input type="hidden" name="drop_name" value="<?php echo $_GET['drop_name'] ?>"/>
-    <input type="submit" value="Delete drop: <?php echo $_GET['drop_name'] ?>"/>
-  </form>
-<?php endif ?>
+    <form action="drop-delete_drop.php" method="post">
+      <input type="hidden" name="drop_name" value="<?php echo $_GET['drop_name'] ?>"/>
+      <input type="submit" value="Delete drop: <?php echo $_GET['drop_name'] ?>"/>
+    </form>
+  <?php endif ?>
 </body>
 </html>
