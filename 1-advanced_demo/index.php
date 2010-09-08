@@ -11,7 +11,7 @@ $drops = DB::getInstance()->
 
 <html>
     <head>
-        <title>Welcome to the drop.io RMB Advanced Demo</title>
+        <title>Welcome to the Rich Media Backbone Advanced Demo</title>
 
         <!-- The Pretty drop.io stylesheets -->
         <link rel="stylesheet" type="text/css" href="../css/base.css"/>
@@ -41,8 +41,8 @@ $drops = DB::getInstance()->
 <body>
     <div id="layout">
       <img src="../../images/logo.gif" alt="Drop.io Logo"/>
-      <h1>Drop.io Advanced Demo</h1>
-      <p>This is a demo of the advanced features of the drop.io API. It uses
+      <h1>Rich Media Backbone Advanced Demo</h1>
+      <p>This is a demo of the advanced features of the RMB API. It uses
           MySQL to cache metadata about your drops and assets.
       </p>
       <hr class="Solid"/>
