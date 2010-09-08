@@ -9,8 +9,13 @@ include_once('../lib/dropio-php/Dropio/Drop.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {
-    $drop_name = $_POST['drop_name'];
-
+  $drop_name = $_POST['drop_name'];
+  
+  try {
+    # Check to see if drop name already exists
+    $getDrop = Dropio_Drop::getInstance($API_KEY, $API_SECRET)->load($drop_name);
+    echo "Drop name already exists.";
+  } catch (Exception $e) {
     # Lookup the drop in the database;
     $res = DB::getInstance()->
           prepare("SELECT count(*) as count FROM `drop` WHERE name = ? ")->
@@ -33,8 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
         $_SESSION['message'] = 'Drop Created!';
     }
-
     echo '<script type="text/javascript" language="javascript">parent.$.fancybox.close();</script>';
+  }
 }
 ?>
 <form action="drop-create_drop.php" method="post">
