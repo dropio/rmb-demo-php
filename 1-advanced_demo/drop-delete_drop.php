@@ -15,7 +15,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
           prepare("DELETE FROM `drop` WHERE name = ? ")->
           execute(array($drop_name));
 
-    $drop = Dropio_Drop::getInstance($API_KEY, $API_SECRET)->delete($drop_name);
+    try {
+      $drop = Dropio_Drop::getInstance($API_KEY, $API_SECRET)->delete($drop_name);
+    } catch (Exception $e) {
+      # Do nothing. Drop doesn't exist.
+    }
 
     $_SESSION['message'] = 'Drop deleted';
 

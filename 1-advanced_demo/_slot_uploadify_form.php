@@ -4,8 +4,16 @@
 
 <?php
   $drop_name = $_GET['drop_name'];
-  $drop = Dropio_Drop::getInstance($API_KEY, $API_SECRET)->load($drop_name);
-  $chatPass = $drop->getChatPassword();
+  try {
+    $drop = Dropio_Drop::getInstance($API_KEY, $API_SECRET)->load($drop_name);
+    $chatPass = $drop->getChatPassword();
+  } catch (Exception $e) {
+    echo '<div id="content-container">';
+    echo '<h2>', $e->getMessage(), '</h2>';
+    echo '<p><a id="deletedrop" href="drop-delete_drop.php?drop_name=', $_GET['drop_name'], '">Delete this drop</a>';
+    echo '</div>';
+    die();
+  }
 ?>
 
 <script type="text/javascript">// <![CDATA[
