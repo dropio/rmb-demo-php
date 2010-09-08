@@ -1,20 +1,20 @@
-<script type="text/javascript" src="../utils/uploadify/swfobject.js"></script>
-<script type="text/javascript" src="../utils/uploadify/jquery.uploadify.v2.1.0.min.js"></script>
-<link rel="stylesheet" type="text/css" media="screen, projection" href="../utils/uploadify/uploadify.css" />
-
 <?php
   $drop_name = $_GET['drop_name'];
   try {
     $drop = Dropio_Drop::getInstance($API_KEY, $API_SECRET)->load($drop_name);
     $chatPass = $drop->getChatPassword();
   } catch (Exception $e) {
-    echo '<div id="content-container">';
-    echo '<h2>', $e->getMessage(), '</h2>';
-    echo '<p><a id="deletedrop" href="drop-delete_drop.php?drop_name=', $_GET['drop_name'], '">Delete this drop</a>';
     echo '</div>';
+    echo '<h1>', $e->getMessage(), '</h1>';
+    echo '<p><a id="deletedrop" href="drop-delete_drop.php?drop_name=', $_GET['drop_name'], '">Delete this drop from your database</a></p>';
+    echo '</body></html>';
     die();
   }
 ?>
+
+<script type="text/javascript" src="../utils/uploadify/swfobject.js"></script>
+<script type="text/javascript" src="../utils/uploadify/jquery.uploadify.v2.1.0.min.js"></script>
+<link rel="stylesheet" type="text/css" media="screen, projection" href="../utils/uploadify/uploadify.css" />
 
 <script type="text/javascript">// <![CDATA[
 
