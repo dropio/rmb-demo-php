@@ -36,9 +36,9 @@ $(document).ready(function() {
             console.log(role);
 
             // Bail out if the status is anything but complete
-            if (location.status !== 'complete') { return; }
+            // if (location.status !== 'complete') { return; }
 
-            // Deal with the role based on it's type
+            // Deal with the role based on its type
             switch (type)
             {
               case 'image' :
