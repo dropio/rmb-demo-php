@@ -32,19 +32,14 @@ $(document).ready(function() {
             var role = data.roles.role;
             var location = role.locations.location;
 
-            console.log('checking role');
-            console.log(role);
-
-            // Bail out if the status is anything but complete
-            // if (location.status !== 'complete') { return; }
-
             // Deal with the role based on its type
             switch (type)
             {
               case 'image' :
-                console.log('inside switch');
+                // Bail out if the status is anything but complete
+                if (location.status !== 'complete') { return; }
+                
                 if (role.name == 'thumbnail') {
-                  console.log('role.name is thumbnail: ' + location.file_url);
                   document.getElementById(data.name).innerHTML = '<img src="' + location.file_url + '"/>';
                 }
                 break;
@@ -73,7 +68,9 @@ $(document).ready(function() {
               case 'document' :
                 if (role.name == 'web_preview') {
                   var myLink = document.getElementById(data.name);
-                  myLink.innerHTML = '<img src="images/pdf_icon.jpg"/>';
+                  myLink.innerHTML = '<img src="images/pdf_icon.jpg" />';
+                  $(myLink).after(data.name.substring(0, 15));
+
                   $(myLink).each(function(){
                     $(this).fancybox({
                       'type' : 'iframe',
@@ -85,7 +82,6 @@ $(document).ready(function() {
                 break;
 
               case 'audio' :
-
                 break;
             }
 
