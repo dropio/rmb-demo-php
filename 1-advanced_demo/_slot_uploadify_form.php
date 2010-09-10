@@ -27,7 +27,7 @@ $(document).ready(function() {
     DropioStreamer.start("<?php echo $_GET['drop_name'] ?>",chatPass,"<?php echo $docroot ?>/streamer_xdr.html");
     DropioStreamer.observe(DropioStreamer.ASSET_UPDATED, function(data) {
       // Shortcut to the objects we want
-      var type = data.type;         // image, movie, document, etc
+      var type = data.type; // image, movie, document, etc
       var role = data.roles.role;
       var location = role.locations.location;
       var myLink = document.getElementById(data.name);
@@ -58,12 +58,10 @@ $(document).ready(function() {
                 'href' : '<?php echo $docroot ?>/1-advanced_demo/_video_player.php?file=' + $(this).attr('href') + '&poster=' + $(this).attr('poster')
               });
             });
-
           }
           if (role.name == 'large_thumbnail') {
             document.getElementById(data.name).setAttribute('poster',location.file_url);
           }
-
           break;
 
         case 'document' :
@@ -79,10 +77,24 @@ $(document).ready(function() {
             });
 
           }
-        break;
+          break;
 
-      case 'audio' :
-        break;
+        case 'audio' :
+          if (location.status !== 'complete') { return; }
+
+          if (role.name == "original_content") {
+            console.log('Audio asset name is: ' + data.name);
+            console.log('Audio asset location is: ' + location.file_url);
+            myLink.setAttribute('href',location.file_url);
+
+            $(myLink).each(function() {
+              $(this).fancybox({
+                'type' : 'iframe',
+                'href' : '<?php echo $docroot ?>/1-advanced-demo/_audio_player.php?file=' + $(this).attr('href')
+              });
+            });
+          }
+          break;
       }
   });
 
@@ -172,6 +184,7 @@ $(document).ready(function() {
       'auto'            : true,
       'onComplete'      : function(e, q, f, role, d) {
           assetCallback(role);
+
           return true;
       },
       'onAllComplete'   : function() { return true; },
