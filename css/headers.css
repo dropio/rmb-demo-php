@@ -7,3 +7,4 @@ h3 { text-shadow: #efeded 1px 1px 1px; }
 #new-drop-form h4 span { font-size: .75em; font-weight: 300; color: #aaa; }
 
 #drop h3 { font-size: 1.5em; margin-bottom: .5em; }
+#logo {display:block;height:160px;width:900px;background:url('../images/rmb-demo-header.png') 0 0 no-repeat transparent;}

@@ -114,7 +114,7 @@ $(document).ready(function() {
 </head>
     <body>
       <div id="layout">
-        <img src="../../images/logo_tagline.png" alt="Rich Media Backbone Logo"/>
+        <a href="/" id="logo"></a>
 
         <hr class="Solid"/>
           <?php include_once('_slot_drops.php'); ?>
