@@ -38,9 +38,11 @@ $(document).ready(function() {
               case 'image' :
                 // Bail out if the status is anything but complete
                 if (location.status !== 'complete') { return; }
-                
+
                 if (role.name == 'thumbnail') {
-                  document.getElementById(data.name).innerHTML = '<img src="' + location.file_url + '"/>';
+                  var myLink = document.getElementById(data.name);
+                  myLink.innerHTML = '<img src="' + location.file_url + '"/>';
+                  $(myLink).after(data.name.substring(0, 15));
                 }
                 break;
 
