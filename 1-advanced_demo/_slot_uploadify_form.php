@@ -80,17 +80,15 @@ $(document).ready(function() {
           break;
 
         case 'audio' :
-          if (location.status !== 'complete') { return; }
-
-          if (role.name == "original_content") {
-            console.log('Audio asset name is: ' + data.name);
-            console.log('Audio asset location is: ' + location.file_url);
+          console.log(location.status)
+          if (role.name == "web_preview") {
             myLink.setAttribute('href',location.file_url);
+            $(myLink).after(data.name.substring(0, 15));
 
             $(myLink).each(function() {
               $(this).fancybox({
                 'type' : 'iframe',
-                'href' : '<?php echo $docroot ?>/1-advanced-demo/_audio_player.php?file=' + $(this).attr('href')
+                'href' : '<?php echo $docroot ?>/1-advanced_demo/_audio_player.php?file=' + $(this).attr('href') + '&name=' + $(this).attr('id')
               });
             });
           }
@@ -184,7 +182,6 @@ $(document).ready(function() {
       'auto'            : true,
       'onComplete'      : function(e, q, f, role, d) {
           assetCallback(role);
-
           return true;
       },
       'onAllComplete'   : function() { return true; },

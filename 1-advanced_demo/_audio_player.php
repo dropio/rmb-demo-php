@@ -1,24 +1,25 @@
 <?php
   $file = $_GET['file'];
+  $name = $_GET['name'];
 ?>
 
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8" />
-  <title>Dropio Video Loader</title>
-  <!-- The Audio player -->
-  <script type="text/javascript" src="../utils/wpaudio/audio-player.js"></script>
+  <head>
+    <meta charset="utf-8" />
+    <title>Dropio Audio Player</title>
 
-  <script type="text/javascript" language="javascript">
+    <!-- The Audio player -->
+    <script type="text/javascript" src="../utils/wpaudio/audio-player.js"></script>
 
-  // Load the audio player
-  AudioPlayer.setup("<?php echo $docroot ?>/utils/wpaudio/player.swf", {
-    width: 290
-  });
-
-  </script>
-</head>
-<body>
-</body>
+    <script type="text/javascript">
+      AudioPlayer.setup("../utils/wpaudio/player.swf", {
+        width: 290
+      });
+    </script>
+  </head>
+  <body>
+    <p id="<?php echo($name); ?>">Alt content</p>
+    <script type="text/javascript" language="javascript">AudioPlayer.embed("<?php echo($name); ?>", {soundFile: "<?php echo($file); ?>"});</script>
+  </body>
 </html>
