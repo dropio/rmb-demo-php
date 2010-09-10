@@ -19,133 +19,131 @@
 
 $(document).ready(function() {
 
-    var api = new DropioApiClient("<?php echo $API_KEY ?>","<?php echo $docroot ?>/DropioJSClientXDReceiver.html");
+  var api = new DropioApiClient("<?php echo $API_KEY ?>","<?php echo $docroot ?>/DropioJSClientXDReceiver.html");
 
-    var dropCB = function(response, status){
-        var chatPass = "<?php echo $chatPass ?>";
+  var dropCB = function(response, status){
+    var chatPass = "<?php echo $chatPass ?>";
 
-        DropioStreamer.start("<?php echo $_GET['drop_name'] ?>",chatPass,"<?php echo $docroot ?>/streamer_xdr.html");
-        DropioStreamer.observe(DropioStreamer.ASSET_UPDATED,function(data){
+    DropioStreamer.start("<?php echo $_GET['drop_name'] ?>",chatPass,"<?php echo $docroot ?>/streamer_xdr.html");
+    DropioStreamer.observe(DropioStreamer.ASSET_UPDATED, function(data) {
+      // Shortcut to the objects we want
+      var type = data.type;         // image, movie, document, etc
+      var role = data.roles.role;
+      var location = role.locations.location;
+      var myLink = document.getElementById(data.name);
 
-            // Shortcut to the objects we want
-            var type = data.type;         // image, movie, document, etc
-            var role = data.roles.role;
-            var location = role.locations.location;
-            var myLink = document.getElementById(data.name);
+      // Deal with the role based on its type
+      switch (type)
+      {
+        case 'image' :
+          if (location.status !== 'complete') { return; }
 
-            // Deal with the role based on its type
-            switch (type)
-            {
-              case 'image' :
-                if (location.status !== 'complete') { return; }
+          if (role.name == 'thumbnail') {
+            myLink.innerHTML = '<img src="' + location.file_url + '"/>';
+            $(myLink).after(data.name.substring(0, 15));
+          }
+          break;
 
-                if (role.name == 'thumbnail') {
-                  myLink.innerHTML = '<img src="' + location.file_url + '"/>';
-                  $(myLink).after(data.name.substring(0, 15));
-                }
-                break;
+        case 'movie'  :
+          if (location.status !== 'complete') { return; }
+          if (role.name == 'thumbnail') {
+            myLink.innerHTML = '<img src="' + location.file_url + '"/>';
+            $(myLink).after(data.name.substring(0, 15));
+          }
+          if (role.name == 'web_preview') {
+            myLink.setAttribute('href',location.file_url);
+            $(myLink).each(function(){
+              $(this).fancybox({
+                'type' : 'iframe',
+                'href' : '<?php echo $docroot ?>/1-advanced_demo/_video_player.php?file=' + $(this).attr('href') + '&poster=' + $(this).attr('poster')
+              });
+            });
 
-              case 'movie'  :
-                if (location.status !== 'complete') { return; }
-                if (role.name == 'thumbnail') {
-                  myLink.innerHTML = '<img src="' + location.file_url + '"/>';
-                  $(myLink).after(data.name.substring(0, 15));
-                }
-                if (role.name == 'web_preview') {
-                  myLink.setAttribute('href',location.file_url);
-                  $(myLink).each(function(){
-                    $(this).fancybox({
-                      'type' : 'iframe',
-                      'href' : '<?php echo $docroot ?>/1-advanced_demo/_video_player.php?file=' + $(this).attr('href') + '&poster=' + $(this).attr('poster')
-                    });
-                  });
+          }
+          if (role.name == 'large_thumbnail') {
+            document.getElementById(data.name).setAttribute('poster',location.file_url);
+          }
 
-                }
-                if (role.name == 'large_thumbnail') {
-                  document.getElementById(data.name).setAttribute('poster',location.file_url);
-                }
+          break;
 
-                break;
+        case 'document' :
+          if (role.name == 'web_preview') {
+            myLink.innerHTML = '<img src="images/pdf_icon.jpg" />';
+            $(myLink).after(data.name.substring(0, 15));
 
-              case 'document' :
-                if (role.name == 'web_preview') {
-                  myLink.innerHTML = '<img src="images/pdf_icon.jpg" />';
-                  $(myLink).after(data.name.substring(0, 15));
+            $(myLink).each(function(){
+              $(this).fancybox({
+                'type' : 'iframe',
+                'href' : 'http://docs.google.com/viewer?embedded=true&url=' + $(this).attr('href')
+              });
+            });
 
-                  $(myLink).each(function(){
-                    $(this).fancybox({
-                      'type' : 'iframe',
-                      'href' : 'http://docs.google.com/viewer?embedded=true&url=' + $(this).attr('href')
-                    });
-                  });
+          }
+        break;
 
-                }
-                break;
+      case 'audio' :
+        break;
+      }
+  });
 
-              case 'audio' :
-                break;
-            }
+  return status;
+  };
 
-        });
+  api.getDrop({ name : "<?php echo $_GET['drop_name']?>" }, dropCB );
 
-        return status;
-    };
+  var j;
 
-    api.getDrop({ name : "<?php echo $_GET['drop_name']?>" }, dropCB );
+  var assetCallback = function(e) {
+   //console.log("asset callback call");
+    j = eval('(' + e + ')');
 
-    var j;
+    console.log(j);
 
-    var assetCallback = function(e) {
-       //console.log("asset callback call");
-        j = eval('(' + e + ')');
+    //console.log('Original Content: ' + j.roles[0].locations[0].file_url);
+    // Create the new element
+    var newAsset = document.createElement('div');
+    newAsset.setAttribute('class','thumb');
 
-        console.log(j);
+    var myLink = document.createElement('a');
+    myLink.setAttribute('class','fancy'+j.type);
+    myLink.setAttribute('id',j.name);
 
-        //console.log('Original Content: ' + j.roles[0].locations[0].file_url);
-        // Create the new element
-        var newAsset = document.createElement('div');
-        newAsset.setAttribute('class','thumb');
+    switch(j.type)
+    {
+      case 'image' :
+        myLink.setAttribute('href',j.roles[0].locations[0].file_url);
+        $(myLink).fancybox({'type':'image'});
+        break;
+      case 'movie' :
+        myLink.setAttribute('href','#');
+        break;
+      case 'audio' :
+        myLink.setAttribute('href',j.roles[0].locations[0].file_url);
+        break;
+      case 'document' :
+        myLink.setAttribute('href','#');
+        break;
+    }
 
-        var myLink = document.createElement('a');
-        myLink.setAttribute('class','fancy'+j.type);
-        myLink.setAttribute('id',j.name);
+    myLink.innerHTML = '<img src="images/spinner.gif" alt="Not ready yet"/>';
+    newAsset.appendChild(myLink);
 
-        switch(j.type)
-        {
-          case 'image' :
-            myLink.setAttribute('href',j.roles[0].locations[0].file_url);
-            $(myLink).fancybox({'type':'image'});
-            break;
-          case 'movie' :
-            myLink.setAttribute('href','#');
-            break;
-          case 'audio' :
-            myLink.setAttribute('href',j.roles[0].locations[0].file_url);
-            break;
-          case 'document' :
-            myLink.setAttribute('href','#');
-            break;
-        }
+    // Get the containing div. If it does not exist then create it
+    typecont = document.getElementById(j.type+'-container');
 
-        myLink.innerHTML = '<img src="images/spinner.gif" alt="Not ready yet"/>';
-        newAsset.appendChild(myLink);
+    if (typecont == null)
+    {
+      // Create the container
+      typecont = document.createElement('div');
+      typecont.setAttribute('style','clear:both');
+      typecont.setAttribute('id',j.type+'-container');
+      typecont.innerHTML = '<h2>' + j.type + '</h2>';
 
-        // Get the containing div. If it does not exist then create it
-        typecont = document.getElementById(j.type+'-container');
-
-        if (typecont == null)
-        {
-          // Create the container
-          typecont = document.createElement('div');
-          typecont.setAttribute('style','clear:both');
-          typecont.setAttribute('id',j.type+'-container');
-          typecont.innerHTML = '<h2>' + j.type + '</h2>';
-
-          document.getElementById('content-container').appendChild(typecont);
-        }
-        document.getElementById(j.type+'-container').appendChild(newAsset);
-        return true;
-    };
+      document.getElementById('content-container').appendChild(typecont);
+    }
+    document.getElementById(j.type+'-container').appendChild(newAsset);
+    return true;
+  };
   <?php
     $sigdata = '';
     if(!empty($API_SECRET)){
