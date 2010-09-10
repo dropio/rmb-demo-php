@@ -31,27 +31,27 @@ $(document).ready(function() {
             var type = data.type;         // image, movie, document, etc
             var role = data.roles.role;
             var location = role.locations.location;
+            var myLink = document.getElementById(data.name);
 
             // Deal with the role based on its type
             switch (type)
             {
               case 'image' :
-                // Bail out if the status is anything but complete
                 if (location.status !== 'complete') { return; }
 
                 if (role.name == 'thumbnail') {
-                  var myLink = document.getElementById(data.name);
                   myLink.innerHTML = '<img src="' + location.file_url + '"/>';
                   $(myLink).after(data.name.substring(0, 15));
                 }
                 break;
 
               case 'movie'  :
+                if (location.status !== 'complete') { return; }
                 if (role.name == 'thumbnail') {
-                  document.getElementById(data.name).innerHTML = '<img src="' + location.file_url + '"/>';
+                  myLink.innerHTML = '<img src="' + location.file_url + '"/>';
+                  $(myLink).after(data.name.substring(0, 15));
                 }
                 if (role.name == 'web_preview') {
-                  var myLink = document.getElementById(data.name);
                   myLink.setAttribute('href',location.file_url);
                   $(myLink).each(function(){
                     $(this).fancybox({
@@ -69,7 +69,6 @@ $(document).ready(function() {
 
               case 'document' :
                 if (role.name == 'web_preview') {
-                  var myLink = document.getElementById(data.name);
                   myLink.innerHTML = '<img src="images/pdf_icon.jpg" />';
                   $(myLink).after(data.name.substring(0, 15));
 
