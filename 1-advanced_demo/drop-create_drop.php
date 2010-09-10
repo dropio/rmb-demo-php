@@ -36,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
     echo '<script type="text/javascript" language="javascript">parent.$.fancybox.close();</script>';
   } catch (Exception $e) {
     echo " failed: " . $e->getMessage();
+    echo "<p />";
   }
 }
 ?>
