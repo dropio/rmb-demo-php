@@ -80,7 +80,7 @@ $(document).ready(function() {
           break;
 
         case 'audio' :
-          console.log(location.status)
+          if (location.status !== 'complete') { return; }
           if (role.name == "web_preview") {
             myLink.setAttribute('href',location.file_url);
             $(myLink).after(data.name.substring(0, 15));
