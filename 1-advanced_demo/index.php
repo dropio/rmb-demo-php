@@ -40,8 +40,7 @@ $drops = DB::getInstance()->
     </head>
 <body>
     <div id="layout">
-      <img src="../../images/logo_tagline.png" alt="Rich Media Backbone Logo"/>
-      <h1>Rich Media Backbone Advanced Demo</h1>
+      <img src="/images/rmb-demo-header.png" alt="Rich Media Backbone Logo"/>
       <p>This is a demo of the advanced features of the RMB API. It uses
           MySQL to cache metadata about your drops and assets.
       </p>
