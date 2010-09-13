@@ -39,7 +39,7 @@ $uploadify_options = array( 'pingback_url' => "{$docroot}pingback.php");
 <link rel="stylesheet" type="text/css" href="../css/layout.css"/>
 
 <!-- load jQuery -->
-<script type="text/javascript" src="../utils/uploadify/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 
 <!-- Fancybox -->
 <script type="text/javascript" src="../utils/fancybox/jquery.fancybox-1.3.1.js"></script>

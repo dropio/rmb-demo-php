@@ -1,23 +1,29 @@
 <?php
 
-# This simpel ajax call receives a dropname,
-$fp = fopen('ajax-debug.log','a+');
-ob_start();
-var_dump($_POST);
-$str=ob_get_contents();
-ob_flush();
-fwrite($fp,$str);
-fclose($fp);
+# Load the databse class
+include_once (dirname(__FILE__) . '/../lib/DB.class.php');
 
-include_once('../_bootstrap.php');
+# Load install-specific configuration
+include_once(dirname(__FILE__) . '/../_config.inc.php');
 
-$sql = "INSERT INTO asset (drop_name,name,created_at,type) values (?,?,?,?)";
-$arr = array(
-    $_POST['drop_name'],
-    $_POST['name'],
-    $_POST['created_at'],
-    $_POST['type']
-);
+try {
+  $sql = "INSERT INTO asset (`drop_id`,`name`,`created_at`,`type`, `is_complete`) values ((SELECT id FROM `drop` d WHERE d.name = ?),?,current_timestamp,?,0)";
 
-DB::getInstance()->prepare($sql)->execute($arr);
+  $asset = json_decode(stripslashes($_POST['asset']), true);
 
+  $arr = array($asset['drop_name'], $asset['name'], $asset['type']);
+
+  $db = DB::getInstance();
+  $db->prepare($sql);
+  $db->execute($arr);
+
+} catch (PDOException $e) {
+  echo $e->getMessage();
+}
+
+$response['success'] = true;
+$response['error'] = $db->getError();
+$response['post'] = $_POST;
+echo json_encode($response);
+
+?>

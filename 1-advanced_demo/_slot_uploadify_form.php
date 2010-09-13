@@ -22,6 +22,7 @@ $(document).ready(function() {
   var api = new DropioApiClient("<?php echo $API_KEY ?>","<?php echo $docroot ?>/DropioJSClientXDReceiver.html");
 
   var dropCB = function(response, status){
+    console.log("Inside dropCB()!");
     var chatPass = "<?php echo $chatPass ?>";
 
     DropioStreamer.start("<?php echo $_GET['drop_name'] ?>",chatPass,"<?php echo $docroot ?>/streamer_xdr.html");
@@ -104,7 +105,7 @@ $(document).ready(function() {
   var j;
 
   var assetCallback = function(e) {
-   //console.log("asset callback call");
+    console.log("asset callback call");
     j = eval('(' + e + ')');
 
     console.log(j);
@@ -181,8 +182,11 @@ $(document).ready(function() {
       'cancelImg'       : '../utils/uploadify/cancel.png',
       'auto'            : true,
       'onComplete'      : function(e, q, f, role, d) {
-          assetCallback(role);
+        $.post("<?php echo $docroot ?>/1-advanced_demo/ajax/upload_complete.php", {'asset':role}, function(data) {
           return true;
+        });
+        assetCallback(role);
+        return true;
       },
       'onAllComplete'   : function() { return true; },
       'onError'         : function(e, q, f, o) { alert("ERROR: " + o.info + o.type); },
