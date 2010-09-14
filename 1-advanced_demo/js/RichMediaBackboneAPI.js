@@ -10,9 +10,9 @@ http://www.opensource.org/licenses/mit-license.php
 DropioApiClient = (function(){
   
   var undefined,
-    HOST = "http://drop.io/",
-    API_HOST = "http://api.drop.io/",
-    UPLOAD_HOST = "http://assets.drop.io/",
+    HOST = "http://stage.drop.io/",
+    API_HOST = "http://stage-api.drop.io/",
+    UPLOAD_HOST = "http://stage-assets.drop.io/",
     DEFAULT_XR_SRC = "/DropioJSClientXDReceiver.html",
     
     DROPS_PATH = API_HOST + "drops",
