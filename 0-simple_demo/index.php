@@ -1,23 +1,28 @@
 <?php
 /**
  * This is a fully functional demo application that lets you manage drops in
- * you drop.io account. It is intended as a functional demonstration of the 
+ * you drop.io account. It is intended as a functional demonstration of the
  * underlying PHP API.
  *
  * The online API reference can be found here: http://backbonedocs.drop.io/API-Methods
- * 
+ *
  */
 
 include_once('_bootstrap.php');
 
 if(!empty($API_KEY) && $API_KEY != 'YOUR_API_KEY') {
-	# Get a list of drops for this account
-	$drops = Dropio_Api::getInstance($API_KEY, $API_SECRET)->getDrops();
+  try {
+    # Get a list of drops for this account
+    $drops = Dropio_Api::getInstance($API_KEY, $API_SECRET)->getDrops();
 
-	# Get stats associated with this account
-	$stats = Dropio_Api::getInstance($API_KEY, $API_SECRET)->getStats();
+    # Get stats associated with this account
+    $stats = Dropio_Api::getInstance($API_KEY, $API_SECRET)->getStats();
+  } catch (Exception $e) {
+    echo $e->getMessage();
+    die();
+  }
 }else{
-	$message = "Please provide an API_KEY in config.inc.php";
+  $message = "Please provide an API_KEY in config.inc.php";
 }
 
 ?>
@@ -31,7 +36,7 @@ if(!empty($API_KEY) && $API_KEY != 'YOUR_API_KEY') {
     <h1>Drop.io API Simple Demo for PHP</h1>
     <p>
       This demo provides a simple examples
-      which will get you started on making your own apps which use 
+      which will get you started on making your own apps which use
       the Drop.io Rich Media Backbone.</p>
     <p>
       This is a fully functional demo app that you can use to manage your drops.
