@@ -170,7 +170,7 @@ $(document).ready(function() {
   ?>
   $('#file').uploadify({
       'uploader'        : '../utils/uploadify/uploadify.swf',
-      'script'          : 'http://assets.drop.io/upload',
+      'script'          : '<?php echo Dropio_Api::UPLOAD_URL; ?>',
       'multi'           : true,
       'scriptData'      : {
         "api_key"       : "<?php echo $API_KEY ?>",

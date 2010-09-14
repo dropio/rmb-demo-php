@@ -133,7 +133,7 @@ Class Dropio_Drop extends Dropio_Api {
       $input .= "<input type=\"hidden\" name=\"$k\" value=\"$v\"/>\n";
 
     $html = <<<EOF
-    <form action="http://assets.drop.io/upload" method="post" enctype="multipart/form-data">
+    <form action="http://stage-assets.drop.io/upload" method="post" enctype="multipart/form-data">
       <ul>
         <li>
           <label for="file">Add a new file:</label>
