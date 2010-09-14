@@ -75,7 +75,7 @@ function asset_updated($asset)
             VALUES ((SELECT id FROM `drop` d WHERE d.name = ?),?,?,?,?,1)";
         $arr = array(
           $values['drop_name'],
-          $values['created_at'],
+          $values['created_at']['s'],
           $values['name'],
           stripslashes($asset),
           $values['type']
