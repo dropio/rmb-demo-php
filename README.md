@@ -2,9 +2,15 @@
 
 ## Overview
 
+### Downloading
+
+Download this demo's source with git by running `git clone git://github.com/dropio/Drop.io-RMBS-Demo-PHP.git`
+
+Alternatively, you can click the "Download Source" button on this page above to download a zip or tar archive.
+
 ### API Keys
 
-To run either of these demo applications you'll need an RMB API key (and optionally an API secret key). 
+To run either of these demo applications you'll need an RMB API key (and optionally an API secret key).
 
 Get yours from <http://backbone.drop.io>
 
