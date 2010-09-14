@@ -41,7 +41,12 @@ if (isset($_GET['drop_name']))
   echo '<script type="text/javascript" language="javascript">parent.$.fancybox.close();</script>';
 }
 
-$drops = Dropio_Api::getInstance($API_KEY, $API_SECRET)->getDrops();
+try {
+  $drops = Dropio_Api::getInstance($API_KEY, $API_SECRET)->getDrops();
+} catch (Exception $e) {
+  echo $e->getMessage();
+  die();
+}
 
 ?>
 <html>
