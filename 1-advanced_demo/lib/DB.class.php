@@ -7,8 +7,8 @@ Class Config {
     public static $user;
     public static $pass;
     public static $dbname;
-	public static $host;
-	public static $port;
+    public static $host;
+    public static $port;
 
 }
 
@@ -65,10 +65,10 @@ Class DB {
             $user = Config::$user;
             $pass = Config::$pass;
             $dbname= Config::$dbname;
-			$host= Config::$host;
-			$post= Config::$port;
+            $host= Config::$host;
+            $post= Config::$port;
         }
-        
+
         $dsn = "mysql:host=$host;dbname=$dbname;port=$port";
 
         return new DB($dsn,$user,$pass);
@@ -105,7 +105,7 @@ Class DB {
 
     /**
      * Fetch the data that came back from the last query
-     * 
+     *
      * @param <type> $mode
      * @return <type>
      */
@@ -142,7 +142,7 @@ Class DB {
         return $this;
     }
 
-	/**
+  /**
      * Exec a SQL Statement on the database.
      *
      * @param string $sql
@@ -150,15 +150,15 @@ Class DB {
      */
     public function exec($sql)
     {
-		$sqlarray = explode(";", $sql);
-		foreach ($sqlarray as $sqlstmt){
-        	try {
-	            //$this->stmt = $this->dbh->exec($sql);
-				$this->dbh->exec($sqlstmt);// or die("Error executing the sql. errorInfo:" . print_r($this->dbh->errorInfo(), true) . "\nSQL statement: " . $sqlstmt);
-	        } catch (PDOException $e) {
-	            echo $e->getMessage();
-	        }
-		}
+    $sqlarray = explode(";", $sql);
+    foreach ($sqlarray as $sqlstmt){
+          try {
+              //$this->stmt = $this->dbh->exec($sql);
+        $this->dbh->exec($sqlstmt);// or die("Error executing the sql. errorInfo:" . print_r($this->dbh->errorInfo(), true) . "\nSQL statement: " . $sqlstmt);
+          } catch (PDOException $e) {
+              echo $e->getMessage();
+          }
+    }
 
         return $this;
     }
@@ -174,7 +174,7 @@ Class DB {
 
     /**
      *
-     * @return <type> 
+     * @return <type>
      */
     public function getStatement()
     {
