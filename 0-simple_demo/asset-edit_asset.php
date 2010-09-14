@@ -3,7 +3,6 @@
 # Boostrap this page
 include_once('_bootstrap.php');
 
-
 # Bail out if we didn't get a name with it.
 if(empty($_REQUEST['dropname']) || empty($_REQUEST['asset']))
   die('$dropname AND $asset must be present in the request params');
@@ -36,7 +35,9 @@ $asset = Dropio_Drop::getInstance($API_KEY, $API_SECRET)
 
     <h1>Editing asset '<?php echo $asset->getName() ?>'</h1>
     <p>
-      <img src="<?php echo $asset->getFileUrl('thumbnail') ?>" alt=""/>
+      <?php if ($asset->getType() == 'image'): ?>
+         <img src="<?php echo($asset->getRole()->getFileUrl()); ?>" alt=""/>
+      <?php endif ?>
     </p>
     <form action="asset-update_asset.php" method="post">
       <ul>
@@ -54,6 +55,6 @@ $asset = Dropio_Drop::getInstance($API_KEY, $API_SECRET)
         </li>
       </ul>
     </form>
-    </div>    
+    </div>
   </body>
 </html>
