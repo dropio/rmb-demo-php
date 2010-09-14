@@ -55,3 +55,9 @@ function show_movie($a)
 {
     return '<a class="fancymovie" href="'.get_file_url($a,'web_preview').'" poster="'.get_file_url($a,'large_thumbnail').'" ><img src="'. get_file_url($a,'thumbnail') . '" alt=""/></a>' . substr($a['name'],0,15) . '<br/>';
 }
+
+function show_other($a)
+{
+  $file_url = get_file_url($a, 'original_content');
+  return '<a class="fancyother" href="'.get_file_url($a,'original_content').'"></a>' . substr($a['name'],0,15) . '<br/>';
+}
