@@ -3,7 +3,7 @@
 # If this is a post then the user submitted the form
 if (strtolower($_SERVER['REQUEST_METHOD']) == 'post')
 {
-    
+
     # Handle when port is null;
     $port = (empty($_POST['port'])) ? '3306' : $_POST['port'];
 
@@ -28,33 +28,33 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post')
 
     # Create the tables
     $sql ="DROP TABLE IF EXISTS `asset`;\r\n
-		CREATE TABLE IF NOT EXISTS `asset` (\r\n
-		  `id` int(11) NOT NULL auto_increment,\r\n
-		  `drop_id` int(11) default NULL,\r\n
-		  `created_at` date NOT NULL,\r\n
-		  `name` varchar(255) default NULL,\r\n
-		  `values` text NOT NULL COMMENT 'json data array',\r\n
-		  `type` varchar(20) NOT NULL,\r\n
-		  `is_complete` tinyint(1) NOT NULL default '0',\r\n
-		  PRIMARY KEY  (`id`),\r\n
-		  UNIQUE KEY `asset_drop_id_name_uniq_idx` (`drop_id`,`name`)\r\n
-		) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Asset Table' AUTO_INCREMENT=1 ;\r\n
-		DROP TABLE IF EXISTS `drop`;\r\n
-		CREATE TABLE IF NOT EXISTS `drop` (\r\n
-		  `id` int(11) NOT NULL auto_increment,\r\n
-		  `name` varchar(255) NOT NULL,\r\n
-		  `created_at` int(11) NOT NULL,\r\n
-		  `values` text NOT NULL,\r\n
-		  PRIMARY KEY  (`id`),\r\n
-		  UNIQUE KEY `name` (`name`)\r\n
-		) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;\r\n
-		ALTER TABLE `asset`\r\n
-		  ADD CONSTRAINT `asset_ibfk_1` FOREIGN KEY (`drop_id`) REFERENCES `drop` (`id`) ON DELETE CASCADE ON UPDATE CASCADE";
-	$dbi = DB::getInstance($_POST['user'],$_POST['pass'],$_POST['dbname'],$_POST['host'],$port);
+    CREATE TABLE IF NOT EXISTS `asset` (\r\n
+      `id` int(11) NOT NULL auto_increment,\r\n
+      `drop_id` int(11) default NULL,\r\n
+      `created_at` date NOT NULL,\r\n
+      `name` varchar(255) default NULL,\r\n
+      `values` text NOT NULL COMMENT 'json data array',\r\n
+      `type` varchar(20) NOT NULL,\r\n
+      `is_complete` tinyint(1) NOT NULL default '0',\r\n
+      PRIMARY KEY  (`id`),\r\n
+      UNIQUE KEY `asset_drop_id_name_uniq_idx` (`drop_id`,`name`)\r\n
+    ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Asset Table' AUTO_INCREMENT=1 ;\r\n
+    DROP TABLE IF EXISTS `drop`;\r\n
+    CREATE TABLE IF NOT EXISTS `drop` (\r\n
+      `id` int(11) NOT NULL auto_increment,\r\n
+      `name` varchar(255) NOT NULL,\r\n
+      `created_at` int(11) NOT NULL,\r\n
+      `values` text NOT NULL,\r\n
+      PRIMARY KEY  (`id`),\r\n
+      UNIQUE KEY `name` (`name`)\r\n
+    ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;\r\n
+    ALTER TABLE `asset`\r\n
+      ADD CONSTRAINT `asset_ibfk_1` FOREIGN KEY (`drop_id`) REFERENCES `drop` (`id`) ON DELETE CASCADE ON UPDATE CASCADE";
+  $dbi = DB::getInstance($_POST['user'],$_POST['pass'],$_POST['dbname'],$_POST['host'],$port);
     $install = $dbi->exec($sql);
-	#Redirect to the app
-	header("Location: http://" . $_SERVER['SERVER_NAME'] ."/". substr($_SERVER["REQUEST_URI"], 0, strpos($_SERVER["REQUEST_URI"], "/install")));
-	# TODO: A little js validation? Or bail out somewhere in the post
+  #Redirect to the app
+  header("Location: http://" . $_SERVER['SERVER_NAME'] ."/". substr($_SERVER["REQUEST_URI"], 0, strpos($_SERVER["REQUEST_URI"], "/install")));
+  # TODO: A little js validation? Or bail out somewhere in the post
 }
 else{
 ?>
@@ -74,9 +74,9 @@ else{
     <body>
         <div id="container">
         <h1>Install the Drop.io RMB Advanced Demo</h1>
-        
+
         <p><a class="fancyform" href="../drop-import_drop.php">Import your drops</a> or <a class="fancyform" href="../drop-create_drop.php">create a new one</a></p>
-        
+
         <form action="" method="post">
             <fieldset>
             <legend>Database</legend>
@@ -90,7 +90,7 @@ else{
             <input type="text" name="user"/>
 
             <label for="pass">Password: </label>
-            <input type="text" name="pass" />
+            <input type="password" name="pass" />
 
             <label for="dbname">Database: </label>
             <input type="text" name="dbname" />
@@ -101,12 +101,12 @@ else{
             <label for="host">Hostname: </label>
             <input type="text" name="docroot" value="http://<?php echo $_SERVER['SERVER_NAME'] ?>"/>
             </fieldset>
-            
+
             <fieldset>
             <legend>API Access</legend>
             <label for="api_key">API Key: </label>
             <input type="text" name="api_key" />
-            
+
             <label for="api_secret">API Secret: </label>
             <input type="text" name="api_secret" /><br/>
             <input type="submit"/>
@@ -120,6 +120,6 @@ else{
         </div>
     </body>
 </html>
-<?php 
-} 
+<?php
+}
 ?>
