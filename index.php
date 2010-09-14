@@ -9,7 +9,7 @@
 
         <p>These examples demonstrate how you can use the Drop.io Rich Media Backbone along
      with our <a href="http://github.com/dropio/dropio-php" target="_blank">PHP helper library</a> to
-    handle file uploads, conversion, storage, and delivery in your applications.</p>
+    handle file uploads, conversion, storage, and delivery in your applications. The  <a href="http://github.com/dropio/Drop.io-RMBS-Demo-PHP">source for these demos is <a href="http://github.com/dropio/Drop.io-RMBS-Demo-PHP">available on Github</a>.</p>
     <p><a href="http://backbone.drop.io" target="_blank">Learn more about the Rich Media Backbone</a></p>
 
         <h2><a href="0-simple_demo/">Simple Demo</a></h2>
@@ -26,7 +26,5 @@
         store information about assets, as well as a publicly accessible web address for accepting
         pingback POSTs from the Rich Media Backbone when your conversions are complete.</p>
         </div>
-
-
     </body>
 </html>
