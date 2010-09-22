@@ -32,12 +32,12 @@ if (strtolower($_SERVER['REQUEST_METHOD']) == 'post')
 		  `id` int(11) NOT NULL auto_increment,\r\n
 		  `drop_id` int(11) default NULL,\r\n
 		  `created_at` date NOT NULL,\r\n
+		  `asset_id` int(11) NOT NULL,\r\n
 		  `name` varchar(255) default NULL,\r\n
 		  `values` text NOT NULL COMMENT 'json data array',\r\n
 		  `type` varchar(20) NOT NULL,\r\n
 		  `is_complete` tinyint(1) NOT NULL default '0',\r\n
-		  PRIMARY KEY  (`id`),\r\n
-		  UNIQUE KEY `asset_drop_id_name_uniq_idx` (`drop_id`,`name`)\r\n
+		  PRIMARY KEY  (`id`)\r\n
 		) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Asset Table' AUTO_INCREMENT=1 ;\r\n
 		DROP TABLE IF EXISTS `drop`;\r\n
 		CREATE TABLE IF NOT EXISTS `drop` (\r\n
