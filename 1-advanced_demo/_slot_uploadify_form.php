@@ -118,7 +118,7 @@ $(document).ready(function() {
     var myLink = document.createElement('a');
     myLink.setAttribute('class','fancy'+j.type);
     myLink.setAttribute('id',j.name);
-
+	
     switch(j.type)
     {
       case 'image' :
@@ -189,7 +189,7 @@ $(document).ready(function() {
         return true;
       },
       'onAllComplete'   : function() { return true; },
-      'onError'         : function(e, q, f, o) { alert("ERROR: " + o.info + o.type); },
+      'onError'         : function(e, q, f, o) { alert("ERROR: " + o.info + o.type); console.log(e);console.log(q);console.log(f);console.log(o); },
       'folder'          : '/uploads'
   });
 });
