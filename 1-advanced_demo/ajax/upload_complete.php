@@ -34,6 +34,6 @@ try {
 } catch (PDOException $e) {
 	die(json_encode(array("response"=>array("result" => "Error", "message" => $e->getMessage()))));
 }
-die(json_encode(array("response"=>array("result" => "Success", "message" => "Database updated, and conversion requested (if specified) for asset_id " . $asset_id))));
+die(json_encode(array("response"=>array("result" => "Success", "message" => "Database updated, and conversion requested (if specified) for asset_id " . $asset['id']))));
 
 ?>

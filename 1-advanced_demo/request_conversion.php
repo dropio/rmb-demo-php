@@ -16,11 +16,11 @@ function request_conversion($asset_id, $asset_type){
 	include_once '_bootstrap.php';
 
 	# Load the api helper library
-	include_once('../lib/dropio-php/Dropio/Api.php');
+	include_once(dirname(__FILE__) . '/../lib/dropio-php/Dropio/Api.php');
 
 	$pingback_url = $docroot . "/1-advanced_demo/pingback.php";
-	$asset_id = intval($_REQUEST['asset_id']);
-	$asset_type = strtoupper($_REQUEST['asset_type']);
+	//$asset_id = intval($_REQUEST['asset_id']);
+	//$asset_type = strtoupper($_REQUEST['asset_type']);
 
 	/////////////////////////////////
 	//Define the conversions we want. These are arbitrary and you can request as many
