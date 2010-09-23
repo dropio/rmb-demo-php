@@ -39,19 +39,22 @@ $(document).ready(function() {
         case 'image' :
           if (location.status !== 'complete') { return; }
 
-          if (role.name == 'thumbnail') {
+          if (role.name == 'custom_small_thumb') {
             myLink.innerHTML = '<img src="' + location.file_url + '"/>';
-            $(myLink).after(data.name.substring(0, 15));
+            $(myLink).after(data.name.substring(0, 28));
+          }
+		  if (role.name == 'custom_large_thumb') {
+            $(myLink).attr('href',location.file_url);
           }
           break;
 
         case 'movie'  :
           if (location.status !== 'complete') { return; }
-          if (role.name == 'thumbnail') {
+          if (role.name == 'custom_poster') {
             myLink.innerHTML = '<img src="' + location.file_url + '"/>';
-            $(myLink).after(data.name.substring(0, 15));
+            $(myLink).after(data.name.substring(0, 28));
           }
-          if (role.name == 'web_preview') {
+          if (role.name == 'custom_iphone') {
             myLink.setAttribute('href',location.file_url);
             $(myLink).each(function(){
               $(this).fancybox({
@@ -60,15 +63,15 @@ $(document).ready(function() {
               });
             });
           }
-          if (role.name == 'large_thumbnail') {
+          if (role.name == 'custom_poster') {
             document.getElementById(data.name).setAttribute('poster',location.file_url);
           }
           break;
 
         case 'document' :
-          if (role.name == 'web_preview') {
+          if (role.name == 'custom_pdf') {
             myLink.innerHTML = '<img src="images/pdf_icon.jpg" />';
-            $(myLink).after(data.name.substring(0, 15));
+            $(myLink).after(data.name.substring(0, 28));
 
             $(myLink).each(function(){
               $(this).fancybox({
@@ -82,9 +85,10 @@ $(document).ready(function() {
 
         case 'audio' :
           if (location.status !== 'complete') { return; }
-          if (role.name == "web_preview") {
+          if (role.name == "custom_mp3_full") {
             myLink.setAttribute('href',location.file_url);
-            $(myLink).after(data.name.substring(0, 15));
+			myLink.innerHTML = '<img src="images/audio_icon.jpg" />';
+            $(myLink).after(data.file_name.substring(0, 28));
 
             $(myLink).each(function() {
               $(this).fancybox({
