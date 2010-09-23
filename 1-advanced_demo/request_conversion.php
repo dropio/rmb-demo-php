@@ -10,7 +10,6 @@
 
 function request_conversion($asset_id, $asset_type){
 
-
 	# Bootstrap the page for app-wide functions. This means loading configs, classes,
 	# and sesison variables
 	include_once '_bootstrap.php';
@@ -33,8 +32,8 @@ function request_conversion($asset_id, $asset_type){
 	$custom_small_thumb = array(
 							"role" => "custom_small_thumb", 
 							"params" => array(
-								"width" => 100,
-								"height" => 100,
+								"width" => 150,
+								"height" => 150,
 								"resize_type" => "FILL"
 							)
 						  );
@@ -49,7 +48,7 @@ function request_conversion($asset_id, $asset_type){
 	///////////
 	//AUDIO
 	$custom_mp3_full = array(
-							"role" => "custom_mp3_128kbps", 
+							"role" => "custom_mp3_full", 
 							"params" => array(
 								"content_type" => "audio/mpeg"
 							)
@@ -84,14 +83,22 @@ function request_conversion($asset_id, $asset_type){
 								"format" => "iphone"
 							)
 						  );
-	$custom_mp3 = array(
+	$custom_movie_mp3 = array(
 							"role" => "custom_mp3", 
 							"params" => array(
 								"format" => "mp3"
 							)
 						  );
-	$custom_poster = array(
-							"role" => "custom_poster", 
+	$custom_movie_thumb = array(
+							"role" => "custom_movie_thumb", 
+							"params" => array(
+								"format" => "thumbnail",
+								"width" =>  125,
+								"height" => 125
+							)
+						  );
+	$custom_movie_poster = array(
+							"role" => "custom_movie_poster", 
 							"params" => array(
 								"format" => "thumbnail",
 								"width" => 640,
@@ -108,6 +115,9 @@ function request_conversion($asset_id, $asset_type){
 
 	if(!empty($_POST['locations'])){ $output_base["locations"] = $_POST['locations']; }
 	$outputs = array();
+
+	//Ensure that asset_type is uppercase
+	$asset_type = strtoupper($asset_type);
 	try{
 		if($asset_type == "IMAGE"){
 			$outputs[] = array_merge($output_base, $custom_small_thumb);
@@ -126,8 +136,9 @@ function request_conversion($asset_id, $asset_type){
 			$response = Dropio_Api::getInstance($API_KEY, $API_SECRET)->convert($asset_type, $inputs, $outputs, $using, $pingback_url);
 		}else if($asset_type == "MOVIE"){
 			$outputs[] = array_merge($output_base, $custom_iphone);
-			$outputs[] = array_merge($output_base, $custom_mp3);
-			$outputs[] = array_merge($output_base, $custom_poster);
+			$outputs[] = array_merge($output_base, $custom_movie_mp3);
+			$outputs[] = array_merge($output_base, $custom_movie_thumb);
+			$outputs[] = array_merge($output_base, $custom_movie_poster);
 			$using = "EncodingDotComConverter";
 			$response = Dropio_Api::getInstance($API_KEY, $API_SECRET)->convert($asset_type, $inputs, $outputs, $using, $pingback_url);
 		}else{
@@ -136,4 +147,5 @@ function request_conversion($asset_id, $asset_type){
 	}catch(Dropio_Api_Exception $e){
 		die(json_encode(array("response"=>array("result" => "Error", "message" => $e->getMessage()))));
 	}
+	return($response);
 }
