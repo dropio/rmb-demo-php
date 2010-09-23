@@ -21,8 +21,8 @@ include_once (dirname(__FILE__) . '/../lib/DB.class.php');
 # Load the conversion requester - this also bootstraps the config, api, etc
 include_once(dirname(__FILE__) . '/../request_conversion.php');
 
-# Requset conversion for this asset
-request_conversion($asset['id'], $asset['type']);
+# Request conversion for this asset
+$conversion_response = request_conversion($asset['id'], $asset['type']);
 
 # Update the database with the new info 
 try {
@@ -34,6 +34,6 @@ try {
 } catch (PDOException $e) {
 	die(json_encode(array("response"=>array("result" => "Error", "message" => $e->getMessage()))));
 }
-die(json_encode(array("response"=>array("result" => "Success", "message" => "Database updated, and conversion requested (if specified) for asset_id " . $asset['id']))));
+die(json_encode(array("response"=>array("result" => "Success", "message" => "Database updated, and conversion requested (if specified) for asset_id " . $asset['id'] . "Conversion response: " . $conversion_response))));
 
 ?>
