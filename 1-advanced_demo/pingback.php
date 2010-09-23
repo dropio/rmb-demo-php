@@ -7,7 +7,7 @@
 
 # Bootstrap the page for app-wide functions. This means loading configs, classes,
 # and sesison variables
-$handled_pingback_functions = array('ASSET_UPDATED');
+$handled_pingback_functions = array('asset_updated');
 
 
 include_once '_bootstrap.php';
