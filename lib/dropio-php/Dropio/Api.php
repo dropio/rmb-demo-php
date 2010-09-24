@@ -7,9 +7,9 @@ Class Dropio_Api {
 
   const RESPONSE_FORMAT  = 'json';
   const API_VERSION      = '3.0';
-  const API_URL          = 'stage-api.drop.io';
+  const API_URL          = 'stage-release-api.drop.io';
   const CLIENT_VER       = '1.0';
-  const UPLOAD_URL       = 'http://stage-assets.drop.io/upload';
+  const UPLOAD_URL       = 'http://stage-release-assets.drop.io/upload';
 
   private $_api_key      = null;
   private $_api_secret   = null;
@@ -74,7 +74,7 @@ Class Dropio_Api {
   /**
    * Set whether the API call is secure (HTTPS) or insecure (HTTP)
    *
-   * @param bolean $b (default true)
+   * @param boolean $b (default true)
    * @return mixed
    */
   public function setIsSecure($b = true)
@@ -161,6 +161,7 @@ Class Dropio_Api {
 
         # For some reason, this needs to be a string instead of an array.
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
+		print(json_encode($params));
         break;
         case 'DELETE':
           curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));

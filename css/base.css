@@ -21,15 +21,15 @@ td, th { font-weight: normal; text-align: left; font-style: normal; }
 #drops { position: fixed; top: 40px; left: 20px; font-size: x-small;}
 
 .thumb {
-    padding: 10px;
-    border: 1px dotted #999;
+    padding: 8px;
+    border: 1px solid #ccc;
     float: left;
     margin-top: 10px;
     margin-right: 10px;
     text-align: left;
-    font-size: 10px;
-    width: 100px;
-    height: 100px;
+    font-size: 11px;
+    width:150px;
+    height: 170px;
     text-align: left;
 }
 
@@ -38,8 +38,7 @@ td, th { font-weight: normal; text-align: left; font-style: normal; }
     border: 1px solid black;
     margin: 0 auto;
     margin-bottom: 5px;
-    max-height: 75px;
-    
+	max-height:150px;
 }
 
 .container { clear: both; }

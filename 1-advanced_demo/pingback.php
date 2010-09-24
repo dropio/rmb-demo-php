@@ -7,7 +7,7 @@
 
 # Bootstrap the page for app-wide functions. This means loading configs, classes,
 # and sesison variables
-$handled_pingback_functions = array('ASSET_UPDATED');
+$handled_pingback_functions = array('asset_updated');
 
 
 include_once '_bootstrap.php';
@@ -20,9 +20,11 @@ $event = strtolower($_POST['event']);
 # Are we debugging this?
 //if (DEBUG===true)
 //{
-	dolog(implode(' ',array_keys($_REQUEST))) ;
+	//dolog(implode(' ',array_keys($_REQUEST))) ;
     dolog($_POST['event']);
     dolog($_POST['asset']);
+	dolog($_POST['body']);
+	dolog($_POST['job']);
 //}
 
 # Call the appropriate function for the kind of event pinging back to us

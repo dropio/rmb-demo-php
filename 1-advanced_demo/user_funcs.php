@@ -45,7 +45,7 @@ function asset_updated($asset)
     }
 
     # Lookup the asset. If it exists then update it. Otherwise, insert it.
-    $sql = "SELECT COUNT(a.id) as count
+    $sql = "SELECT COUNT(asset.id) as count
                 FROM asset 
                 WHERE asset.asset_id = ?";
 
@@ -60,8 +60,8 @@ function asset_updated($asset)
 
         dolog("Found it. updating...");
 
-        $sql = "UPDATE asset a SET a.`values` = ?, a.is_complete = 1
-                    WHERE a.asset_id = ?";
+        $sql = "UPDATE asset SET asset.`values` = ?, asset.is_complete = 1
+                    WHERE asset.asset_id = ?";
         $arr = array(stripslashes($asset),$values['id']);
 
     } else {

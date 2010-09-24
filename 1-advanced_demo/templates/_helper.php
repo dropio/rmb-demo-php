@@ -1,5 +1,5 @@
 <?php
-function get_file_url($a,$type)
+function get_file_url($a,$role)
 {
     $vals = json_decode($a['values'],true);
 
@@ -9,14 +9,14 @@ function get_file_url($a,$type)
     # Dig down into that array
     foreach($vals['roles'] as $v)
     {
-        if ($v['name'] == $type)
+        if ($v['name'] == $role)
             return ($a['is_complete']==0) ? 'images/spinner.gif' : $v['locations'][0]['file_url'];
     }
 }
 
 function show_image($a)
 {
-    return '<a class="fancyimage" href="'.get_file_url($a,'original_content').'"><img src="'. get_file_url($a,'thumbnail') . '" alt=""/></a>' . substr($a['name'],0,15) . '<br/>';
+    return '<a class="fancyimage" href="'.get_file_url($a,'custom_large_thumb').'"><img src="'. get_file_url($a,'custom_small_thumb') . '" alt=""/></a>' . substr($a['name'],0,28) . '<br/>';
 }
 
 
@@ -25,12 +25,11 @@ function show_image($a)
  */
 function show_audio($a)
 {
-    $file_url = get_file_url($a,'original_content');
+    $file_url = get_file_url($a,'custom_mp3_full');
     $html = <<<EOF
     <p id="{$a['name']}">Alt content</p>
     <script type="text/javascript" language="javascript">AudioPlayer.embed("{$a['name']}", {soundFile: "$file_url"});</script>
-    <b>Name:</b> {$a['name']}<br/>
-    <b>Description:</b>
+    <b>Name:</b> {$a['name']}
 
 EOF;
     return $html;
