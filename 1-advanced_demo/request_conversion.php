@@ -77,10 +77,12 @@ function request_conversion($asset_id, $asset_type){
 						  );
 	//////////
 	//MOVIES
-	$custom_iphone = array(
-							"role" => "custom_iphone", 
+	$custom_mp4 = array(
+							"role" => "custom_mp4", 
 							"params" => array(
-								"format" => "iphone"
+								"format" => "mp4",
+								"width" => "640",
+								"height" => "480"
 							)
 						  );
 	$custom_movie_mp3 = array(
@@ -92,17 +94,17 @@ function request_conversion($asset_id, $asset_type){
 	$custom_movie_thumb = array(
 							"role" => "custom_movie_thumb", 
 							"params" => array(
-								"format" => "thumbnail",
-								"width" =>  125,
+								"format" => "jpg",
+								"width"  => 125,
 								"height" => 125
 							)
 						  );
 	$custom_movie_poster = array(
 							"role" => "custom_movie_poster", 
 							"params" => array(
-								"format" => "thumbnail",
-								"width" => 640,
-								"height" =>480
+								"format" => "jpg",
+								"width"  => 640,
+								"height" => 480
 							)
 						  );
 
@@ -123,29 +125,31 @@ function request_conversion($asset_id, $asset_type){
 			$outputs[] = array_merge($output_base, $custom_small_thumb);
 			$outputs[] = array_merge($output_base, $custom_large_thumb);
 			$using = "DropioImageConverter";
-			$response = Dropio_Api::getInstance($API_KEY, $API_SECRET)->convert($asset_type, $inputs, $outputs, $using, $pingback_url);
+			Dropio_Api::getInstance($API_KEY, $API_SECRET)->convert($asset_type, $inputs, $outputs, $using, $pingback_url);
 		}else if($asset_type == "AUDIO"){
 			$outputs[] = array_merge($output_base, $custom_mp3_full);
 			$outputs[] = array_merge($output_base, $custom_mp3_30sec);
 			$using = "DropioAudioConverter";
-			$response = Dropio_Api::getInstance($API_KEY, $API_SECRET)->convert($asset_type, $inputs, $outputs, $using, $pingback_url);
+			Dropio_Api::getInstance($API_KEY, $API_SECRET)->convert($asset_type, $inputs, $outputs, $using, $pingback_url);
 		}else if($asset_type == "DOCUMENT"){
 			$outputs[] = array_merge($output_base, $custom_pdf);
 			$outputs[] = array_merge($output_base, $custom_flv);
 			$using = "ScribdConverter";
-			$response = Dropio_Api::getInstance($API_KEY, $API_SECRET)->convert($asset_type, $inputs, $outputs, $using, $pingback_url);
+			Dropio_Api::getInstance($API_KEY, $API_SECRET)->convert($asset_type, $inputs, $outputs, $using, $pingback_url);
 		}else if($asset_type == "MOVIE"){
-			$outputs[] = array_merge($output_base, $custom_iphone);
-			$outputs[] = array_merge($output_base, $custom_movie_mp3);
+			$outputs[] = array_merge($output_base, $custom_mp4);
+			//$outputs[] = array_merge($output_base, $custom_movie_mp3);
 			$outputs[] = array_merge($output_base, $custom_movie_thumb);
 			$outputs[] = array_merge($output_base, $custom_movie_poster);
-			$using = "EncodingDotComConverter";
-			$response = Dropio_Api::getInstance($API_KEY, $API_SECRET)->convert($asset_type, $inputs, $outputs, $using, $pingback_url);
+			//$using = "EncodingDotComConverter";
+			$using = "DropioVideoConverter";
+			//HACK HACK HACK - this should be MOVIE, not VIDEO
+			Dropio_Api::getInstance($API_KEY, $API_SECRET)->convert("VIDEO", $inputs, $outputs, $using, $pingback_url);
 		}else{
 			//don't request conversion for other files (zips, etc)
 		}
 	}catch(Dropio_Api_Exception $e){
-		die(json_encode(array("response"=>array("result" => "Error", "message" => $e->getMessage()))));
+		return(json_encode(array("response"=>array("result" => "Error", "message" => $e->getMessage()))));
 	}
-	return($response);
+	return true;
 }
