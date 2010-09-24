@@ -88,6 +88,13 @@ $(document).ready(function() {
       'type' : 'image'
     });
 
+    $(".fancyaudio").each(function() {
+      $(this).fancybox({
+        'type' : 'iframe',
+        'href' : '<?php echo $docroot ?>/1-advanced_demo/_audio_player.php?file=' + $(this).attr('href') + '&name=' + $(this).attr('name')
+      });
+    });
+
     $('.fancydocument').each(function(){
       $(this).fancybox({
         'type' : 'iframe',

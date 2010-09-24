@@ -87,13 +87,13 @@ $(document).ready(function() {
           if (location.status !== 'complete') { return; }
           if (role.name == "custom_mp3_full") {
             myLink.setAttribute('href',location.file_url);
-      myLink.innerHTML = '<img src="images/audio_icon.jpg" />';
-            $(myLink).after(data.file_name.substring(0, 28));
+            myLink.innerHTML = '<img src="images/audio_icon.jpg" />';
+            $(myLink).after(data.name.substring(0, 28));
 
             $(myLink).each(function() {
               $(this).fancybox({
                 'type' : 'iframe',
-                'href' : '<?php echo $docroot ?>/1-advanced_demo/_audio_player.php?file=' + $(this).attr('href') + '&name=' + $(this).attr('id')
+                'href' : '<?php echo $docroot ?>/1-advanced_demo/_audio_player.php?file=' + $(this).attr('href') + '&name=' + $(this).attr('name')
               });
             });
           }
@@ -134,6 +134,7 @@ $(document).ready(function() {
         break;
       case 'audio' :
         myLink.setAttribute('href',j.roles[0].locations[0].file_url);
+        myLink.setAttribute('name', j.name);
         break;
       case 'document' :
         myLink.setAttribute('href','#');

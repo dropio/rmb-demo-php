@@ -25,20 +25,11 @@ function show_image($a)
     return '<a class="fancyimage" href="'.get_file_url($a,'custom_large_thumb').'"><img src="'. get_file_url($a,'custom_small_thumb') . '" alt=""/></a>' . get_name($a) . '<br/>';
 }
 
-
-/**
- *  Get an HTML snippet that loads wpaudio on an mp3 file
- */
 function show_audio($a)
 {
     $file_url = get_file_url($a,'custom_mp3_full');
-    $html = <<<EOF
-    <p id="{$a['name']}">Alt content</p>
-    <script type="text/javascript" language="javascript">AudioPlayer.embed("{$a['name']}", {soundFile: "$file_url"});</script>
-    <b>Name:</b> {$a['name']}
-
-EOF;
-    return $html;
+    $name = get_name($a);
+    return '<a class="fancyaudio" href="' . $file_url . '"  name="' . $name .  '"><img src="images/audio_icon.jpg" /></a>' . '<div id="shortname">' . $name . '</div><br />';
 }
 
 /**
@@ -53,7 +44,7 @@ function show_document($a)
         # Document is not a PDF. Link to web preview.
         $doclink = 'web_preview';
     }
-    return '<a class="fancydocument" href="' . get_file_url($a, $doclink) . '"><img src="images/pdf_icon.jpg"/></a>' . substr($a['name'], 0, 15) . '<br/>';
+    return '<a class="fancydocument" href="' . get_file_url($a, $doclink) . '"><img src="images/pdf_icon.jpg"/></a>' . substr($a['name'], 0, 20) . '<br/>';
 }
 
 function show_movie($a)
