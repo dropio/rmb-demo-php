@@ -22,7 +22,7 @@ function get_name($a)
 
 function show_image($a)
 {
-    return '<a class="fancyimage" href="'.get_file_url($a,'custom_large_thumb').'"><img src="'. get_file_url($a,'custom_small_thumb') . '" alt=""/></a>' . get_name($a) . '<br/>';
+    return '<a class="fancyimage" href="'.get_file_url($a,'custom_large_thumb').'"><img src="'. get_file_url($a,'custom_small_thumb') . '" alt=""/></a><div id="shortname">' . get_name($a) . '</div><br/>';
 }
 
 function show_audio($a)
@@ -44,10 +44,10 @@ function show_document($a)
         # Document is not a PDF. Link to web preview.
         $doclink = 'web_preview';
     }
-    return '<a class="fancydocument" href="' . get_file_url($a, $doclink) . '"><img src="images/pdf_icon.jpg"/></a>' . substr($a['name'], 0, 20) . '<br/>';
+    return '<a class="fancydocument" href="' . get_file_url($a, $doclink) . '"><img src="images/pdf_icon.jpg"/></a><div id="shortname">' . $a['name'] . '</div><br/>';
 }
 
 function show_movie($a)
 {
-    return '<a class="fancymovie" href="'.get_file_url($a,'web_preview').'" poster="'.get_file_url($a,'large_thumbnail').'" ><img src="'. get_file_url($a,'thumbnail') . '" alt=""/></a>' . substr($a['name'],0,15) . '<br/>';
+    return '<a class="fancymovie" href="'.get_file_url($a,'web_preview').'" poster="'.get_file_url($a,'large_thumbnail').'" ><img src="'. get_file_url($a,'thumbnail') . '" alt=""/></a><div id="shortname">' . $a['name'] . '</div><br/>';
 }
