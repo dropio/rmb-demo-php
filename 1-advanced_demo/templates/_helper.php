@@ -14,9 +14,15 @@ function get_file_url($a,$role)
     }
 }
 
+function get_name($a)
+{
+  $vals = json_decode($a['values'], true);
+  return $vals['name'];
+}
+
 function show_image($a)
 {
-    return '<a class="fancyimage" href="'.get_file_url($a,'custom_large_thumb').'"><img src="'. get_file_url($a,'custom_small_thumb') . '" alt=""/></a>' . substr($a['name'],0,28) . '<br/>';
+    return '<a class="fancyimage" href="'.get_file_url($a,'custom_large_thumb').'"><img src="'. get_file_url($a,'custom_small_thumb') . '" alt=""/></a>' . get_name($a) . '<br/>';
 }
 
 

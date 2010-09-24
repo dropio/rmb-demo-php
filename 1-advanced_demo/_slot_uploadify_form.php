@@ -43,7 +43,7 @@ $(document).ready(function() {
             myLink.innerHTML = '<img src="' + location.file_url + '"/>';
             $(myLink).after(data.name.substring(0, 28));
           }
-		  if (role.name == 'custom_large_thumb') {
+      if (role.name == 'custom_large_thumb') {
             $(myLink).attr('href',location.file_url);
           }
           break;
@@ -87,7 +87,7 @@ $(document).ready(function() {
           if (location.status !== 'complete') { return; }
           if (role.name == "custom_mp3_full") {
             myLink.setAttribute('href',location.file_url);
-			myLink.innerHTML = '<img src="images/audio_icon.jpg" />';
+      myLink.innerHTML = '<img src="images/audio_icon.jpg" />';
             $(myLink).after(data.file_name.substring(0, 28));
 
             $(myLink).each(function() {
@@ -122,7 +122,7 @@ $(document).ready(function() {
     var myLink = document.createElement('a');
     myLink.setAttribute('class','fancy'+j.type);
     myLink.setAttribute('id',j.name);
-	
+
     switch(j.type)
     {
       case 'image' :

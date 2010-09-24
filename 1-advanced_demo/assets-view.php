@@ -146,7 +146,9 @@ $(document).ready(function() {
           <div class="container" id="<?php echo $k ?>-container">
               <h2><?php echo $k?></h2>
               <?php foreach($v as $ass): ?>
-              <div class="thumb"><?php $func = "show_$k";echo $func($ass); ?></div>
+                <div class="thumb">
+                  <?php $func = "show_$k";echo $func($ass); ?>
+                </div>
               <?php endforeach ?>
           </div>
           <?php endforeach ?>
