@@ -69,6 +69,7 @@ $(document).ready(function() {
           break;
 
         case 'document' :
+          if (location.status !== 'complete') { return; }
           if (role.name == 'custom_pdf') {
             myLink.innerHTML = '<img src="images/pdf_icon.jpg" />';
             $(myLink).after(data.name.substring(0, 28));
