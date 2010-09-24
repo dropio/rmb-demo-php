@@ -31,6 +31,8 @@ td, th { font-weight: normal; text-align: left; font-style: normal; }
     width:150px;
     height: 170px;
     text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .thumb img {
@@ -38,16 +40,11 @@ td, th { font-weight: normal; text-align: left; font-style: normal; }
     border: 1px solid black;
     margin: 0 auto;
     margin-bottom: 5px;
-  max-height:150px;
+    max-height:150px;
 }
 
 a.fancyaudio img {
   border: none;
-}
-
-#shortname {
-  white-space: nowrap;
-  overflow: hidden;
 }
 
 .container { clear: both; }
