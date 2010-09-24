@@ -16,13 +16,18 @@ function get_file_url($a,$role)
 
 function get_original_filename($a)
 {
-	$vals = json_decode($a['values'],true);
+  $vals = json_decode($a['values'],true);
+
+  if (!($vals == NULL || $vals == FALSE))
+  {
     foreach($vals['roles'] as $v)
     {
-        if ($v['name'] == "original_content"){
-            return $v['locations'][0]['filename'];
-		}
+      if ($v['name'] == "original_content")
+      {
+        return $v['locations'][0]['filename'];
+      }
     }
+  }
 }
 
 function get_name($a)
@@ -55,11 +60,11 @@ function show_document($a)
         # Document is not a PDF. Link to web preview.
         $doclink = get_file_url($a,'custom_pdf');
     }
-	$name = get_name($a);
+  $name = get_name($a);
     return '<a class="fancydocument" href="' . $doclink . '"><img src="images/pdf_icon.jpg"/></a>' . $name . '<br/>';
 }
 
 function show_movie($a)
 {
-    return '<a class="fancymovie" href="'.get_file_url($a,'web_preview').'" poster="'.get_file_url($a,'large_thumbnail').'" ><img src="'. get_file_url($a,'thumbnail') . '" alt=""/></a>' . $a['name'] . '<br/>';
+    return '<a class="fancymovie" href="'.get_file_url($a,'web_preview').'" poster="'.get_file_url($a,'large_thumbnail').'" ><img src="' . get_file_url($a,'thumbnail') . '" alt=""/><div class="bttn-play"></div></a>' . $a['name'] . '<br/>';
 }
