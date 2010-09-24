@@ -54,7 +54,7 @@ $(document).ready(function() {
             myLink.innerHTML = '<img src="' + location.file_url + '"/>';
             $(myLink).after(data.name.substring(0, 28));
           }
-          if (role.name == 'custom_iphone') {
+          if (role.name == 'custom_mp4') {
             myLink.setAttribute('href',location.file_url);
             $(myLink).each(function(){
               $(this).fancybox({
