@@ -14,6 +14,17 @@ function get_file_url($a,$role)
     }
 }
 
+function get_original_filename($a)
+{
+	$vals = json_decode($a['values'],true);
+    foreach($vals['roles'] as $v)
+    {
+        if ($v['name'] == "original_content"){
+            return $v['locations'][0]['filename'];
+		}
+    }
+}
+
 function get_name($a)
 {
   $vals = json_decode($a['values'], true);
@@ -37,14 +48,15 @@ function show_audio($a)
  */
 function show_document($a)
 {
-    if (substr($a['name'], -3, 3) == "pdf") {
+    if (substr(get_original_filename($a), -3, 3) == "pdf") {
         # Document is a PDF. Link to original content.
-        $doclink = 'original_content';
+        $doclink = get_file_url($a,'original_content');
     } else {
         # Document is not a PDF. Link to web preview.
-        $doclink = 'web_preview';
+        $doclink = get_file_url($a,'custom_pdf');
     }
-    return '<a class="fancydocument" href="' . get_file_url($a, $doclink) . '"><img src="images/pdf_icon.jpg"/></a>' . $a['name'] . '<br/>';
+	$name = get_name($a);
+    return '<a class="fancydocument" href="' . $doclink . '"><img src="images/pdf_icon.jpg"/></a>' . $name . '<br/>';
 }
 
 function show_movie($a)
