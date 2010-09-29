@@ -161,7 +161,7 @@ Class Dropio_Api {
 
         # For some reason, this needs to be a string instead of an array.
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
-		print(json_encode($params));
+		#print(json_encode($params));
         break;
         case 'DELETE':
           curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
@@ -201,7 +201,7 @@ Class Dropio_Api {
       }
       return $data;
     }
-
+	#print("Raw curl response: " . $data);
     throw new Dropio_Api_Exception('Received error code from web server:' . $http_response_code . ' result: ' . $result,$http_response_code);
   }
 
