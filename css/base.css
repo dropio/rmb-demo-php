@@ -47,4 +47,9 @@ a.fancyaudio img {
   border: none;
 }
 
+a.fancymovie img {
+  max-width:150px;
+  max-height:150px;
+}
+
 .container { clear: both; }
