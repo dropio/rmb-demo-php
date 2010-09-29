@@ -102,7 +102,7 @@ Class Dropio_Asset extends Dropio_Api {
     return $this;
   }
 
-  public function convertAsset($outputs, $using = null){
+  public function convertAsset($outputs, $using = null, $pingback_url = null){
 	//This is a simplified conversion call that requires only an array of output parameter arrays
 	//(one for each requested conversion), which can omit the asset_id
 	//This convert function can only act on 1 asset (unlike it's more generic cousin in the Api class) 
