@@ -61,5 +61,6 @@ function show_document($a)
 
 function show_movie($a)
 {
-    return '<a class="fancymovie" href="'.get_file_url($a,'web_preview').'" poster="'.get_file_url($a,'large_thumbnail').'" ><img src="'. get_file_url($a,'thumbnail') . '" alt=""/></a>' . $a['name'] . '<br/>';
+	$name = get_name($a);
+    return '<a class="fancymovie" href="'.get_file_url($a,'custom_mp4').'" poster="'.get_file_url($a,'custom_movie_poster').'" ><img src="'. get_file_url($a,'custom_movie_thumb') . '" alt=""/></a>' . $name . '<br/>';
 }
