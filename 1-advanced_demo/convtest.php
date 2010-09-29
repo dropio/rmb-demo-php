@@ -77,30 +77,23 @@ function request_conversion($asset_id, $asset_type){
 						  );
 	//////////
 	//MOVIES
-	$custom_iphone = array(
-							"role" => "custom_iphone", 
+	$custom_mp4 = array(
+							"role" => "custom_mp4", 
 							"params" => array(
-								"format" => "iphone"
-							)
-						  );
-	$custom_movie_mp3 = array(
-							"role" => "custom_mp3", 
-							"params" => array(
-								"format" => "mp3"
+								"format" => "mp4"
 							)
 						  );
 	$custom_movie_thumb = array(
 							"role" => "custom_movie_thumb", 
 							"params" => array(
-								"format" => "thumbnail",
-								"width" =>  125,
-								"height" => 125
+								"format" => "jpg",
+								"width" =>  125
 							)
 						  );
 	$custom_movie_poster = array(
 							"role" => "custom_movie_poster", 
 							"params" => array(
-								"format" => "thumbnail",
+								"format" => "jpg",
 								"width" => 640,
 								"height" =>480
 							)
@@ -135,12 +128,12 @@ function request_conversion($asset_id, $asset_type){
 			$using = "ScribdConverter";
 			Dropio_Api::getInstance($API_KEY, $API_SECRET)->convert($asset_type, $inputs, $outputs, $using, $pingback_url);
 		}else if($asset_type == "MOVIE"){
-			$outputs[] = array_merge($output_base, $custom_iphone);
+			$outputs[] = array_merge($output_base, $custom_mp4);
 			#$outputs[] = array_merge($output_base, $custom_movie_mp3);
-			#$outputs[] = array_merge($output_base, $custom_movie_thumb);
-			#$outputs[] = array_merge($output_base, $custom_movie_poster);
-			$using = "EncodingDotComConverter";
-			Dropio_Api::getInstance($API_KEY, $API_SECRET)->convert("VIDEO", $inputs, $outputs, $using, $pingback_url);
+			$outputs[] = array_merge($output_base, $custom_movie_thumb);
+			$outputs[] = array_merge($output_base, $custom_movie_poster);
+			$using = "DropioMovieConverter";
+			Dropio_Api::getInstance($API_KEY, $API_SECRET)->convert($asset_type, $inputs, $outputs, $using, $pingback_url);
 		}else{
 			//don't request conversion for other files (zips, etc)
 		}
@@ -150,4 +143,4 @@ function request_conversion($asset_id, $asset_type){
 	return true;
 }
 
-echo request_conversion('1732', 'movie');
+echo request_conversion('1784', 'image');
