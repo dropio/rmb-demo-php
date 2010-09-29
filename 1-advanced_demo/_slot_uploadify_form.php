@@ -22,7 +22,6 @@ $(document).ready(function() {
   var api = new DropioApiClient("<?php echo $API_KEY ?>","<?php echo $docroot ?>/DropioJSClientXDReceiver.html");
 
   var dropCB = function(response, status){
-    console.log("Inside dropCB()!");
     var chatPass = "<?php echo $chatPass ?>";
 
     DropioStreamer.start("<?php echo $_GET['drop_name'] ?>",chatPass,"<?php echo $docroot ?>/streamer_xdr.html");
@@ -122,12 +121,8 @@ $(document).ready(function() {
   var j;
 
   var assetCallback = function(e) {
-    console.log("asset callback call");
     j = eval('(' + e + ')');
 
-    console.log(j);
-
-    //console.log('Original Content: ' + j.roles[0].locations[0].file_url);
     // Create the new element
     var newAsset = document.createElement('div');
     newAsset.setAttribute('class','thumb');
