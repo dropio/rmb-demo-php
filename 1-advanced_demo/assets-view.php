@@ -47,7 +47,7 @@ $uploadify_options = array( 'pingback_url' => "{$docroot}pingback.php");
 
 <!-- Javascript RMB API and streamer -->
 <script type="text/javascript" language="javascript" src="js/RichMediaBackboneAPI.js"></script>
-<script type="text/javascript" charset="utf-8" src="http://stage-release.drop.io/javascripts/streamer.js"></script>
+<script type="text/javascript" charset="utf-8" src="http://drop.io/javascripts/streamer.js"></script>
 
 <!-- The Audio player -->
 <script type="text/javascript" src="../utils/wpaudio/audio-player.js"></script>
