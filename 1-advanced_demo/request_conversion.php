@@ -95,8 +95,8 @@ function request_conversion($asset_id, $asset_type){
 							"role" => "custom_movie_thumb", 
 							"params" => array(
 								"format" => "jpg",
-								"width"  => 125,
-								"height" => 125
+								"width"  => 320,
+								"height" => 240
 							)
 						  );
 	$custom_movie_poster = array(
@@ -142,9 +142,9 @@ function request_conversion($asset_id, $asset_type){
 			$outputs[] = array_merge($output_base, $custom_movie_thumb);
 			$outputs[] = array_merge($output_base, $custom_movie_poster);
 			//$using = "EncodingDotComConverter";
-			$using = "DropioVideoConverter";
+			$using = "DropioMovieConverter";
 			//HACK HACK HACK - this should be MOVIE, not VIDEO
-			Dropio_Api::getInstance($API_KEY, $API_SECRET)->convert("VIDEO", $inputs, $outputs, $using, $pingback_url);
+			Dropio_Api::getInstance($API_KEY, $API_SECRET)->convert($asset_type, $inputs, $outputs, $using, $pingback_url);
 		}else{
 			//don't request conversion for other files (zips, etc)
 		}
