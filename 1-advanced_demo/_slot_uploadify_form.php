@@ -50,7 +50,7 @@ $(document).ready(function() {
 
         case 'movie'  :
           if (location.status !== 'complete') { return; }
-          if (role.name == 'custom_poster') {
+          if (role.name == 'custom_movie_thumb') {
             myLink.innerHTML = '<img src="' + location.file_url + '"/>';
             $(myLink).after(data.name.substring(0, 28));
           }
@@ -58,13 +58,25 @@ $(document).ready(function() {
             myLink.setAttribute('href',location.file_url);
             $(myLink).each(function(){
               $(this).fancybox({
-                'type' : 'iframe',
-                'href' : '<?php echo $docroot ?>/1-advanced_demo/_video_player.php?file=' + $(this).attr('href') + '&poster=' + $(this).attr('poster')
-              });
+		        'padding'   : 0,
+		        'autoScale' : true,
+		        'type'      : 'iframe',
+		        'width'     : 660,
+		        'height'    : 540,
+		        'href'      : '<?php echo $docroot ?>/1-advanced_demo/_video_player.php?file=' + $(this).attr('href') + '&poster=' + $(this).attr('poster')
+		      });
             });
           }
-          if (role.name == 'custom_poster') {
+          if (role.name == 'custom_movie_poster') {
             document.getElementById(data.name).setAttribute('poster',location.file_url);
+			$(this).fancybox({
+		        'padding'   : 0,
+		        'autoScale' : true,
+		        'type'      : 'iframe',
+		        'width'     : 660,
+		        'height'    : 540,
+		        'href'      : '<?php echo $docroot ?>/1-advanced_demo/_video_player.php?file=' + $(this).attr('href') + '&poster=' + $(this).attr('poster')
+		      });
           }
           break;
 
