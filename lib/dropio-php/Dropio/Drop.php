@@ -266,7 +266,9 @@ EOL;
   public function getEmail()          { return $this->_values['email']; }
   public function getEmailKey()       { return $this->_values['email_key']; }
   public function getMaxBytes()       { return $this->_values['max_bytes']; }
-  public function getMaxSize()        { return $this->_values['max_bytes'] / 1024 / 1024; }
+  public function getMaxSize()        { 
+	return (!empty($this->_values['max_size']) ? $this->_values['max_size'] : $this->_values['max_bytes'] / 1024 / 1024); 
+  }
   public function getName()           { return $this->_values['name']; }
 
   /**
@@ -297,8 +299,8 @@ EOL;
   public function setMaxSize($max_size=null)
   {
 	  //default to a petabyte - 1073741824 megs. Pratically, this is 'unlimited'
-	  $max_size = (empty($size) ? 1073741824 : $size); 
-      $this->_values['max_size'] = $size;
+	  $max_size = (empty($max_size) ? 1073741824 : $max_size); 
+      $this->_values['max_size'] = $max_size;
       return $this;
   }
 
