@@ -45,38 +45,37 @@ function asset_updated($asset)
     }
 
     # Lookup the asset. If it exists then update it. Otherwise, insert it.
-    $sql = "SELECT COUNT(a.id) as c
-                FROM asset a LEFT JOIN `drop` d
-                ON d.id = a.drop_id
-                WHERE d.name = ? and a.name = ?";
+    $sql = "SELECT COUNT(asset.id) as count
+                FROM asset 
+                WHERE asset.asset_id = ?";
 
-    $arr = array($values['drop_name'],$values['name']);
+    $arr = array($values['id']);
 
-    $s = $r->prepare($sql)->
+    $result = $r->prepare($sql)->
                 execute($arr)->
                 fetch();
 
-    if ((int) $s['c'] > 0)
+    if ((int) $result['count'] > 0)
     {
 
         dolog("Found it. updating...");
 
-        $sql = "UPDATE asset a SET a.`values` = ?, a.is_complete = 1
-                    WHERE drop_id IN (SELECT id FROM `drop` d WHERE d.name = ?)
-                    AND a.name = ?";
-        $arr = array(stripslashes($asset),$values['drop_name'],$values['name']);
+        $sql = "UPDATE asset SET asset.`values` = ?, asset.is_complete = 1
+                    WHERE asset.asset_id = ?";
+        $arr = array(stripslashes($asset),$values['id']);
 
     } else {
 
         dolog("Did not find it. Inserting...");
 
 
-        $sql = "INSERT INTO asset (`drop_id`, `created_at`, `name`, `values`, `type`,`is_complete`)
-            VALUES ((SELECT id FROM `drop` d WHERE d.name = ?),?,?,?,?,1)";
+        $sql = "INSERT INTO asset (`drop_id`, `created_at`, `name`, `asset_id`, `values`, `type`,`is_complete`)
+            VALUES ((SELECT id FROM `drop` d WHERE d.name = ?),?,?,?,?,?,1)";
         $arr = array(
           $values['drop_name'],
           $values['created_at']['s'],
           $values['name'],
+		  $values['id'],
           stripslashes($asset),
           $values['type']
         );
@@ -84,7 +83,7 @@ function asset_updated($asset)
 
     if(!$r->prepare($sql)->execute($arr))
     {
-      dolog('Filed to execute:' . $r->getError());
+      dolog('Failed to execute:' . $r->getError());
     }
 
     return true;
@@ -92,11 +91,16 @@ function asset_updated($asset)
 
 function asset_destroyed($asset)
 {
-  $sql = "DELETE FROM asset WHERE drop_id IN (SELECT id from `drop` d where d.name = ?) AND name = ?";
+  $sql = "DELETE FROM asset WHERE asset_id = ?";
   $values = json_decode(stripslashes($asset),true);
 
-  $arr = array($values['drop_name'],$values['name']);
+  $arr = array($values['id']);
 
   DB::getInstance()->prepare($sql)->execute($arr);
 
+}
+
+function job_complete($job){
+	dolog(print_r($job, true));
+	//throw this away for now;
 }

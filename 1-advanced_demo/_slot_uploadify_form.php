@@ -22,7 +22,6 @@ $(document).ready(function() {
   var api = new DropioApiClient("<?php echo $API_KEY ?>","<?php echo $docroot ?>/DropioJSClientXDReceiver.html");
 
   var dropCB = function(response, status){
-    console.log("Inside dropCB()!");
     var chatPass = "<?php echo $chatPass ?>";
 
     DropioStreamer.start("<?php echo $_GET['drop_name'] ?>",chatPass,"<?php echo $docroot ?>/streamer_xdr.html");
@@ -39,36 +38,52 @@ $(document).ready(function() {
         case 'image' :
           if (location.status !== 'complete') { return; }
 
-          if (role.name == 'thumbnail') {
+          if (role.name == 'custom_small_thumb') {
             myLink.innerHTML = '<img src="' + location.file_url + '"/>';
-            $(myLink).after(data.name.substring(0, 15));
+            $(myLink).after(data.name.substring(0, 28));
+          }
+      if (role.name == 'custom_large_thumb') {
+            $(myLink).attr('href',location.file_url);
           }
           break;
 
         case 'movie'  :
           if (location.status !== 'complete') { return; }
-          if (role.name == 'thumbnail') {
+          if (role.name == 'custom_movie_thumb') {
             myLink.innerHTML = '<img src="' + location.file_url + '"/>';
-            $(myLink).after(data.name.substring(0, 15));
+            $(myLink).after(data.name.substring(0, 28));
           }
-          if (role.name == 'web_preview') {
+          if (role.name == 'custom_mp4') {
             myLink.setAttribute('href',location.file_url);
             $(myLink).each(function(){
               $(this).fancybox({
-                'type' : 'iframe',
-                'href' : '<?php echo $docroot ?>/1-advanced_demo/_video_player.php?file=' + $(this).attr('href') + '&poster=' + $(this).attr('poster')
-              });
+		        'padding'   : 0,
+		        'autoScale' : true,
+		        'type'      : 'iframe',
+		        'width'     : 660,
+		        'height'    : 540,
+		        'href'      : '<?php echo $docroot ?>/1-advanced_demo/_video_player.php?file=' + $(this).attr('href') + '&poster=' + $(this).attr('poster')
+		      });
             });
           }
-          if (role.name == 'large_thumbnail') {
+          if (role.name == 'custom_movie_poster') {
             document.getElementById(data.name).setAttribute('poster',location.file_url);
+			$(this).fancybox({
+		        'padding'   : 0,
+		        'autoScale' : true,
+		        'type'      : 'iframe',
+		        'width'     : 660,
+		        'height'    : 540,
+		        'href'      : '<?php echo $docroot ?>/1-advanced_demo/_video_player.php?file=' + $(this).attr('href') + '&poster=' + $(this).attr('poster')
+		      });
           }
           break;
 
         case 'document' :
-          if (role.name == 'web_preview') {
+          if (location.status !== 'complete') { return; }
+          if (role.name == 'custom_pdf') {
             myLink.innerHTML = '<img src="images/pdf_icon.jpg" />';
-            $(myLink).after(data.name.substring(0, 15));
+            $(myLink).after(data.name.substring(0, 28));
 
             $(myLink).each(function(){
               $(this).fancybox({
@@ -82,14 +97,15 @@ $(document).ready(function() {
 
         case 'audio' :
           if (location.status !== 'complete') { return; }
-          if (role.name == "web_preview") {
+          if (role.name == "custom_mp3_full") {
             myLink.setAttribute('href',location.file_url);
-            $(myLink).after(data.name.substring(0, 15));
+            myLink.innerHTML = '<img src="images/audio_icon.jpg" />';
+            $(myLink).after(data.name.substring(0, 28));
 
             $(myLink).each(function() {
               $(this).fancybox({
                 'type' : 'iframe',
-                'href' : '<?php echo $docroot ?>/1-advanced_demo/_audio_player.php?file=' + $(this).attr('href') + '&name=' + $(this).attr('id')
+                'href' : '<?php echo $docroot ?>/1-advanced_demo/_audio_player.php?file=' + $(this).attr('href') + '&name=' + $(this).attr('name')
               });
             });
           }
@@ -105,12 +121,8 @@ $(document).ready(function() {
   var j;
 
   var assetCallback = function(e) {
-    console.log("asset callback call");
     j = eval('(' + e + ')');
 
-    console.log(j);
-
-    //console.log('Original Content: ' + j.roles[0].locations[0].file_url);
     // Create the new element
     var newAsset = document.createElement('div');
     newAsset.setAttribute('class','thumb');
@@ -130,6 +142,7 @@ $(document).ready(function() {
         break;
       case 'audio' :
         myLink.setAttribute('href',j.roles[0].locations[0].file_url);
+        myLink.setAttribute('name', j.name);
         break;
       case 'document' :
         myLink.setAttribute('href','#');
@@ -170,7 +183,7 @@ $(document).ready(function() {
   ?>
   $('#file').uploadify({
       'uploader'        : '../utils/uploadify/uploadify.swf',
-      'script'          : 'http://assets.drop.io/upload',
+      'script'          : '<?php echo Dropio_Api::UPLOAD_URL; ?>',
       'multi'           : true,
       'scriptData'      : {
         "api_key"       : "<?php echo $API_KEY ?>",
@@ -189,7 +202,7 @@ $(document).ready(function() {
         return true;
       },
       'onAllComplete'   : function() { return true; },
-      'onError'         : function(e, q, f, o) { alert("ERROR: " + o.info + o.type); },
+      'onError'         : function(e, q, f, o) { alert("ERROR: " + o.info + o.type); console.log(e);console.log(q);console.log(f);console.log(o); },
       'folder'          : '/uploads'
   });
 });

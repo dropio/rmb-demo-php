@@ -88,6 +88,13 @@ $(document).ready(function() {
       'type' : 'image'
     });
 
+    $(".fancyaudio").each(function() {
+      $(this).fancybox({
+        'type' : 'iframe',
+        'href' : '<?php echo $docroot ?>/1-advanced_demo/_audio_player.php?file=' + $(this).attr('href') + '&name=' + $(this).attr('name')
+      });
+    });
+
     $('.fancydocument').each(function(){
       $(this).fancybox({
         'type' : 'iframe',
@@ -100,10 +107,10 @@ $(document).ready(function() {
     $('.fancymovie').each(function(){
       $(this).fancybox({
         'padding'   : 0,
-        'autoScale' : false,
+        'autoScale' : true,
         'type'      : 'iframe',
-        'width'     : 640,
-        'height'    : 480,
+        'width'     : 660,
+        'height'    : 540,
         'href'      : '<?php echo $docroot ?>/1-advanced_demo/_video_player.php?file=' + $(this).attr('href') + '&poster=' + $(this).attr('poster')
       });
     });
@@ -146,7 +153,9 @@ $(document).ready(function() {
           <div class="container" id="<?php echo $k ?>-container">
               <h2><?php echo $k?></h2>
               <?php foreach($v as $ass): ?>
-              <div class="thumb"><?php $func = "show_$k";echo $func($ass); ?></div>
+                <div class="thumb">
+                  <?php $func = "show_$k";echo $func($ass); ?>
+                </div>
               <?php endforeach ?>
           </div>
           <?php endforeach ?>
