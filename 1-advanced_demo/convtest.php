@@ -80,22 +80,31 @@ function request_conversion($asset_id, $asset_type){
 	$custom_mp4 = array(
 							"role" => "custom_mp4", 
 							"params" => array(
-								"format" => "mp4"
+								"format" => "mp4",
+								"width" => "640",
+								"height" => "480"
+							)
+						  );
+	$custom_movie_mp3 = array(
+							"role" => "custom_mp3", 
+							"params" => array(
+								"format" => "mp3"
 							)
 						  );
 	$custom_movie_thumb = array(
 							"role" => "custom_movie_thumb", 
 							"params" => array(
 								"format" => "jpg",
-								"width" =>  125
+								"width"  => 320,
+								"height" => 240
 							)
 						  );
 	$custom_movie_poster = array(
 							"role" => "custom_movie_poster", 
 							"params" => array(
 								"format" => "jpg",
-								"width" => 640,
-								"height" =>480
+								"width"  => 640,
+								"height" => 480
 							)
 						  );
 
@@ -129,10 +138,12 @@ function request_conversion($asset_id, $asset_type){
 			Dropio_Api::getInstance($API_KEY, $API_SECRET)->convert($asset_type, $inputs, $outputs, $using, $pingback_url);
 		}else if($asset_type == "MOVIE"){
 			$outputs[] = array_merge($output_base, $custom_mp4);
-			#$outputs[] = array_merge($output_base, $custom_movie_mp3);
+			//$outputs[] = array_merge($output_base, $custom_movie_mp3);
 			$outputs[] = array_merge($output_base, $custom_movie_thumb);
 			$outputs[] = array_merge($output_base, $custom_movie_poster);
+			//$using = "EncodingDotComConverter";
 			$using = "DropioMovieConverter";
+			//HACK HACK HACK - this should be MOVIE, not VIDEO
 			Dropio_Api::getInstance($API_KEY, $API_SECRET)->convert($asset_type, $inputs, $outputs, $using, $pingback_url);
 		}else{
 			//don't request conversion for other files (zips, etc)
@@ -143,4 +154,4 @@ function request_conversion($asset_id, $asset_type){
 	return true;
 }
 
-echo request_conversion('1784', 'image');
+echo request_conversion('47129543', 'image');
