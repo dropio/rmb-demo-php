@@ -143,7 +143,6 @@ function request_conversion($asset_id, $asset_type){
 			$outputs[] = array_merge($output_base, $custom_movie_poster);
 			//$using = "EncodingDotComConverter";
 			$using = "DropioMovieConverter";
-			//HACK HACK HACK - this should be MOVIE, not VIDEO
 			Dropio_Api::getInstance($API_KEY, $API_SECRET)->convert($asset_type, $inputs, $outputs, $using, $pingback_url);
 		}else{
 			//don't request conversion for other files (zips, etc)
