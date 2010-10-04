@@ -14,6 +14,10 @@ To run either of these demo applications you'll need an RMB API key (and optiona
 
 Get yours from <http://backbone.drop.io>
 
+### Live Demo
+
+A live version of this demo application can be viewed online here: <http://rmbdemo.drop.io>
+
 ### 0-simple_demo
 
 This is a small PHP application demonstrating the basic functionality of the Rich Media Backbone API. With it you can create and manage drops as well as upload and manage assets.
