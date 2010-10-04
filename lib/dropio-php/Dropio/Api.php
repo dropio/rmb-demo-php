@@ -96,27 +96,48 @@ Class Dropio_Api {
 
   protected function _addRequiredParams($params = null)
   {
+	  date_default_timezone_set('America/New_York');
       $params['timestamp'] = strtotime('now + 15 minutes');
       return $params;
   }
 
-  public function signRequest($params = null)
+  public function signRequest($params = null, $method = "POST")
   {
     $str='';
-    ksort($params);
+    $this->ksortTree($params);
 
-    # Weird, if token is present but empty, remove it. Move this logic to
-    # Drop object
-    if(empty($params['token']))
-      unset($params['token']);
-
-    foreach($params as $k=>$v)
-        $str .= "$k=$v";
-
+	#for GET and DELETE calls, all values are interpreted as strings, so convert them
+	#before we JSON encode them. 
+	if($method == "GET" || $method == "DELETE"){ 
+   		foreach($params as $k=>$v){
+	        $params[$k]=(string)$v;
+		}
+	}
+	print "\r\n Pingback url is: " . $params["pingback_url"];	
+	$str = json_encode($params);
+	//The ruby to_json does not add backslashes to slashes
+	$str = stripslashes($str);
+	#Debugging output
+	print("\r\nstring to sign was: " . $str . $this->_api_secret .  "\r\n\r\n");
+	
+	#add the signature to the params
     $params['signature'] = sha1($str . $this->_api_secret);
 
     return $params;
   }
+  
+	private function ksortTree( &$array )
+	{
+		if (!is_array($array)) {
+			return false;
+		}
+
+		ksort($array);
+		foreach ($array as $k=>$v) {
+			$this->ksortTree($array[$k]);
+		}
+		return true;
+  	}
 
   /**
    * Build a use that is either secure (HTTPS) or plain (HTTP)
@@ -152,6 +173,7 @@ Class Dropio_Api {
     curl_setopt($ch, CURLOPT_TIMEOUT, 0);
 	curl_setopt($ch, CURLOPT_VERBOSE, true); // Display communication with server
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: application/json', 'Content-Type: application/json'));
+	#curl_setopt($ch, CURLOPT_PROXY, "localhost:8888");
 	
     switch($method)
     {
