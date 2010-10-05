@@ -37,7 +37,6 @@ td, th { font-weight: normal; text-align: left; font-style: normal; }
 
 .thumb img {
     display: block;
-    border: 1px solid black;
     margin: 0 auto;
     margin-bottom: 5px;
     max-height:150px;
@@ -53,3 +52,5 @@ a.fancymovie img {
 }
 
 .container { clear: both; }
+
+#footer {height:200px;}
