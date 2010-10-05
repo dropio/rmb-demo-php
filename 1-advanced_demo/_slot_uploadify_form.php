@@ -52,7 +52,6 @@ function updateAsset(asset) {
 				myLink.innerHTML = '<img src="images/spinner.gif" alt="Conversion processing"/>';
 			}else if (role.name == 'custom_movie_thumb') {
 	          myLink.innerHTML = '<img src="' + location.file_url + '"/>';
-	          $(myLink).after(role.filename);
 	        }else if (role.name == 'custom_mp4') {
 	          myLink.setAttribute('href',location.file_url);
 	          $(myLink).each(function(){
