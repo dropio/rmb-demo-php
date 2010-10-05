@@ -17,6 +17,109 @@
 
 <script type="text/javascript">// <![CDATA[
 
+function updateAsset(asset) {
+    // Shortcut to the objects we want
+	console.log(asset);
+    var type = asset.type; // image, movie, document, etc
+	var location;
+    var myLink = document.getElementById(asset.name);
+    // iterate over the available roles (there may only be 1, in the case of stream mesages)
+	$.each(asset.roles, function(index, role) { 
+		//grab the first available location
+		location = role.locations.location
+		//Handle this update based on the type of asset
+    	switch (type)
+	    {
+	      case 'image' :
+	        if (role.name == 'original_content' && asset.roles.length == 1) {
+		 		myLink.setAttribute('href',asset.roles[0].locations[0].file_url);
+				$(myLink).after(role.filename);
+		        $(myLink).fancybox({'type':'image'});
+				myLink.innerHTML = '<img src="images/spinner.gif" alt="Conversion processing"/>';
+			}else if (role.name == 'custom_small_thumb' && location.status == "complete") {
+	          myLink.innerHTML = '<img src="' + location.file_url + '"/>';
+	        }else if (role.name == 'custom_large_thumb' && location.status == "complete") {
+	          $(myLink).attr('href',location.file_url);
+	        }
+	        
+			break;
+
+	      case 'movie'  :
+	        if (role.name == 'original_content' && asset.roles.length == 1){
+				myLink.setAttribute('href',asset.roles[0].locations[0].file_url);
+				$(myLink).after(role.filename);
+		        $(myLink).fancybox({'type':'movie'});
+				myLink.innerHTML = '<img src="images/spinner.gif" alt="Conversion processing"/>';
+			}else if (role.name == 'custom_movie_thumb') {
+	          myLink.innerHTML = '<img src="' + location.file_url + '"/>';
+	          $(myLink).after(role.filename);
+	        }else if (role.name == 'custom_mp4') {
+	          myLink.setAttribute('href',location.file_url);
+	          $(myLink).each(function(){
+	            $(this).fancybox({
+			        'padding'   : 0,
+			        'autoScale' : true,
+			        'type'      : 'iframe',
+			        'width'     : 660,
+			        'height'    : 540,
+			        'href'      : '<?php echo $docroot ?>/1-advanced_demo/_video_player.php?file=' + $(this).attr('href') + '&poster=' + $(this).attr('poster')
+			      });
+	          });
+	        }else if (role.name == 'custom_movie_poster') {
+	          document.getElementById(asset.name).setAttribute('poster',location.file_url);
+				$(this).fancybox({
+			        'padding'   : 0,
+			        'autoScale' : true,
+			        'type'      : 'iframe',
+			        'width'     : 660,
+			        'height'    : 540,
+			        'href'      : '<?php echo $docroot ?>/1-advanced_demo/_video_player.php?file=' + $(this).attr('href') + '&poster=' + $(this).attr('poster')
+			      });
+	        }
+	        break;
+
+	      case 'document' :
+	        if (role.name == 'original_content' && asset.roles.length == 1 && role.filename.substr(role.filename.lastIndexOf(".")+1, 3).toLowerCase() != 'pdf'){
+				myLink.setAttribute('href',asset.roles[0].locations[0].file_url);
+				$(myLink).after(role.filename);
+				myLink.innerHTML = '<img src="images/spinner.gif" alt="Conversion processing"/>';
+			}else if (role.name == 'custom_pdf' || role.name == 'original_content' && role.filename.substr(role.filename.lastIndexOf(".")+1, 3).toLowerCase() == 'pdf'){
+				myLink.setAttribute('href',asset.roles[0].locations[0].file_url);
+				myLink.innerHTML = '<img src="images/pdf_icon.jpg" />';
+			}
+	        break;
+
+	      case 'audio' :
+	        if (role.name == 'original_content' && asset.roles.length == 1){
+				myLink.setAttribute('href',asset.roles[0].locations[0].file_url);
+				$(myLink).after(role.filename);
+				myLink.innerHTML = '<img src="images/spinner.gif" alt="Conversion processing"/>';
+			}else if (role.name == "custom_mp3_full") {
+	          myLink.setAttribute('href',location.file_url);
+	          myLink.innerHTML = '<img src="images/audio_icon.jpg" />';
+	          $(myLink).after(role.filename);
+
+	          $(myLink).each(function() {
+	            $(this).fancybox({
+	              'type' : 'iframe',
+	              'href' : '<?php echo $docroot ?>/1-advanced_demo/_audio_player.php?file=' + $(this).attr('href') + '&name=' + $(this).attr('name')
+	            });
+	          });
+	        }
+	        break;
+
+		   case 'other' :
+	        if (role.name == "original_content") {
+		  		myLink.setAttribute('href',asset.roles[0].locations[0].file_url);
+				$(myLink).after(role.filename);
+		        myLink.innerHTML = '<img src="images/other_icon.png" />';
+	        }
+	        break;
+	    }
+	});
+	return true;
+}
+
 $(document).ready(function() {
 
   var api = new DropioApiClient("<?php echo $API_KEY ?>","<?php echo $docroot ?>/DropioJSClientXDReceiver.html");
@@ -25,147 +128,72 @@ $(document).ready(function() {
     var chatPass = "<?php echo $chatPass ?>";
 
     DropioStreamer.start("<?php echo $_GET['drop_name'] ?>",chatPass,"<?php echo $docroot ?>/streamer_xdr.html");
-    DropioStreamer.observe(DropioStreamer.ASSET_UPDATED, function(data) {
-      // Shortcut to the objects we want
-      var type = data.type; // image, movie, document, etc
-      var role = data.roles.role;
-      var location = role.locations.location;
-      var myLink = document.getElementById(data.name);
-
-      // Deal with the role based on its type
-      switch (type)
-      {
-        case 'image' :
-          if (location.status !== 'complete') { return; }
-
-          if (role.name == 'custom_small_thumb') {
-            myLink.innerHTML = '<img src="' + location.file_url + '"/>';
-            $(myLink).after(data.name.substring(0, 28));
-          }
-      if (role.name == 'custom_large_thumb') {
-            $(myLink).attr('href',location.file_url);
-          }
-          break;
-
-        case 'movie'  :
-          if (location.status !== 'complete') { return; }
-          if (role.name == 'custom_movie_thumb') {
-            myLink.innerHTML = '<img src="' + location.file_url + '"/>';
-            $(myLink).after(data.name.substring(0, 28));
-          }
-          if (role.name == 'custom_mp4') {
-            myLink.setAttribute('href',location.file_url);
-            $(myLink).each(function(){
-              $(this).fancybox({
-		        'padding'   : 0,
-		        'autoScale' : true,
-		        'type'      : 'iframe',
-		        'width'     : 660,
-		        'height'    : 540,
-		        'href'      : '<?php echo $docroot ?>/1-advanced_demo/_video_player.php?file=' + $(this).attr('href') + '&poster=' + $(this).attr('poster')
-		      });
-            });
-          }
-          if (role.name == 'custom_movie_poster') {
-            document.getElementById(data.name).setAttribute('poster',location.file_url);
-			$(this).fancybox({
-		        'padding'   : 0,
-		        'autoScale' : true,
-		        'type'      : 'iframe',
-		        'width'     : 660,
-		        'height'    : 540,
-		        'href'      : '<?php echo $docroot ?>/1-advanced_demo/_video_player.php?file=' + $(this).attr('href') + '&poster=' + $(this).attr('poster')
-		      });
-          }
-          break;
-
-        case 'document' :
-          if (location.status !== 'complete') { return; }
-          if (role.name == 'custom_pdf') {
-            myLink.innerHTML = '<img src="images/pdf_icon.jpg" />';
-            $(myLink).after(data.name.substring(0, 28));
-
-            $(myLink).each(function(){
-              $(this).fancybox({
-                'type' : 'iframe',
-                'href' : 'http://docs.google.com/viewer?embedded=true&url=' + $(this).attr('href')
-              });
-            });
-
-          }
-          break;
-
-        case 'audio' :
-          if (location.status !== 'complete') { return; }
-          if (role.name == "custom_mp3_full") {
-            myLink.setAttribute('href',location.file_url);
-            myLink.innerHTML = '<img src="images/audio_icon.jpg" />';
-            $(myLink).after(data.name.substring(0, 28));
-
-            $(myLink).each(function() {
-              $(this).fancybox({
-                'type' : 'iframe',
-                'href' : '<?php echo $docroot ?>/1-advanced_demo/_audio_player.php?file=' + $(this).attr('href') + '&name=' + $(this).attr('name')
-              });
-            });
-          }
-          break;
-      }
-  });
+    DropioStreamer.observe(DropioStreamer.ASSET_UPDATED, updateAsset);
 
   return status;
   };
 
+  
   api.getDrop({ name : "<?php echo $_GET['drop_name']?>" }, dropCB );
 
-  var j;
+  var asset;
 
-  var assetCallback = function(e) {
-    j = eval('(' + e + ')');
+  var assetCallback = function(assetjson) {
+    asset = eval('(' + assetjson + ')');
 
     // Create the new element
     var newAsset = document.createElement('div');
     newAsset.setAttribute('class','thumb');
 
     var myLink = document.createElement('a');
-    myLink.setAttribute('class','fancy'+j.type);
-    myLink.setAttribute('id',j.name);
-
-    switch(j.type)
+    myLink.setAttribute('class','fancy'+asset.type);
+    myLink.setAttribute('id',asset.name);
+	
+	/*
+    switch(asset.type)
     {
       case 'image' :
-        myLink.setAttribute('href',j.roles[0].locations[0].file_url);
+        myLink.setAttribute('href',asset.roles[0].locations[0].file_url);
         $(myLink).fancybox({'type':'image'});
+		myLink.innerHTML = '<img src="images/spinner.gif" alt="Conversion processing"/>';
         break;
       case 'movie' :
         myLink.setAttribute('href','#');
+		myLink.innerHTML = '<img src="images/spinner.gif" alt="Conversion processing"/>';
         break;
       case 'audio' :
-        myLink.setAttribute('href',j.roles[0].locations[0].file_url);
-        myLink.setAttribute('name', j.name);
+        myLink.setAttribute('href',asset.roles[0].locations[0].file_url);
+        myLink.setAttribute('name', asset.name);
+		myLink.innerHTML = '<img src="images/audio_icon.png" alt="'+asset.name+'"/>';
         break;
       case 'document' :
         myLink.setAttribute('href','#');
+		myLink.innerHTML = '<img src="images/pdf_icon.png" alt="'+asset.name+'"/>';
+        break;
+	  case 'other' :
+        myLink.setAttribute('href',asset.roles[0].locations[0].file_url);
+        myLink.setAttribute('name', asset.name);
+		myLink.innerHTML = '<img src="images/other_icon.png" alt="'+asset.name+'"/>';
         break;
     }
-
-    myLink.innerHTML = '<img src="images/spinner.gif" alt="Not ready yet"/>';
+	*/
     newAsset.appendChild(myLink);
 
     // Get the containing div. If it does not exist then create it
-    typecont = document.getElementById(j.type+'-container');
+    typecont = document.getElementById(asset.type+'-container');
 
     if (typecont == null)
     {
       // Create the container
       typecont = document.createElement('div');
       typecont.setAttribute('style','clear:both');
-      typecont.setAttribute('id',j.type+'-container');
-      typecont.innerHTML = '<h2>' + j.type + '</h2>';
+      typecont.setAttribute('id',asset.type+'-container');
+      typecont.innerHTML = '<h2>' + asset.type + '</h2>';
 
       document.getElementById('content-container').appendChild(typecont);
     }
-    document.getElementById(j.type+'-container').appendChild(newAsset);
+    document.getElementById(asset.type+'-container').appendChild(newAsset);
+	updateAsset(asset);
     return true;
   };
   <?php
