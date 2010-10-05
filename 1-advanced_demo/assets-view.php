@@ -142,8 +142,6 @@ $(document).ready(function() {
           <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=movie">Movies</a> |
           <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=audio">Audio</a> |
           <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=document">Documents</a> |
-          <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=notes">Notes</a> |
-          <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=link">Links</a> |
           <a href="assets-view.php?drop_name=<?php echo $_GET['drop_name']?>&type=other">Other</a>
 
             <hr class="Dotted"/>
@@ -161,5 +159,6 @@ $(document).ready(function() {
           <?php endforeach ?>
           </div> <!-- END content-container -->
     </div>
+	<div id="footer"></div>
   </body>
 </html>
