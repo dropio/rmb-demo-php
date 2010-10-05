@@ -26,8 +26,8 @@ $conversion_response = request_conversion($asset['id'], $asset['type']);
 
 # Update the database with the new info 
 try {
-	$sql = "INSERT INTO asset (`drop_id`,`asset_id`,`created_at`,`type`, `is_complete`) values ((SELECT id FROM `drop` d WHERE d.name = ?),?,current_timestamp,?,0)";
-	$arr = array($asset['drop_name'], $asset['id'], $asset['type']);
+	$sql = "INSERT INTO asset (`drop_id`,`asset_id`,`created_at`,`type`, `values`, `is_complete`) values ((SELECT id FROM `drop` d WHERE d.name = ?),?,current_timestamp,?,?,?)";
+	$arr = array($asset['drop_name'], $asset['id'], $asset['type'], stripslashes(json_encode($asset)), (($asset['type'] == 'other') ? 1 : 0));
 	$db = DB::getInstance();
 	$db->prepare($sql);
 	$db->execute($arr);
