@@ -19,9 +19,9 @@
 
 function updateAsset(asset) {
     // Shortcut to the objects we want
-	console.log(asset);
+  console.log(asset);
     var type = asset.type; // image, movie, document, etc
-	var location;
+  var location;
     var myLink = document.getElementById(asset.name);
     // iterate over the available roles (there may only be 1, in the case of stream mesages)
 	$.each(asset.roles, function(index, role) { 
@@ -148,35 +148,35 @@ $(document).ready(function() {
     var myLink = document.createElement('a');
     myLink.setAttribute('class','fancy'+asset.type);
     myLink.setAttribute('id',asset.name);
-	
-	/*
+  
+  /*
     switch(asset.type)
     {
       case 'image' :
         myLink.setAttribute('href',asset.roles[0].locations[0].file_url);
         $(myLink).fancybox({'type':'image'});
-		myLink.innerHTML = '<img src="images/spinner.gif" alt="Conversion processing"/>';
+    myLink.innerHTML = '<img src="images/spinner.gif" alt="Conversion processing"/>';
         break;
       case 'movie' :
         myLink.setAttribute('href','#');
-		myLink.innerHTML = '<img src="images/spinner.gif" alt="Conversion processing"/>';
+    myLink.innerHTML = '<img src="images/spinner.gif" alt="Conversion processing"/>';
         break;
       case 'audio' :
         myLink.setAttribute('href',asset.roles[0].locations[0].file_url);
         myLink.setAttribute('name', asset.name);
-		myLink.innerHTML = '<img src="images/audio_icon.png" alt="'+asset.name+'"/>';
+    myLink.innerHTML = '<img src="images/audio_icon.png" alt="'+asset.name+'"/>';
         break;
       case 'document' :
         myLink.setAttribute('href','#');
-		myLink.innerHTML = '<img src="images/pdf_icon.png" alt="'+asset.name+'"/>';
+    myLink.innerHTML = '<img src="images/pdf_icon.png" alt="'+asset.name+'"/>';
         break;
-	  case 'other' :
+    case 'other' :
         myLink.setAttribute('href',asset.roles[0].locations[0].file_url);
         myLink.setAttribute('name', asset.name);
-		myLink.innerHTML = '<img src="images/other_icon.png" alt="'+asset.name+'"/>';
+    myLink.innerHTML = '<img src="images/other_icon.png" alt="'+asset.name+'"/>';
         break;
     }
-	*/
+  */
     newAsset.appendChild(myLink);
 
     // Get the containing div. If it does not exist then create it
@@ -193,7 +193,7 @@ $(document).ready(function() {
       document.getElementById('content-container').appendChild(typecont);
     }
     document.getElementById(asset.type+'-container').appendChild(newAsset);
-	updateAsset(asset);
+  updateAsset(asset);
     return true;
   };
   <?php
