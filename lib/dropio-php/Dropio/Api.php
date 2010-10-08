@@ -83,12 +83,12 @@ Class Dropio_Api {
     return $this;
   }
 
-  protected function _signIfNeeded($params = null)
+  protected function _signIfNeeded($params = null, $method = "POST")
   {
     if($this->_api_secret !== NULL)
     {
         $params = $this->_addRequiredParams($params);
-        $params = $this->signRequest($params);
+        $params = $this->signRequest($params, $method);
     }
 	
     return $params;
@@ -105,7 +105,7 @@ Class Dropio_Api {
   {
     $str='';
     $this->ksortTree($params);
-
+	
 	#for GET and DELETE calls, all values are interpreted as strings, so convert them
 	#before we JSON encode them. 
 	if($method == "GET" || $method == "DELETE"){ 
@@ -113,16 +113,16 @@ Class Dropio_Api {
 	        $params[$k]=(string)$v;
 		}
 	}
-	print "\r\n Pingback url is: " . $params["pingback_url"];	
+	//print "\r\n Pingback url is: " . $params["pingback_url"];	
 	$str = json_encode($params);
 	//The ruby to_json does not add backslashes to slashes
 	$str = stripslashes($str);
 	#Debugging output
-	print("\r\nstring to sign was: " . $str . $this->_api_secret .  "\r\n\r\n");
+	//print("\r\nstring to sign was: " . $str . $this->_api_secret .  "\r\n\r\n");
 	
 	#add the signature to the params
     $params['signature'] = sha1($str . $this->_api_secret);
-
+	
     return $params;
   }
   
@@ -165,7 +165,7 @@ Class Dropio_Api {
     $url =  $this->getApiUrl() . '/' . $path;
 
     # Sign this api request if needed
-    $params = $this->_signIfNeeded($params);
+    $params = $this->_signIfNeeded($params, $method);
 	$ch = curl_init();
 
     # Setting the user agent, useful for debugging and allowing us to check which version
