@@ -20,7 +20,7 @@ $assets = $drop->getAssets();
 ?>
 <html>
   <head>
-    <title>View assets for Drop <?php echo $dropname ?> | Drop.io PHP API Simple Demo</title>
+    <title>View assets for Drop <?php echo $dropname ?> | Rich Media Backbone PHP API Simple Demo</title>
     <link type="text/css" rel="stylesheet" media="screen" href="../css/main.css"/>
   </head>
   <body>

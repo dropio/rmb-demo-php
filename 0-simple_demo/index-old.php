@@ -29,7 +29,7 @@ $dropname = (isset($_REQUEST['dropname'])) ? $_REQUEST['dropname'] : null;
 $newdrop = (isset($_REQUEST['newdrop'])) ? $_REQUEST['newdrop'] : null;
 
 ////Example of adding a note to a drop
-//Dropio_Drop::load($dropname)->addNote('This is an example of the Drop.io PHP Library','Hello World');
+//Dropio_Drop::load($dropname)->addNote('This is an example of the Rich Media Backbone PHP Library','Hello World');
 
 $page = 1;
 
@@ -93,7 +93,7 @@ if($_REQUEST["action"] == "delete" && $_REQUEST["assetid"]){
 		if($a->{$a->primary_key} == $_REQUEST["assetid"]){
 			//check if data is safe
 			if(json_decode(stripslashes($_REQUEST["metadata"]))){
-				//encode the json data with htmlspecialchars to avoid filtering on the drop.io side
+				//encode the json data with htmlspecialchars to avoid filtering on the RMB side
 				$a->description = htmlspecialchars(stripslashes($_REQUEST["metadata"]));
 				$updated = $a->save();
 			}
@@ -120,7 +120,7 @@ if($_REQUEST["action"] == "delete" && $_REQUEST["assetid"]){
 <html xmlns="http://www.w3.org/1999/xhtml"> 
  
 <head> 
-	<title>Drop.io Rich Media Backbone Example</title>
+	<title>Rich Media Backbone Example</title>
 	<style type="text/css">
 		#assets{
 			
@@ -325,7 +325,7 @@ if (empty($_REQUEST["viewmode"]) || $_REQUEST["viewmode"] == 'media' || $_REQUES
 						<li>Location: <?php echo $loc["name"]; ?></li>
 						<?php if ($r["name"] == "original_content") { ?>
 							<?php 
-								$ocurl = "http://api.drop.io/drops/".$dropname."/assets/".$a->name."/download/original?api_key=".$API_KEY."&version=3.0";
+								$ocurl = "http://api.rmb.io/drops/".$dropname."/assets/".$a->name."/download/original?api_key=".$API_KEY."&version=3.0";
 								if($loc["name"] != "DropioS3"){ $ocurl .= "&location=" . $loc["name"]; } 
 							?>
 							<ul><li><a href="<?php echo $ocurl; ?>">
@@ -462,7 +462,7 @@ function SendAssetEmail($a, $emails){
 	//define the receiver of the email
 	$to = $emails;
 	//define the subject of the email
-	$subject = 'You\'ve been sent a file using the Drop.io RMB PHP demo'; 
+	$subject = 'You\'ve been sent a file using the RMB PHP demo'; 
 	//define the headers we want passed. Note that they are separated with \r\n
 	$headers = "From: eric@dropio.com\r\nReply-To: eric@dropio.com\r\n";
 	//add boundary string and mime type specification
@@ -604,7 +604,7 @@ function GetAssetPreview($a){
 }
 function GetOriginalFileUrl($a){
 	global $dropname, $API_KEY;
-	$origfile = "http://api.drop.io";
+	$origfile = "http://api.rmb.io";
 	$origfile .= "/drops/".$dropname."/assets/".$a->name."/download/original?api_key=".$API_KEY;
 	$origfile .= "&version=3.0";
 	if ($a->roles[0]["locations"][0]["name"] != "DropioS3"){

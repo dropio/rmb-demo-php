@@ -1,10 +1,10 @@
 <?php
 /**
  * This is a fully functional demo application that lets you manage drops in
- * you drop.io account. It is intended as a functional demonstration of the
+ * you Rich Media Backbone account. It is intended as a functional demonstration of the
  * underlying PHP API.
  *
- * The online API reference can be found here: http://backbonedocs.drop.io/API-Methods
+ * The online API reference can be found here: http://docs.rmb.io/API-Methods
  *
  */
 
@@ -28,16 +28,16 @@ if(!empty($API_KEY) && $API_KEY != 'YOUR_API_KEY') {
 ?>
 <html>
   <head>
-    <title>Drop.io PHP API Simple Demo</title>
+    <title>RMB PHP API Simple Demo</title>
     <link type="text/css" rel="stylesheet" media="screen" href="/css/main.css"/>
   </head>
   <body>
     <div id="container">
-    <h1>Drop.io API Simple Demo for PHP</h1>
+    <h1>RMB API Simple Demo for PHP</h1>
     <p>
       This demo provides a simple examples
       which will get you started on making your own apps which use
-      the Drop.io Rich Media Backbone.</p>
+      the Rich Media Backbone.</p>
     <p>
       This is a fully functional demo app that you can use to manage your drops.
       To get started all you need to do is edit the <i>config.inc.php</i> file with

@@ -15,7 +15,7 @@ $drop = Dropio_Drop::getInstance($API_KEY, $API_SECRET)->load($dropname);
 ?>
 <html>
   <head>
-    <title>Edit Drop | Drop.io PHP API Simple Demo</title>
+    <title>Edit Drop | Rich Media Backbone PHP API Simple Demo</title>
     <link type="text/css" rel="stylesheet" media="screen" href="css/demo.css"/>
   </head>
   <body>

@@ -21,7 +21,7 @@ $asset = Dropio_Drop::getInstance($API_KEY, $API_SECRET)
 ?>
 <html>
   <head>
-    <title>Edit Asset | Drop.io PHP API Simple Demo</title>
+    <title>Edit Asset | Rich Media Backbone PHP API Simple Demo</title>
     <link type="text/css" rel="stylesheet" media="screen" href="../css/main.css"/>
   </head>
   <body>
