@@ -142,7 +142,7 @@ Class Dropio_Asset extends Dropio_Api {
 
   /**
    *
-   * @link http://backbonedocs.drop.io/Create-a-Note
+   * @link http://docs.rmb.io/Create-a-Note
    *
    * @param <type> $content
    * @param <type> $options
@@ -166,7 +166,7 @@ Class Dropio_Asset extends Dropio_Api {
 
   /**
    *
-   * @param string $url     The url drop.io will download
+   * @param string $url     The url the RMB will download
    * @param mixed  $options optional parameters
    * @return <type>
    */
@@ -214,7 +214,7 @@ Class Dropio_Asset extends Dropio_Api {
   }
 
   /**
-   * Upload a file to drop.io
+   * Upload a file to the RMB
    *
    * required: drop_name, file
    * optional: comment, description, redirect_to, convert_to, ouput_locations, pingback_url
@@ -248,7 +248,7 @@ Class Dropio_Asset extends Dropio_Api {
   /**
    * Delete an asset
    *
-   * @link http://backbonedocs.drop.io/Delete-an-Asset
+   * @link http://docs.rmb.io/Delete-an-Asset
    * @return mixed
    */
   public function delete()

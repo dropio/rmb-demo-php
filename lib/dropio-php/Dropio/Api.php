@@ -7,9 +7,9 @@ Class Dropio_Api {
 
   const RESPONSE_FORMAT  = 'json';
   const API_VERSION      = '3.0';
-  const API_URL          = 'api.drop.io';
+  const API_URL          = 'api.rmb.io';
   const CLIENT_VER       = '1.0';
-  const UPLOAD_URL       = 'http://assets.drop.io/upload';
+  const UPLOAD_URL       = 'http://up.rmb.io/upload';
 
   private $_api_key      = null;
   private $_api_secret   = null;
@@ -169,7 +169,7 @@ Class Dropio_Api {
 	$ch = curl_init();
 
     # Setting the user agent, useful for debugging and allowing us to check which version
-    curl_setopt($ch, CURLOPT_USERAGENT, 'Drop.io PHP client v' . self::CLIENT_VER);
+    curl_setopt($ch, CURLOPT_USERAGENT, 'RMB PHP client v' . self::CLIENT_VER);
     curl_setopt($ch, CURLOPT_TIMEOUT, 0);
 	curl_setopt($ch, CURLOPT_VERBOSE, true); // Display communication with server
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: application/json', 'Content-Type: application/json'));

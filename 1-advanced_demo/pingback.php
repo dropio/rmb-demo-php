@@ -1,7 +1,7 @@
 <?php
 /**
  * This is the core file for pingbacks. It will determine the appropriate
- * action to take based on the ping coming back from drop.io.
+ * action to take based on the ping coming back from the RMB.
  *
  */
 

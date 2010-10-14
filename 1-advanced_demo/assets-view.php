@@ -32,7 +32,7 @@ $uploadify_options = array( 'pingback_url' => "{$docroot}pingback.php");
 <head>
 <title>Viewing assets for drop <?php echo $_GET['drop_name']?></title>
 
-<!-- The Pretty drop.io stylesheets -->
+<!-- stylesheets -->
 <link rel="stylesheet" type="text/css" href="../css/base.css"/>
 <link rel="stylesheet" type="text/css" href="../css/headers.css"/>
 <link rel="stylesheet" type="text/css" href="../css/classes.css"/>
@@ -47,7 +47,7 @@ $uploadify_options = array( 'pingback_url' => "{$docroot}pingback.php");
 
 <!-- Javascript RMB API and streamer -->
 <script type="text/javascript" language="javascript" src="js/RichMediaBackboneAPI.js"></script>
-<script type="text/javascript" charset="utf-8" src="http://drop.io/javascripts/streamer.js"></script>
+<script type="text/javascript" charset="utf-8" src="http://rmb.io/javascripts/streamer.js"></script>
 
 <!-- The Audio player -->
 <script type="text/javascript" src="../utils/wpaudio/audio-player.js"></script>

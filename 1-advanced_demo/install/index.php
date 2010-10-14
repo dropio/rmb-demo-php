@@ -73,7 +73,7 @@ else{
     </head>
     <body>
         <div id="container">
-        <h1>Install the Drop.io RMB Advanced Demo</h1>
+        <h1>Install the RMB Advanced Demo</h1>
 
         <p><a class="fancyform" href="../drop-import_drop.php">Import your drops</a> or <a class="fancyform" href="../drop-create_drop.php">create a new one</a></p>
 

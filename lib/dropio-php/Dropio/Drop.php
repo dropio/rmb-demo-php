@@ -91,7 +91,7 @@ Class Dropio_Drop extends Dropio_Api {
   /**
    * Delete a drop and all its contents
    *
-   * @link http://backbonedocs.drop.io/Delete-a-Drop
+   * @link http://docs.rmb.io/Delete-a-Drop
    * @return mixed
    */
   public function delete($drop_name=null)
@@ -138,7 +138,7 @@ Class Dropio_Drop extends Dropio_Api {
       $input .= "<input type=\"hidden\" name=\"$k\" value=\"$v\"/>\n";
 
     $html = <<<EOF
-    <form action="http://assets.drop.io/upload" method="post" enctype="multipart/form-data">
+    <form action="http://up.rmb.io/upload" method="post" enctype="multipart/form-data">
       <ul>
         <li>
           <label for="file">Add a new file:</label>
@@ -229,7 +229,7 @@ EOL;
   /**
    * Create a drop
    *
-   * @link http://backbonedocs.drop.io/Create-a-Drop
+   * @link http://docs.rmb.io/Create-a-Drop
    * @param <type> $dropname
    * @return <type>
    */

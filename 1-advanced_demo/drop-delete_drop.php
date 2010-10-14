@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 <html>
 <head>
   <title></title>
-  <!-- The Pretty drop.io stylesheets -->
+  <!-- stylesheets -->
   <link rel="stylesheet" type="text/css" href="../css/base.css"/>
   <link rel="stylesheet" type="text/css" href="../css/headers.css"/>
   <link rel="stylesheet" type="text/css" href="../css/classes.css"/>

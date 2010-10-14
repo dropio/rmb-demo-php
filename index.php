@@ -1,16 +1,16 @@
 <html>
     <head>
-        <title>Drop.io RMB Demo Applications for PHP</title>
+        <title>RMB Demo Applications for PHP</title>
         <link rel="stylesheet" type="text/css" media="screen" href="/css/main.css"/>
     </head>
     <body>
         <div id="container">
-        <h1>Drop.io RMB Demo Applications for PHP</h1>
+        <h1>RMB Demo Applications for PHP</h1>
 
-        <p>These examples demonstrate how you can use the Drop.io Rich Media Backbone along
+        <p>These examples demonstrate how you can use the Rich Media Backbone along
      with our <a href="http://github.com/dropio/dropio-php" target="_blank">PHP helper library</a> to
     handle file uploads, conversion, storage, and delivery in your applications. The  <a href="http://github.com/dropio/Drop.io-RMBS-Demo-PHP">source for these demos is <a href="http://github.com/dropio/Drop.io-RMBS-Demo-PHP">available on Github</a>.</p>
-    <p><a href="http://backbone.drop.io" target="_blank">Learn more about the Rich Media Backbone</a></p>
+    <p><a href="http://rmb.io" target="_blank">Learn more about the Rich Media Backbone</a></p>
 
         <h2><a href="0-simple_demo/">Simple Demo</a></h2>
         <p>The simple demo provides examples of each API call using our PHP helper library.</p>

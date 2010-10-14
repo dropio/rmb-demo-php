@@ -13,7 +13,7 @@ $drops = DB::getInstance()->
     <head>
         <title>Welcome to the Rich Media Backbone Advanced Demo</title>
 
-        <!-- The Pretty drop.io stylesheets -->
+        <!-- stylesheets -->
         <link rel="stylesheet" type="text/css" href="../css/base.css"/>
         <link rel="stylesheet" type="text/css" href="../css/headers.css"/>
         <link rel="stylesheet" type="text/css" href="../css/classes.css"/>
