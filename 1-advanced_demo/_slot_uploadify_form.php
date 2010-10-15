@@ -19,7 +19,7 @@
 
 function updateAsset(asset) {
     // Shortcut to the objects we want
-  console.log(asset);
+  //console.log(asset);
     var type = asset.type; // image, movie, document, etc
   var location;
     var myLink = document.getElementById(asset.name);
