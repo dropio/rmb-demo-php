@@ -9,7 +9,7 @@ Class Dropio_Api {
   const API_VERSION      = '3.0';
   const API_URL          = 'api.rmb.io';
   const CLIENT_VER       = '1.0';
-  const UPLOAD_URL       = 'http://up.rmb.io/upload';
+  const UPLOAD_URL       = 'http://u.rmb.io/upload';
 
   private $_api_key      = null;
   private $_api_secret   = null;
