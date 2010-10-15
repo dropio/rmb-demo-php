@@ -13,10 +13,10 @@ include_once('_bootstrap.php');
 if(!empty($API_KEY) && $API_KEY != 'YOUR_API_KEY') {
   try {
     # Get a list of drops for this account
-    $drops = Dropio_Api::getInstance($API_KEY, $API_SECRET)->getDrops();
+    $drops = Rmb_Api::getInstance($API_KEY, $API_SECRET)->getDrops();
 
     # Get stats associated with this account
-    $stats = Dropio_Api::getInstance($API_KEY, $API_SECRET)->getStats();
+    $stats = Rmb_Api::getInstance($API_KEY, $API_SECRET)->getStats();
   } catch (Exception $e) {
     echo $e->getMessage();
     die();

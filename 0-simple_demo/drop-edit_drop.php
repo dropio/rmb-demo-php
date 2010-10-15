@@ -10,7 +10,7 @@ if(empty($_REQUEST['dropname']))
 $dropname = $_REQUEST['dropname'];
 
 # Pick a grep and load the descriptive values into an array
-$drop = Dropio_Drop::getInstance($API_KEY, $API_SECRET)->load($dropname);
+$drop = Rmb_Drop::getInstance($API_KEY, $API_SECRET)->load($dropname);
 
 ?>
 <html>

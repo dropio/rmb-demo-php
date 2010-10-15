@@ -4,7 +4,7 @@
 include_once('_bootstrap.php');
 
 # Include the classes for API access
-include_once('../lib/dropio-php/Dropio/Drop.php');
+include_once('../lib/rmb-php/Rmb/Drop.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST')
 {
@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
           execute(array($drop_name));
 
     try {
-      $drop = Dropio_Drop::getInstance($API_KEY, $API_SECRET)->delete($drop_name);
+      $drop = Rmb_Drop::getInstance($API_KEY, $API_SECRET)->delete($drop_name);
     } catch (Exception $e) {
       # Do nothing. Drop doesn't exist.
     }

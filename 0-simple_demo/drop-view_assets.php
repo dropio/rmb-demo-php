@@ -10,7 +10,7 @@ if(empty($_REQUEST['dropname']))
 $dropname = $_REQUEST['dropname'];
 
 # Call a static method and chain the calls to load the drop
-$drop = Dropio_Drop::getInstance($API_KEY,$API_SECRET)->load($dropname);
+$drop = Rmb_Drop::getInstance($API_KEY,$API_SECRET)->load($dropname);
 
 $assets = $drop->getAssets();
 

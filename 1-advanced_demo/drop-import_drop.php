@@ -3,7 +3,7 @@
 include_once('_bootstrap.php');
 
 # Include the classes for API access
-include_once('../lib/dropio-php/Dropio/Drop.php');
+include_once('../lib/rmb-php/Rmb/Drop.php');
 
 
 include_once('user_funcs.php');
@@ -14,7 +14,7 @@ include_once('user_funcs.php');
 if (isset($_GET['drop_name']))
 {
   $drop_name = $_GET['drop_name'];
-  $drop = Dropio_Drop::getInstance($API_KEY, $API_SECRET)->load($drop_name);
+  $drop = Rmb_Drop::getInstance($API_KEY, $API_SECRET)->load($drop_name);
   $assets = $drop->getAssets();
 
 
@@ -42,7 +42,7 @@ if (isset($_GET['drop_name']))
 }
 
 try {
-  $drops = Dropio_Api::getInstance($API_KEY, $API_SECRET)->getDrops();
+  $drops = Rmb_Api::getInstance($API_KEY, $API_SECRET)->getDrops();
 } catch (Exception $e) {
   echo $e->getMessage();
   die();

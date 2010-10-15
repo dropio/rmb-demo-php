@@ -2,7 +2,7 @@
 
 include_once '_bootstrap.php';
 include_once 'templates/_helper.php';
-include_once '../lib/dropio-php/Dropio/Drop.php';
+include_once '../lib/rmb-php/Rmb/Drop.php';
 
 $type = (isset($_GET['type'])) ? $_GET['type'] : 'all';
 

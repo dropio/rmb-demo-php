@@ -14,7 +14,7 @@ $dropname = $_REQUEST['dropname'];
 $assetname = $_REQUEST['asset'];
 
 # Pick a drop and load the descriptive values into an array
-$asset = Dropio_Drop::getInstance($API_KEY, $API_SECRET)
+$asset = Rmb_Drop::getInstance($API_KEY, $API_SECRET)
         ->setName($dropname)
         ->getAsset($assetname);
 

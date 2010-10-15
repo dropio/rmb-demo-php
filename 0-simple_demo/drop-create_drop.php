@@ -10,7 +10,7 @@ if(empty($_REQUEST['dropname']))
 $dropname = (strcmp($_REQUEST['dropname'],'random')==0) ? null : $_REQUEST['dropname'];
 
 # Call a static method which will create the new drop
-$drop = Dropio_Drop::getInstance($API_KEY,$API_SECRET)->createDrop($dropname);
+$drop = Rmb_Drop::getInstance($API_KEY,$API_SECRET)->createDrop($dropname);
 
 if($drop->isLoaded())
   $_SESSION['message'] = "SUCCESS! Created new bucket '{$drop->getName()}'";

@@ -7,7 +7,7 @@ include_once('_bootstrap.php');
 if(empty($_POST['name']))
   die('$name must be present in the request params');
 
-$drop = Dropio_Drop::getInstance($API_KEY,$API_SECRET)->load($_POST['orig_name'])
+$drop = Rmb_Drop::getInstance($API_KEY,$API_SECRET)->load($_POST['orig_name'])
   ->setName($_POST['name'])
   ->setDescription($_POST['description'])
   ->save();

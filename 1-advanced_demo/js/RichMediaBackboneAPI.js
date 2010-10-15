@@ -12,7 +12,7 @@ DropioApiClient = (function(){
   var undefined,
     HOST = "http://rmb.io/",
     API_HOST = "http://api.rmb.io/",
-    UPLOAD_HOST = "http://up.rmb.io/",
+    UPLOAD_HOST = "http://u.rmb.io/",
     DEFAULT_XR_SRC = "/DropioJSClientXDReceiver.html",
     
     DROPS_PATH = API_HOST + "drops",

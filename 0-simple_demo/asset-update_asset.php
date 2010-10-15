@@ -7,7 +7,7 @@ include_once('_bootstrap.php');
 if(!isset($_POST['assetname']))
   die('$name must be present in the request params - ' . $_POST['name']);
 
-$asset = Dropio_Asset::getInstance($API_KEY,$API_SECRET)
+$asset = Rmb_Asset::getInstance($API_KEY,$API_SECRET)
         ->setDropName($_POST['dropname'])
         ->setName($_POST['assetname'])
         ->load()

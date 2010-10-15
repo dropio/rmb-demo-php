@@ -1,7 +1,7 @@
 <?php
   $drop_name = $_GET['drop_name'];
   try {
-    $drop = Dropio_Drop::getInstance($API_KEY, $API_SECRET)->load($drop_name);
+    $drop = Rmb_Drop::getInstance($API_KEY, $API_SECRET)->load($drop_name);
     $chatPass = $drop->getChatPassword();
   } catch (Exception $e) {
     echo '</div><h1>', $e->getMessage(), '</h1>';
@@ -205,13 +205,13 @@ $(document).ready(function() {
       $paramsToSign["timestamp"] = $timestamp;
       $paramsToSign["signature_mode"] = "OPEN";
       $paramsToSign["api_key"] = $API_KEY;
-      $signedParams = Dropio_Api::getInstance($API_KEY, $API_SECRET)->signRequest($paramsToSign);
+      $signedParams = Rmb_Api::getInstance($API_KEY, $API_SECRET)->signRequest($paramsToSign);
       $sigdata .= ',"timestamp":"'.$timestamp.'","signature_mode":"OPEN","signature":"'.$signedParams["signature"].'"';
     }
   ?>
   $('#file').uploadify({
       'uploader'        : '../utils/uploadify/uploadify.swf',
-      'script'          : '<?php echo Dropio_Api::UPLOAD_URL; ?>',
+      'script'          : '<?php echo Rmb_Api::UPLOAD_URL; ?>',
       'multi'           : true,
       'scriptData'      : {
         "api_key"       : "<?php echo $API_KEY ?>",

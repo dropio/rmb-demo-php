@@ -8,7 +8,7 @@
         <h1>RMB Demo Applications for PHP</h1>
 
         <p>These examples demonstrate how you can use the Rich Media Backbone along
-     with our <a href="http://github.com/dropio/dropio-php" target="_blank">PHP helper library</a> to
+     with our <a href="http://github.com/dropio/rmb-php" target="_blank">PHP helper library</a> to
     handle file uploads, conversion, storage, and delivery in your applications. The  <a href="http://github.com/dropio/Drop.io-RMBS-Demo-PHP">source for these demos is <a href="http://github.com/dropio/Drop.io-RMBS-Demo-PHP">available on Github</a>.</p>
     <p><a href="http://rmb.io" target="_blank">Learn more about the Rich Media Backbone</a></p>
 

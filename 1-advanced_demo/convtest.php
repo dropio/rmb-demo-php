@@ -15,7 +15,7 @@ function request_conversion($asset_id, $asset_type){
 	include_once '_bootstrap.php';
 
 	# Load the api helper library
-	include_once(dirname(__FILE__) . '/../lib/dropio-php/Dropio/Api.php');
+	include_once(dirname(__FILE__) . '/../lib/rmb-php/Rmb/Api.php');
 
 	$pingback_url = $docroot . "/1-advanced_demo/pingback.php";
 	//$asset_id = intval($_REQUEST['asset_id']);
@@ -125,17 +125,17 @@ function request_conversion($asset_id, $asset_type){
 			$outputs[] = array_merge($output_base, $custom_small_thumb);
 			$outputs[] = array_merge($output_base, $custom_large_thumb);
 			$using = "DropioImageConverter";
-			Dropio_Api::getInstance($API_KEY, $API_SECRET)->convert($asset_type, $inputs, $outputs, $using, $pingback_url);
+			Rmb_Api::getInstance($API_KEY, $API_SECRET)->convert($asset_type, $inputs, $outputs, $using, $pingback_url);
 		}else if($asset_type == "AUDIO"){
 			$outputs[] = array_merge($output_base, $custom_mp3_full);
 			$outputs[] = array_merge($output_base, $custom_mp3_30sec);
 			$using = "DropioAudioConverter";
-			Dropio_Api::getInstance($API_KEY, $API_SECRET)->convert($asset_type, $inputs, $outputs, $using, $pingback_url);
+			Rmb_Api::getInstance($API_KEY, $API_SECRET)->convert($asset_type, $inputs, $outputs, $using, $pingback_url);
 		}else if($asset_type == "DOCUMENT"){
 			$outputs[] = array_merge($output_base, $custom_pdf);
 			$outputs[] = array_merge($output_base, $custom_flv);
 			$using = "ScribdConverter";
-			Dropio_Api::getInstance($API_KEY, $API_SECRET)->convert($asset_type, $inputs, $outputs, $using, $pingback_url);
+			Rmb_Api::getInstance($API_KEY, $API_SECRET)->convert($asset_type, $inputs, $outputs, $using, $pingback_url);
 		}else if($asset_type == "MOVIE"){
 			$outputs[] = array_merge($output_base, $custom_mp4);
 			//$outputs[] = array_merge($output_base, $custom_movie_mp3);
@@ -144,11 +144,11 @@ function request_conversion($asset_id, $asset_type){
 			//$using = "EncodingDotComConverter";
 			$using = "DropioMovieConverter";
 			//HACK HACK HACK - this should be MOVIE, not VIDEO
-			Dropio_Api::getInstance($API_KEY, $API_SECRET)->convert($asset_type, $inputs, $outputs, $using, $pingback_url);
+			Rmb_Api::getInstance($API_KEY, $API_SECRET)->convert($asset_type, $inputs, $outputs, $using, $pingback_url);
 		}else{
 			//don't request conversion for other files (zips, etc)
 		}
-	}catch(Dropio_Api_Exception $e){
+	}catch(Rmb_Api_Exception $e){
 		return(json_encode(array("response"=>array("result" => "Error", "message" => $e->getMessage()))));
 	}
 	return true;

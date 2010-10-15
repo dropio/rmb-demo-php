@@ -36,8 +36,8 @@ function asset_updated($asset)
     if ((int) $s['c'] == 0) {
       # Load the drop first
       # Include the classes for API access
-      include_once('../lib/dropio-php/Dropio/Drop.php');
-          $drop = Dropio_Drop::getInstance($API_KEY, $API_SECRET)->load($values['drop_name']);
+      include_once('../lib/rmb-php/Rmb/Drop.php');
+          $drop = Rmb_Drop::getInstance($API_KEY, $API_SECRET)->load($values['drop_name']);
 
           $sql = "INSERT INTO `drop` (name,`values`) VALUES (?,?)";
           $s = $r->prepare($sql)->

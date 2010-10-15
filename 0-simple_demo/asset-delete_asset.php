@@ -13,7 +13,7 @@ $dropname = $_REQUEST['dropname'];
 $asset = $_REQUEST['asset'];
 
 # Call a static method which will delete the drop
-$r = Dropio_Asset::getInstance($API_KEY, $API_SECRET)
+$r = Rmb_Asset::getInstance($API_KEY, $API_SECRET)
         ->setDropName($dropname)
         ->setName($asset)
         ->delete();

@@ -10,7 +10,7 @@ if(empty($_REQUEST['dropname']))
 $dropname = $_REQUEST['dropname'];
 
 # Call a static method which will delete the drop
-$r = Dropio_Drop::getInstance($API_KEY,$API_SECRET)->setName($dropname)->delete();
+$r = Rmb_Drop::getInstance($API_KEY,$API_SECRET)->setName($dropname)->delete();
 
 if($r['response']['result'] == 'Success')
   $_SESSION['message'] = "Removed drop '$dropname'";
